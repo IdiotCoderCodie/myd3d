@@ -1,0 +1,4 @@
+AppName=PaperPlanes
+Fullscreen=FALSE
+ScreenWidth=800
+ScreenHeight=600
