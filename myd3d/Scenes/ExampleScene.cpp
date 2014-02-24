@@ -8,8 +8,9 @@ ExampleScene::ExampleScene(const std::string& name, SceneManager* sceneMgr)
 {
 	D3D& d3d = GetParent().GetD3DInstance();
 
-	float aspect = GetParent().GetD3DInstance().GetScreenWidth() 
-					/ (float)GetParent().GetD3DInstance().GetScreenHeight();
+	int screenWidth		= GetParent().GetD3DInstance().GetScreenWidth();
+	int screenHeight	= GetParent().GetD3DInstance().GetScreenHeight();
+	float aspect		= screenWidth / (float)screenHeight;
 
 	EntityFactory::CreatePerspectiveFpCameraEntity(*this, 60.0f, aspect, 0.1f, 500.0f, "mmainCam");
 	
@@ -27,7 +28,8 @@ ExampleScene::ExampleScene(const std::string& name, SceneManager* sceneMgr)
 		12.0f,
 		"testLight");
 
-	//EntityFactory::CreateBmpEntity(*this, d3d, G)
+	EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", 100, 100, screenWidth, screenHeight,
+									"testBitmap");
 }
 
 

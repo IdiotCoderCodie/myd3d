@@ -229,6 +229,8 @@ Entity* EntityFactory::CreateBmpEntity(Scene& scene, D3D& d3d, WCHAR* textureNam
 	newEntity->SetComponent(new VisualBitmapComponent(d3d, tex->GetTexture(), width, height, screenWidth,
 												      screenHeight));
 
+	scene.AddEntity(newEntity);
+
 	return newEntity;
 }
 

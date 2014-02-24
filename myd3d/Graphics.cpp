@@ -3,6 +3,7 @@
 #include "Scenes\Scene.h"
 #include "Scenes\PlaneScene.h"
 #include "Scenes\ExampleScene.h"
+#include "Scenes\Example2DScene.h"
 
 #include <AntTweakBar.h>
 
@@ -13,7 +14,7 @@ Graphics::Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen
         m_statsTweakBar(0),
         m_fps(0.0f)
 {
-    m_sceneMgr.AddScene(new ExampleScene("PlaneName", &m_sceneMgr));
+    m_sceneMgr.AddScene(new Example2DScene("PlaneName", &m_sceneMgr));
     m_timer.Start();
 
     m_statsTweakBar = TwNewBar("Performance Stats");
