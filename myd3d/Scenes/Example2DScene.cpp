@@ -12,6 +12,10 @@ Example2DScene::Example2DScene(const std::string& name, SceneManager* sceneMgr)
 
 	EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", 100, 100, m_screenWidth, m_screenHeight,
 		"testBitmap");
+
+	EntityFactory::CreateOrthoFpCameraEntity(*this, -m_screenWidth / 2.0f, m_screenWidth / 2.0f,
+		-m_screenHeight / 2.0f, m_screenHeight / 2.0f, "testCam");
+	
 }
 
 

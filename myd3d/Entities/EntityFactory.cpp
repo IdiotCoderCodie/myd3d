@@ -3,6 +3,7 @@
 #include "../Assets/Textures/TextureManager.h"
 #include "../Scenes/Scene.h"
 #include "../Components/Camera/PerspectiveCamComponent.h"
+#include "../Components/Camera/OrthoCamComponent.h"
 #include "../Components/Physics/FreeRoamFpComponent.h"
 #include "../Components/Light/LightComponent.h"
 #include "../Components/Visual/VisualMeshComponent.h"
@@ -24,6 +25,17 @@ Entity* EntityFactory::CreatePerspectiveFpCameraEntity(Scene& scene, float fov, 
     return newEntity;
 }
 
+
+Entity* EntityFactory::CreateOrthoFpCameraEntity(Scene& scene, float left, float right, float bot,
+	float top, const std::string& id)
+{
+	Entity* newEntity = new Entity(scene, id);
+	newEntity->SetComponent(new OrthoCamComponent(left, right, bot, top));
+	newEntity->SetComponent(new FreeRoamFpComponent(30.0f, 75.0f, 75.0f));
+	scene.AddEntity(newEntity);
+	//newEntity->MoveForward(-10.0f);
+	return newEntity;
+}
 
 Entity* EntityFactory::CreatePerspectiveCameraEntity(Scene& scene, float fov, float aspect, 
                                                      float pNear, float pFar, 

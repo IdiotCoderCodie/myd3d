@@ -18,6 +18,13 @@ namespace EntityFactory
                                                    float camNear, float camFar, 
                                                    const std::string& id);
 
+	/**
+	 * Creates an entity with a OrthoCamComponent and FreeRoamFpComponent.
+	 */
+	Entity* CreateOrthoFpCameraEntity(Scene& scene, float left, float right, float bot,
+		float top, const std::string& id);
+
+
     /**
      * Creates an entity with a PerspectiveCamComponent attached.
      */

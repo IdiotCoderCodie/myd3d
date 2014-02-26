@@ -117,6 +117,9 @@
     <ClCompile Include="Scenes\Example2DScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Components\Camera\OrthoCamComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D.h">
@@ -228,6 +231,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\Example2DScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Camera\OrthoCamComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

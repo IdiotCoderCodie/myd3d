@@ -97,6 +97,7 @@
     <ClCompile Include="Components\Physics\FreeRoamFpComponent.cpp" />
     <ClCompile Include="Entities\EntityFactory.cpp" />
     <ClCompile Include="Components\Physics\FollowPathComponent.cpp" />
+    <ClCompile Include="Components\Camera\OrthoCamComponent.cpp" />
     <ClCompile Include="Scenes\Example2DScene.cpp" />
     <ClCompile Include="Scenes\ExampleScene.cpp" />
     <ClCompile Include="Graphics.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="Components\Physics\FreeRoamFpComponent.h" />
     <ClInclude Include="Entities\EntityFactory.h" />
     <ClInclude Include="Components\Physics\FollowPathComponent.h" />
+    <ClInclude Include="Components\Camera\OrthoCamComponent.h" />
     <ClInclude Include="Scenes\Example2DScene.h" />
     <ClInclude Include="Scenes\ExampleScene.h" />
     <ClInclude Include="Graphics.h" />

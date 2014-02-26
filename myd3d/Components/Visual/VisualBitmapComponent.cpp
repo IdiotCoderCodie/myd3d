@@ -4,6 +4,7 @@
 #include "../../Scenes/SceneManager.h"
 #include "../../glm/gtc/matrix_transform.hpp"
 #include "../../Assets/Shaders/ShaderResources/constant_buffers.h"
+#include "../Camera/CameraComponent.h"
 
 VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView* srcTexture, 
                                              int width, int height, 
@@ -54,6 +55,20 @@ void VisualBitmapComponent::Draw(D3D& d3d)
 										      0.0f, 2.0f / screenHeight, 0.0f, 0.0f,
 											  0.0f, 0.0f, 1.0f / (100.0f - 0.01f), 0.0f,
 											  0.0f, 0.0f, 0.01f / (0.01f - 100.0f), 1.0f);
+
+	matrixBuffer.viewMatrix = glm::transpose(GetParent().GetParent().GetActiveCamera()->GetViewMatrix());
+	matrixBuffer.projectionMatrix = glm::transpose(
+		GetParent().GetParent().GetActiveCamera()->GetProjMatrix());
+	/* THIS WORKS. BUT WON'T USE YET UNLESS NEEDED FOR SOME REASON.
+	glm::mat4 ogl_to_d3d = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.5f));
+	ogl_to_d3d = glm::scale(ogl_to_d3d, glm::vec3(1.0f, 1.0f, 0.5f));
+	glm::mat4 test = glm::ortho(-screenWidth / 2.0f, screenWidth / 2.0f, -screenHeight / 2.0f, screenHeight / 2.0f,
+								0.01f, 100.0f);
+								
+	test = ogl_to_d3d * test;
+
+	matrixBuffer.projectionMatrix = test;
+	*/
 
     GetShader().VSSetConstBufferData(d3d, std::string("MatrixBuffer"), 
                                   (void*)&matrixBuffer, sizeof(matrixBuffer), 0);

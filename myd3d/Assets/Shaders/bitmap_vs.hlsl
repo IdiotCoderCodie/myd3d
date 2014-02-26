@@ -27,7 +27,7 @@ PixelInputType vp_main(VertexInputType input)
 
 
     output.position = mul(input.position,  modelMatrix);
-    //output.position = mul(output.position, viewMatrix);
+    output.position = mul(output.position, viewMatrix);
     output.position = mul(output.position, projectionMatrix);
 
     output.uv = input.uv;
