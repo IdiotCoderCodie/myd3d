@@ -1,5 +1,7 @@
 cbuffer MatrixBuffer
 {
+	matrix modelMatrix;
+	matrix viewMatrix;
     matrix projectionMatrix;
 };
 
@@ -22,9 +24,11 @@ PixelInputType vp_main(VertexInputType input)
 
     input.position.w = 1.0f;
 
-   /* output.position = mul(input.position,  worldMatrix);
-    output.position = mul(output.position, viewMatrix);*/
-    output.position = mul(input.position, projectionMatrix);
+
+
+    output.position = mul(input.position,  modelMatrix);
+    //output.position = mul(output.position, viewMatrix);
+    output.position = mul(output.position, projectionMatrix);
 
     output.uv = input.uv;
 

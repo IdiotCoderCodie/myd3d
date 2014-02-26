@@ -14,6 +14,7 @@ namespace bitmap
     struct MatrixBufferStruct
     {
         glm::mat4 projectionMat;
+		glm::mat4 modelMat;
     };
 };
 

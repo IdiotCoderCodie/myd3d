@@ -109,14 +109,19 @@ bool Bitmap::Init(ID3D11Device* device)
 
 bool Bitmap::UpdateBuffers(D3D& d3d, int positionX, int positionY) const
 {
-    float left = (float)((m_screenWidth / 2) * -1) + (float)positionX;
+	float left = -m_bitmapWidth / 2.0f;
+	float right = left + m_bitmapWidth;
+	float top = +m_bitmapHeight / 2.0f;
+	float bot = top - m_bitmapHeight;
+
+    /*float left  = (float)((m_screenWidth / 2) * -1) + (float)positionX;
 
     float right = left + (float)m_bitmapWidth;
 
     float top   = (float)((m_screenHeight / 2.0f) - (float)positionY);
 
     float bot   = top - (float)m_bitmapHeight;
-
+*/
     bitmap::VertexStruct* vertices = new bitmap::VertexStruct[m_vertexCount];
     if(!vertices)
     {
