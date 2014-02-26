@@ -9,6 +9,7 @@ Bitmap::Bitmap(D3D& d3d, const Texture& texture, int width, int height, int scre
         m_bitmapWidth(width), m_bitmapHeight(height)       
 {
     Init(&d3d.GetDevice());
+	InitBuffers(d3d);
 }
 
 Bitmap::Bitmap(D3D& d3d, ID3D11ShaderResourceView* texture, int width, int height, int screenWidth,
@@ -20,6 +21,7 @@ Bitmap::Bitmap(D3D& d3d, ID3D11ShaderResourceView* texture, int width, int heigh
       m_bitmapWidth(width), m_bitmapHeight(height)
 {
     Init(&d3d.GetDevice());
+	InitBuffers(d3d);
 }
 
 
@@ -107,7 +109,7 @@ bool Bitmap::Init(ID3D11Device* device)
 }
 
 
-bool Bitmap::UpdateBuffers(D3D& d3d, int positionX, int positionY) const
+bool Bitmap::InitBuffers(D3D& d3d) const
 {
 	float left = -m_bitmapWidth / 2.0f;
 	float right = left + m_bitmapWidth;

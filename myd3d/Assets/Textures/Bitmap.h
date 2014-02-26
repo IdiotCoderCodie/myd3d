@@ -29,8 +29,7 @@ public:
     ID3D11ShaderResourceView* GetTextureShaderResourceView() const       { return m_texture; }
     //void SetTextureShaderResourceView(ID3D11ShaderResourceView* texture) { m_texture = texture; }
 
-
-    bool UpdateBuffers(D3D& d3d, int positionX, int positionY) const;
+    bool InitBuffers(D3D& d3d) const;
 
     void Draw(D3D& d3d);
 

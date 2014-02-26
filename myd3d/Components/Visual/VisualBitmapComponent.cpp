@@ -22,7 +22,6 @@ VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView*
 
 VisualBitmapComponent::~VisualBitmapComponent(void)
 {
-
 }
 
 
@@ -34,9 +33,6 @@ void VisualBitmapComponent::ComponentID(componentId_t& out) const
 
 void VisualBitmapComponent::Update(float time)
 {
-    // Check if updating position. If so need to update bitmap buffers.
-    m_bitmap.UpdateBuffers(GetParent().GetParent().GetParent().GetD3DInstance(), 
-                           0, 0);
 }
 
 void VisualBitmapComponent::Draw(D3D& d3d)
@@ -48,7 +44,9 @@ void VisualBitmapComponent::Draw(D3D& d3d)
     int screenWidth = GetParent().GetParent().GetParent().GetD3DInstance().GetScreenWidth();
     int screenHeight = GetParent().GetParent().GetParent().GetD3DInstance().GetScreenHeight();
 
-    // NOTE: need to get the actual screen width and height.
+	// TODO: Get the actual view matrix from the active camera.
+	// TODO: Create an orthogonal camera component.
+
 	ConstantBuffers::MVPBuffer matrixBuffer;
 	matrixBuffer.modelMatrix = glm::transpose(GetParent().GetTransform().GetMatrix());
 	matrixBuffer.viewMatrix	 = glm::transpose(glm::mat4(1.0f));
@@ -56,17 +54,6 @@ void VisualBitmapComponent::Draw(D3D& d3d)
 										      0.0f, 2.0f / screenHeight, 0.0f, 0.0f,
 											  0.0f, 0.0f, 1.0f / (100.0f - 0.01f), 0.0f,
 											  0.0f, 0.0f, 0.01f / (0.01f - 100.0f), 1.0f);
-
-  //  bitmap::MatrixBufferStruct matBuffer = 
-  //  { 
-  //      // Method of generating ortho matrix taken from D3DX spec.
-  //      glm::mat4(2.0f / screenWidth, 0.0f, 0.0f, 0.0f,
-  //                0.0f, 2.0f / screenHeight, 0.0f, 0.0f,
-  //                0.0f, 0.0f, 1.0f/(100.0f - 0.01f), 0.0f,
-  //                0.0f, 0.0f, 0.01f/(0.01f - 100.0f), 1.0f),
-
-		//glm::transpose(GetParent().GetTransform().GetMatrix())
-  //  };
 
     GetShader().VSSetConstBufferData(d3d, std::string("MatrixBuffer"), 
                                   (void*)&matrixBuffer, sizeof(matrixBuffer), 0);
