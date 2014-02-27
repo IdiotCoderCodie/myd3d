@@ -96,41 +96,31 @@ bool StaticMesh::LoadObj(const std::string& filename)
             {
                 static int faceCount = 0;
 
-                char c;
-                input >> c; // Remove the 'f'.
-
-                for(int i = 0; i != 3; i++)
+                int v[3];
+                int n[3];
+                int t[3]; // YUK!!
+                sscanf(line.c_str(), "%*c %d%*c%d%*c%d %d%*c%d%*c%d %d%*c%d%*c%d", 
+                                                            &v[0], &t[0], &n[0], 
+                                                            &v[1], &t[1], &n[1], 
+                                                            &v[2], &t[2], &n[2]);
+                // Reverse loop to reverse winding.
+                for(int j = 2; j > -1; j--)
                 {
-                    int v[3];
-                    int n[3];
-                    int t[3]; // YUK!!
-                    sscanf(line.c_str(), "%*c %d%*c%d%*c%d %d%*c%d%*c%d %d%*c%d%*c%d", 
-                                                             &v[0], &t[0], &n[0], 
-                                                             &v[1], &t[1], &n[1], 
-                                                             &v[2], &t[2], &n[2]);
-                    // Reverse loop to reverse winding.
-                    for(int j = 2; j > -1; j--)
-                    {
-                        ModelVertex newModVert;
-                        // Assign vertex positions.
-                        newModVert.x    = tempVerts[v[j]-1].x; 
-                        newModVert.y    = tempVerts[v[j]-1].y;
-                        newModVert.z    = tempVerts[v[j]-1].z;
-                        // Assign texture coords.
-                        newModVert.tu   = tempUVs[t[j]-1].x;
-                        newModVert.tv   = tempUVs[t[j]-1].y;
-                        // Assign normals.
-                        newModVert.nx   = tempNormals[n[j]-1].x;
-                        newModVert.ny   = tempNormals[n[j]-1].y;
-                        newModVert.nz   = tempNormals[n[j]-1].z;
+                    ModelVertex newModVert;
 
-                        m_modelData.push_back(newModVert);
-                    }
+                    // Assign vertex positions.
+                    newModVert.x    = tempVerts[v[j]-1].x; 
+                    newModVert.y    = tempVerts[v[j]-1].y;
+                    newModVert.z    = tempVerts[v[j]-1].z;
+                    // Assign texture coords.
+                    newModVert.tu   = tempUVs[t[j]-1].x;
+                    newModVert.tv   = tempUVs[t[j]-1].y;
+                    // Assign normals.
+                    newModVert.nx   = tempNormals[n[j]-1].x;
+                    newModVert.ny   = tempNormals[n[j]-1].y;
+                    newModVert.nz   = tempNormals[n[j]-1].z;
 
-                    // Read in next 2 lines, don't read in last loop, don't need this line yet.
-                    if(i != 2)
-                        std::getline(input, line);
-
+                    m_modelData.push_back(newModVert);
                 }
                 faceCount++;
             }

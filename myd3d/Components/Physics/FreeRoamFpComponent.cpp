@@ -161,7 +161,7 @@ void FreeRoamFpComponent::Update(float time)
     //----------------------------------------------------------------------------------------------
 
      // Handle PGUP key press.
-    if(G_InputManager().IsKeyPressed(DIK_PGUP) && G_InputManager().IsKeyPressed(DIK_LCONTROL) 
+    if(G_InputManager().IsKeyPressed(DIK_PGDN) && G_InputManager().IsKeyPressed(DIK_LCONTROL) 
         && !m_goingDown)
     {
         // Set y acceleration.
@@ -185,7 +185,7 @@ void FreeRoamFpComponent::Update(float time)
 
 
     // Handle left keypress.
-    if(G_InputManager().IsKeyPressed(DIK_PGDN) && G_InputManager().IsKeyPressed(DIK_LCONTROL) 
+    if(G_InputManager().IsKeyPressed(DIK_PGUP) && G_InputManager().IsKeyPressed(DIK_LCONTROL) 
         && !m_goingUp)
     {
         // Set y acceleration.
@@ -224,11 +224,11 @@ void FreeRoamFpComponent::Update(float time)
     }
     if(G_InputManager().IsKeyPressed(DIK_UPARROW) && !G_InputManager().IsKeyPressed(DIK_LCONTROL))
     {
-        newAngularVelocity.x -= m_turnSensitivityY;
+        newAngularVelocity.x += m_turnSensitivityY;
     }
     if(G_InputManager().IsKeyPressed(DIK_DOWNARROW) && !G_InputManager().IsKeyPressed(DIK_LCONTROL))
     {
-        newAngularVelocity.x += m_turnSensitivityY;
+        newAngularVelocity.x -= m_turnSensitivityY;
     }
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
