@@ -87,6 +87,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Scenes\AdvRenderingScene.cpp" />
     <ClCompile Include="Assets\Textures\Bitmap.cpp" />
     <ClCompile Include="Assets\Textures\TextureManager.cpp" />
     <ClCompile Include="Components\Collision\CollisionComponent.cpp" />
@@ -124,6 +125,7 @@
     <ClCompile Include="Assets\Shaders\ShaderManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Scenes\AdvRenderingScene.h" />
     <ClInclude Include="Assets\Shaders\ShaderResources\constant_buffers.h" />
     <ClInclude Include="Assets\Shaders\ShaderResources\poly_layouts.h" />
     <ClInclude Include="Assets\Shaders\ShaderResources\sampler_desc.h" />

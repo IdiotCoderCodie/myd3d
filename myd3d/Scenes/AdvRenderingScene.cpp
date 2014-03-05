@@ -1,0 +1,68 @@
+#include "AdvRenderingScene.h"
+
+#include "../Entities/EntityFactory.h"
+#include "../Components/Visual/VisualMeshComponent.h"
+#include "SceneManager.h"
+
+AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* sceneMgr)
+: Scene(name, sceneMgr)
+{
+	D3D& d3d = GetParent().GetD3DInstance();
+
+	int screenWidth = GetParent().GetD3DInstance().GetScreenWidth();
+	int screenHeight = GetParent().GetD3DInstance().GetScreenHeight();
+	float aspect = screenWidth / (float)screenHeight;
+
+	EntityFactory::CreatePerspectiveFpCameraEntity(*this, 60.0f, aspect, 0.1f, 500.0f, "mmainCam");
+
+	EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cubeInv.obj", L"cement.dds",
+		GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f),
+		"testCube");
+
+	EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.02f, 1.0f),
+		glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+		glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),
+		glm::vec3(0.0f, 0.0f, -5.0f),
+		30.0f,
+		12.0f,
+		"mainLight");
+}
+
+
+AdvRenderingScene::~AdvRenderingScene()
+{
+}
+
+
+void AdvRenderingScene::Update(double time)
+{
+	Scene::Update(time);
+}
+
+
+void AdvRenderingScene::Draw(D3D& d3d)
+{
+	for (int i = 0; i < GetShadowMaps().size(); i++)
+	{
+		GetShadowMaps()[i]->ClearRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView(),
+			1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	// Do shadow pass.
+	for (auto ent : GetEntities())
+	{
+		Component* vmcCheck = ent->GetComponent("VisualComponent", "VisualMeshComponent");
+		if (vmcCheck)
+		{
+			// entity has a VMC.
+			VisualMeshComponent* vmc = static_cast<VisualMeshComponent*>(vmcCheck);
+			vmc->ShadowPass(d3d);
+		}
+	}
+
+	d3d.BeginScene(0.6f, 0.6f, 0.6f, 1.0f);
+
+	d3d.SetBackBufferRenderTarget();
+
+	Scene::Draw(d3d);
+}

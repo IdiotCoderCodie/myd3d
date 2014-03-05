@@ -120,6 +120,9 @@
     <ClCompile Include="Components\Camera\OrthoCamComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\AdvRenderingScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D.h">
@@ -234,6 +237,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\Camera\OrthoCamComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\AdvRenderingScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
