@@ -22,6 +22,7 @@ private:
 	void UpdateObjectPhysics();
 
 private:
+	float m_dt;
     Scene* m_parentScene;
 	ContactManifold* m_manifold;
 	std::vector<Circle*> m_circles;

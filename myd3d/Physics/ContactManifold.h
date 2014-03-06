@@ -20,8 +20,8 @@ public:
 
     void Add(ManifoldPoint point);
     void Assess();
-    int GetNumPoints() const;
-    ManifoldPoint& GetPoint(int index);
+	int GetNumPoints() const			{ return m_numOfPoints; }
+	ManifoldPoint& GetPoint(int index)	{ return m_points[index]; }
 
 private:
     ManifoldPoint m_points[1000];
