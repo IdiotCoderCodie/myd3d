@@ -12,7 +12,9 @@ Circle::~Circle(void)
 
 void Circle::CollisionWithCircle(Circle* circle, ContactManifold* contactManifold)
 {
-    if((circle->GetNewPos() - this->GetNewPos()).length() < circle->GetRadius() + this->GetRadius())
+	glm::vec2 test1 = circle->GetNewPos() - this->GetNewPos();
+
+    if( glm::length(circle->GetNewPos() - this->GetNewPos()) < (circle->GetRadius() + this->GetRadius()) )
     {
         ManifoldPoint newPoint;
         newPoint.contactID1     = this;

@@ -1,6 +1,9 @@
 #pragma once
 #include "../../glm/glm.hpp"
 #include "../ContactManifold.h"
+class Entity;
+
+class Circle;
 
 class RigidBody
 {
@@ -9,14 +12,14 @@ public:
     virtual ~RigidBody(void);
 
     virtual void CalculatePhysics(float dt);
-    virtual void CollisionWithCircle(RigidBody* circle, ContactManifold* contactManifold) = 0;
+    virtual void CollisionWithCircle(Circle* circle, ContactManifold* contactManifold) = 0;
     virtual void CollisionWithSquare(RigidBody* square, ContactManifold* contactManifold) = 0;
     void Update();
     virtual void CollisionResponseWithCircle(ManifoldPoint& point) = 0;
     virtual void CollisionResponseWithSquare(ManifoldPoint& point) = 0;
 
 
-    void SetPos(float x, float y)       { m_velocity = glm::vec2(x, y); }
+    void SetPos(float x, float y)       { m_position = glm::vec2(x, y); }
     void SetVel(float x, float y)       { m_velocity = glm::vec2(x, y); }
     void SetNewVel(float x, float y)    { m_newVelocity = glm::vec2(x, y); }
     void SetMass(float mass)            { m_mass = mass; }
@@ -31,6 +34,8 @@ public:
 
     void ResetPos()                     { m_newPosition = m_position; }
 
+	void SetParent(Entity* entity)		{ m_parentEntity = entity; }
+
 private:
     float m_mass;
     float m_elasticity;
@@ -39,6 +44,7 @@ private:
     glm::vec2 m_velocity;
     glm::vec2 m_newVelocity;
     int m_objectID;
+	Entity* m_parentEntity;
 
     static int countId;
 };

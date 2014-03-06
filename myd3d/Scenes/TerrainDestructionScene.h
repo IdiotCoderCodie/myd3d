@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "../Physics/PhysicsSystem.h"
 
 class TerrainDestructionScene : public Scene
 {
@@ -13,5 +14,6 @@ public:
 private:
     int m_screenWidth;
     int m_screenHeight;
+	PhysicsSystem m_physicsSystem;
 };
 

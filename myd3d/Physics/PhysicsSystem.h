@@ -12,6 +12,8 @@ public:
 
     void Update(double time);
 
+	void AddCircle(Entity* entity, float radius, glm::vec2& velocity);
+
 private:
 	void SimulationLoop(double time);
 	void StaticCollisionDetection();

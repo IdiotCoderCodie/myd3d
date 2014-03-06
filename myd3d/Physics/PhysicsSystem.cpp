@@ -30,6 +30,18 @@ void PhysicsSystem::Update(double time)
 }
 
 
+void PhysicsSystem::AddCircle(Entity* entity, float radius, glm::vec2& velocity)
+{
+	Circle* circle = new Circle();
+	circle->SetParent(entity);
+	circle->SetRadius(radius);
+	circle->SetVel(velocity.x, velocity.y);
+	circle->SetMass(1.0f);
+	circle->SetPos(entity->GetPos().x, entity->GetPos().y);
+
+	m_circles.push_back(circle);
+}
+
 void PhysicsSystem::SimulationLoop(double time)
 {
 	m_dt = time;
@@ -64,7 +76,7 @@ void PhysicsSystem::StaticCollisionDetection()
 		loop = false;
 		for (int circle1 = 0; circle1 < m_circles.size(); circle1++)
 		{
-			for (int circle2 = checkedNum; circle2 < m_circles.size(); circle2++)
+			for (int circle2 = checkedNum + 1; circle2 < m_circles.size(); circle2++)
 			{
 				loop |= StaticSphereCollisionDetection(m_circles[circle1], m_circles[circle2]);
 			}
@@ -114,7 +126,7 @@ void PhysicsSystem::DynamicCollisionDetection()
 	
 	for (int circle1 = 0; circle1 < m_circles.size(); circle1++)
 	{
-		for (int circle2 = checkedNum; circle2 < m_circles.size(); circle2++)
+		for (int circle2 = circle1 + 1; circle2 < m_circles.size(); circle2++)
 		{
 			m_circles[circle1]->CollisionWithCircle(m_circles[circle2], m_manifold);
 		}
