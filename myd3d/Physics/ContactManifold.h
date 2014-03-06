@@ -1,6 +1,8 @@
 #pragma once
 #include "../glm/glm.hpp"
 
+class Circle;
+
 struct ManifoldPoint 
 {
     glm::vec2 contactPoint;

@@ -32,6 +32,20 @@ void Circle::CollisionWithSquare(RigidBody* circle, ContactManifold* contactMani
 void Circle::CollisionResponseWithCircle(ManifoldPoint& point)
 {
     // TODO: complete.
+	Circle* c1 = point.contactID1;
+	Circle* c2 = point.contactID2;
+	float m1 = c1->GetMass();
+	float m2 = c2->GetMass();
+	glm::vec2 u1 = c1->GetNewVel();
+	glm::vec2 u2 = c2->GetNewVel();
+	
+	glm::vec2 v1 = ((m1 - m2) / (m1 + m2))*u1 + ((2 * m2) / (m1 + m2))*u2;
+	glm::vec2 v2 = ((m2 - m1) / (m1 + m2))*u2 + ((2 * m1) / (m1 + m2))*u1;
+
+	c1->SetNewVel(v1.x, v1.y);
+	c2->SetNewVel(v2.x, v2.y);
+
+	point.responded = true;
 }
 
 void Circle::CollisionResponseWithSquare(ManifoldPoint& point)
