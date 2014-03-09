@@ -272,7 +272,8 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
     {
         LightComponent* light = static_cast<LightComponent*>(lights[i]);
 
-        lightsBuffer[i].enabled       = true;
+        lightsBuffer[i].enabled       = 1;
+		lightsBuffer[i].shadows		  = 0;
         lightsBuffer[i].position      = glm::vec4(light->GetParent().GetPos(), 1.0f);
         lightsBuffer[i].ambient       = light->GetAmbient();
         lightsBuffer[i].diffuse       = light->GetDiffuse();

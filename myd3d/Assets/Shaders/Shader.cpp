@@ -543,7 +543,7 @@ bool Shader::CompileShader(HWND hwnd, WCHAR* filename, CHAR* entryPoint, CHAR* t
     HRESULT result;
     ID3D10Blob* errMsg = 0;
     // Compile shader.
-    result = D3DCompileFromFile(filename, NULL, NULL, entryPoint, target, 0, 0, shaderBuff, 
+    result = D3DCompileFromFile(filename, NULL, NULL, entryPoint, target, D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, shaderBuff, 
                                 &errMsg);
 
     if(FAILED(result))

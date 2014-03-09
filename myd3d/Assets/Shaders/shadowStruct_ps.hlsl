@@ -11,7 +11,8 @@ Texture2D shadowMapTextures[MAX_SHADOWCASTING_LIGHTS] : register(t3);
 
 struct light
 {
-    bool   enabled;
+    int   enabled;
+	int    shadows;
     float4 position;
     float4 ambient;
     float4 diffuse;
@@ -20,7 +21,7 @@ struct light
     float3 spotDirection;
     float  spotExponent;
     float3 attenuation;
-    float3 padding;
+    float2 padding;
 };
 StructuredBuffer<light> LightBuffer : register(t2);
 
@@ -61,7 +62,7 @@ void accumulateLights(StructuredBuffer<light> lights, float3 pos, float3 norm, f
             //float3 lightVec = lights[index].position.xyz - pos;
             float NdotL = max(dot(norm, lightVec), 0.0);
                   
-            if(index < MAX_SHADOWCASTING_LIGHTS)
+            if((lights[index].shadows == 1) && index < MAX_SHADOWCASTING_LIGHTS)
             {
                 float2 projectTexCoord;
                 // Calculate projected texture coords.
@@ -117,6 +118,18 @@ void accumulateLights(StructuredBuffer<light> lights, float3 pos, float3 norm, f
                     }
                 }               
             }
+			else
+			{
+				float3 H = normalize(lightVec - normalize(pos - eye));
+				float  NdotH = max(dot(norm, H), 0.0);
+				float  exponent = max(128.0 / max(0.0, min(128.0, shininess)), 0.0);
+				float4 litResult = lit(NdotL, NdotH, exponent);
+
+				// Light the pixel.
+				//ambient  += (lights[index].ambient  * litResult.x);
+				diffuse += (lights[index].diffuse  * litResult.y);
+				specular += (lights[index].specular * litResult.z);
+			}
             ambient += lights[index].ambient;
         }
         
@@ -125,7 +138,7 @@ void accumulateLights(StructuredBuffer<light> lights, float3 pos, float3 norm, f
 
 float4 ps_main(PixelInputType input) : SV_TARGET
 {
-    float4 color = float4(0.0, 0.0, 0.0, 1.0);
+	//float4 color = float4(0.0, 0.0, 0.0, 1.0);
     float lightIntensity = 0.0f;
 
     // Sample the normal texture, put int range -1.0 to +1.0.
@@ -141,7 +154,8 @@ float4 ps_main(PixelInputType input) : SV_TARGET
     accumulateLights(LightBuffer, input.position, input.normal, cameraPosition, 0.0, 
                      ambient, diffuse, specular, input);
 
-    color += ambient;
+	float4 color = ambient;
+   // color += ambient;
     color += diffuse;
     //color += specular;
 
@@ -153,5 +167,6 @@ float4 ps_main(PixelInputType input) : SV_TARGET
     //Combine final colors.
     color = color * textureColor;
 
-    return color;
+	return color;
+
 }

@@ -16,7 +16,7 @@ Graphics::Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen
         m_statsTweakBar(0),
         m_fps(0.0f)
 {
-    m_sceneMgr.AddScene(new TerrainDestructionScene("TerrainDestruction", &m_sceneMgr));
+    m_sceneMgr.AddScene(new AdvRenderingScene("TerrainDestruction", &m_sceneMgr));
     m_timer.Start();
 
     m_statsTweakBar = TwNewBar("Performance Stats");

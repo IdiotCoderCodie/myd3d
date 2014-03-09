@@ -122,7 +122,8 @@ namespace ConstantBuffers
 
     struct Light
     {
-        bool enabled;
+        int enabled;
+		int shadows;
         glm::vec4 position;
         glm::vec4 ambient;
         glm::vec4 diffuse;
@@ -131,6 +132,6 @@ namespace ConstantBuffers
         glm::vec3 spotDirection;
         float     spotExponent;
         glm::vec3 attenuation;
-        glm::vec3 padding;
+        glm::vec2 padding;
     };
 };

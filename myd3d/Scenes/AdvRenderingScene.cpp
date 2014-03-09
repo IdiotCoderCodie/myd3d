@@ -15,17 +15,27 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 
 	EntityFactory::CreatePerspectiveFpCameraEntity(*this, 60.0f, aspect, 0.1f, 500.0f, "mmainCam");
 
-	EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cubeInv.obj", L"cement.dds",
+	EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"cement.dds",
 		GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f),
 		"testCube");
 
-	EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.01f, 0.01f, 0.02f, 1.0f),
-		glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+	Entity* light = EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.05f, 0.1f, 0.05f, 1.0f),
+		glm::vec4(0.1f, 0.5f, 0.1f, 1.0f),
 		glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),
-		glm::vec3(0.0f, 0.0f, -5.0f),
-		30.0f,
+		glm::vec3(0.0f, 0.0f, 5.0f),
+		10.0f,
 		12.0f,
 		"mainLight");
+
+	/*Entity* light2 = EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.1f, 0.05f, 0.05f, 1.0f),
+		glm::vec4(0.5f, 0.1f, 0.1f, 1.0f),
+		glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),
+		glm::vec3(0.0f, 0.0f, 7.0f),
+		10.0f,
+		12.0f,
+		"mainLight2");*/
+
+	light->RotateGlobalY(180.0f);
 }
 
 
