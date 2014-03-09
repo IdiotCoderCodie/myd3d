@@ -291,5 +291,6 @@
     <FxCompile Include="Assets\Shaders\particle_ps.hlsl" />
     <FxCompile Include="Assets\Shaders\lines_vs.hlsl" />
     <FxCompile Include="Assets\Shaders\lines_ps.hlsl" />
+    <FxCompile Include="Assets\Shaders\allenLike_vs.hlsl" />
   </ItemGroup>
 </Project>

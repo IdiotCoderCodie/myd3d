@@ -15,14 +15,14 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 
 	EntityFactory::CreatePerspectiveFpCameraEntity(*this, 60.0f, aspect, 0.1f, 500.0f, "mmainCam");
 
-	EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"cement.dds",
+	EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\teapot.obj", L"cement.dds",
 		GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f),
 		"testCube");
 
 	Entity* light = EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.05f, 0.1f, 0.05f, 1.0f),
 		glm::vec4(0.1f, 0.5f, 0.1f, 1.0f),
 		glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),
-		glm::vec3(0.0f, 0.0f, 5.0f),
+		glm::vec3(0.0f, 0.0f, 20.0f),
 		10.0f,
 		12.0f,
 		"mainLight");

@@ -87,8 +87,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Physics\RigidBody\Circle.cpp" />
     <ClCompile Include="Physics\ContactManifold.cpp" />
     <ClCompile Include="Physics\PhysicsSystem.cpp" />
+    <ClCompile Include="Physics\RigidBody\RigidBody.cpp" />
     <ClCompile Include="Scenes\AdvRenderingScene.cpp" />
     <ClCompile Include="Assets\Textures\Bitmap.cpp" />
     <ClCompile Include="Assets\Textures\TextureManager.cpp" />
@@ -128,9 +130,10 @@
     <ClCompile Include="Scenes\TerrainDestructionScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Physics\RigidBody\Circle.h" />
     <ClInclude Include="Physics\ContactManifold.h" />
-    <ClInclude Include="Physics\PhysicsCollider.h" />
     <ClInclude Include="Physics\PhysicsSystem.h" />
+    <ClInclude Include="Physics\RigidBody\RigidBody.h" />
     <ClInclude Include="Scenes\AdvRenderingScene.h" />
     <ClInclude Include="Assets\Shaders\ShaderResources\constant_buffers.h" />
     <ClInclude Include="Assets\Shaders\ShaderResources\poly_layouts.h" />
@@ -180,6 +183,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Assets\Shaders\allenLike_vs.hlsl" />
     <FxCompile Include="Assets\Shaders\bitmap_ps.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>

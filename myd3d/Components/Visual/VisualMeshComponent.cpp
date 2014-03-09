@@ -13,6 +13,8 @@
 //extern ShaderManager G_ShaderManager();
 //extern TextureManager G_TextureManager;
 
+static float   m_totalTime = 0.0f;
+
 VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, Texture& texture,
                                          std::vector<RenderTarget*>& shadowMaps)
     : VisualComponent(),
@@ -74,6 +76,7 @@ void VisualMeshComponent::ComponentID(componentId_t& out) const
 
 void VisualMeshComponent::Update(float timeElapsed)
 {
+    m_totalTime += timeElapsed;
 }
 
 
@@ -222,7 +225,7 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
     }
     else
     {
-        SetShader(G_ShaderManager().GetShader("Mesh_Shadows"));
+        SetShader(G_ShaderManager().GetShader("Allen_Like"));
     }
 
 
@@ -254,12 +257,22 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
         lightPosBuffer.lightPosition[i]    = glm::vec4(light->GetParent().GetPos(), 0.0f);
     }
 
+
+    // Setup time buffer.
+    ConstantBuffers::TimeBuffer timeBuffer;
+    timeBuffer.time = m_totalTime;
+
+    
     // Set the buffers using the data put into the structures above.
     GetShader().VSSetConstBufferData(d3d, std::string("MatrixBuffer"), 
                                   (void*)&matBuffer, sizeof(matBuffer), 0);
 
     GetShader().VSSetConstBufferData(d3d, std::string("LightPositionBuffer"), 
             (void*)&lightPosBuffer, sizeof(lightPosBuffer), 1);
+
+    GetShader().VSSetConstBufferData(d3d, std::string("TimeBuffer"), 
+            (void*)&timeBuffer, sizeof(timeBuffer), 2);
+
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
 

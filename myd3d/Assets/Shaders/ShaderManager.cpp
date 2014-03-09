@@ -81,6 +81,43 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
 
 
     //----------------------------------------------------------------------------------------------
+    // Create mesh render shader using shadow, using 1 light and 1 texture.
+    m_shaders["Allen_Like"] = Shader();
+    m_shaders["Allen_Like"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\allenLike_vs.hlsl", 
+                                        "vp_main", "vs_5_0", &PolyLayouts::POS3_TEX2_NORM3[0], 3);
+    m_shaders["Allen_Like"].SetPixelShader(d3d, 0, L"Assets\\Shaders\\shadowStruct_ps.hlsl", 
+                                        "ps_main", "ps_5_0");
+
+    // Add all the buffers.
+    m_shaders["Allen_Like"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
+                                      sizeof(ConstantBuffers::ShadowMatrixBuffer), 
+                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);  
+
+    m_shaders["Allen_Like"].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
+                                          sizeof(ConstantBuffers::LightPositionBuffer), 
+    								      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+    m_shaders["Allen_Like"].AddBuffer(d3d, "TimeBuffer", D3D11_USAGE_DYNAMIC, 
+                                          sizeof(ConstantBuffers::TimeBuffer), 
+                                          D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+    m_shaders["Allen_Like"].AddBuffer(d3d, "CameraBuffer", D3D11_USAGE_DYNAMIC,
+                                          sizeof(ConstantBuffers::CameraPosBuffer),
+                                          D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+    m_shaders["Allen_Like"].AddStructuredBuffer(d3d, "LightBuffer", 
+                                                         sizeof(ConstantBuffers::Light), 
+                                                         ConstantBuffers::MAX_SHADOWCASTING_LIGHTS);
+
+    // Add the sampler states.
+    m_shaders["Allen_Like"].AddSamplerState(d3d, "ModelTextureSampler", 
+                                                      SamplerDesc::DEFAULT_WRAP);
+    m_shaders["Allen_Like"].AddSamplerState(d3d, "ShadowMapSampler", 
+                                                      SamplerDesc::SAMPLE_CLAMP);
+    //----------------------------------------------------------------------------------------------
+
+
+    //----------------------------------------------------------------------------------------------
 	// Load in the test normal map shader, with 2 lights and shadows.
 	m_shaders["Mesh_Bump_Shadows"] = Shader();
 	m_shaders["Mesh_Bump_Shadows"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\shadowStruct_bump_vs.hlsl", 

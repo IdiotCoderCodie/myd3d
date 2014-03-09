@@ -134,4 +134,11 @@ namespace ConstantBuffers
         glm::vec3 attenuation;
         glm::vec2 padding;
     };
+
+
+    struct TimeBuffer
+    {
+        float     time;
+        glm::vec3 padding;
+    };
 };
