@@ -141,4 +141,11 @@ namespace ConstantBuffers
         float     time;
         glm::vec3 padding;
     };
+
+
+	struct TessellationBuffer
+	{
+		float		tesselationAmount;
+		glm::vec3	padding;
+	};
 };

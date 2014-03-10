@@ -51,7 +51,7 @@ public:
     bool InitBuffers(D3D& d3d);
     bool InitBuffersTanBin(D3D& d3d);
 
-    void Render(D3D& d3d);
+	void Render(D3D& d3d, D3D_PRIMITIVE_TOPOLOGY topology);
 
     int GetVertexCount() const { return m_vertexCount; }
     int GetIndexCount() const { return m_indexCount;}

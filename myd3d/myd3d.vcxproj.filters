@@ -292,5 +292,9 @@
     <FxCompile Include="Assets\Shaders\lines_vs.hlsl" />
     <FxCompile Include="Assets\Shaders\lines_ps.hlsl" />
     <FxCompile Include="Assets\Shaders\allenLike_vs.hlsl" />
+    <FxCompile Include="Assets\Shaders\terrainPlanet_vs.hlsl" />
+    <FxCompile Include="Assets\Shaders\terrainPlanet_ds.hlsl" />
+    <FxCompile Include="Assets\Shaders\terrainPlanet_hs.hlsl" />
+    <FxCompile Include="Assets\Shaders\terrainPlanet_ps.hlsl" />
   </ItemGroup>
 </Project>

@@ -299,7 +299,7 @@ bool StaticMesh::InitBuffersTanBin(D3D& d3d)
     return true;
 }
 
-void StaticMesh::Render(D3D& d3d)
+void StaticMesh::Render(D3D& d3d, D3D_PRIMITIVE_TOPOLOGY topology)
 {
     unsigned int stride = m_includeTanBin ? sizeof(VertexFormatTanBin) : sizeof(VertexFormat);
     unsigned int offset = 0;
@@ -311,7 +311,7 @@ void StaticMesh::Render(D3D& d3d)
     d3d.GetDeviceContext().IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
     // Set type of primitive to be rendered.
-    d3d.GetDeviceContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	d3d.GetDeviceContext().IASetPrimitiveTopology(topology);
 }
 
 

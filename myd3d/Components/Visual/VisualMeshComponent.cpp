@@ -84,7 +84,7 @@ void VisualMeshComponent::ShadowPass(D3D& d3d)
 {
     if(m_castShadows)
     {
-        m_mesh.Render(d3d);
+        m_mesh.Render(d3d, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
         Shader* shadowShader = G_ShaderManager().GetShader("Depth");
         // Send data for the matrix buffer to the shader, getting view and proj matrix from light.
@@ -115,7 +115,7 @@ void VisualMeshComponent::ShadowPass(D3D& d3d)
 
 void VisualMeshComponent::Draw(D3D& d3d)
 {
-    m_mesh.Render(d3d);
+    m_mesh.Render(d3d, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     if(m_recieveShadows)
     {

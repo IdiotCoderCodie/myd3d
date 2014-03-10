@@ -183,6 +183,33 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
                                  D3D11_CPU_ACCESS_WRITE, 0, 0);
     //----------------------------------------------------------------------------------------------
 
+
+	//----------------------------------------------------------------------------------------------
+	// Lines
+	std::string name = "PlanetTerrain";
+	m_shaders[name] = Shader();
+	m_shaders[name].SetVertexShader(d3d, 0, L"Assets\\Shaders\\terrainPlanet_vs.hlsl", "main",
+											   "vs_5_0", &PolyLayouts::POS3_TEX2_NORM3[0], 3);
+
+	m_shaders[name].SetHullShader(d3d, 0, L"Assets\\Shaders\\terrainPlanet_hs.hlsl", "main",
+											 "hs_5_0");
+
+	m_shaders[name].SetDomainShader(d3d, 0, L"Assets\\Shaders\\terrainPlanet_ds.hlsl", "main",
+											   "ds_5_0");
+
+	m_shaders[name].SetPixelShader(d3d, 0, L"Assets\\Shaders\\terrainPlanet_ps.hlsl", "main",
+										      "ps_5_0");
+
+	m_shaders[name].AddBuffer(d3d, "TessellationBuffer", D3D11_USAGE_DYNAMIC,
+										 sizeof(ConstantBuffers::TessellationBuffer), 
+										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
+										 sizeof(ConstantBuffers::MVPBuffer),
+										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+	//----------------------------------------------------------------------------------------------
+
+
     m_loaded = true;
     // NOTE: should be checking all of the above worked fine.
     return true;
