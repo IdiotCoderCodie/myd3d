@@ -20,7 +20,9 @@ VisualTessellatedPlanetComponent::VisualTessellatedPlanetComponent(D3D& d3d, con
       m_bumpTexture(texture), // Not used anyway, so set as same as m_texture for now?
       m_shadowMaps(shadowMaps),
       m_castShadows(false),
-      m_recieveShadows(false)
+      m_recieveShadows(false),
+	  m_tessFactor(1.0f),
+	  m_tweakBarInitialized(false)
 {
     if(!G_ShaderManager().IsLoaded())
     {
@@ -38,13 +40,17 @@ VisualTessellatedPlanetComponent::VisualTessellatedPlanetComponent(D3D& d3d, con
       m_bumpTexture(bmpMap),
       m_shadowMaps(shadowMaps),
       m_castShadows(false),
-      m_recieveShadows(false)
+      m_recieveShadows(false),
+	  m_tessFactor(1.0f),
+	  m_tweakBarInitialized(false)
 {
     if(!G_ShaderManager().IsLoaded())
     {
         G_ShaderManager().LoadShaders(d3d, "configFile");
     }
     SetShader(G_ShaderManager().GetShader("Normal_Shadows_Test"));
+
+
 }
 
 
@@ -52,6 +58,15 @@ VisualTessellatedPlanetComponent::~VisualTessellatedPlanetComponent(void)
 {
 }
 
+
+void VisualTessellatedPlanetComponent::InitTweakBar()
+{
+	TwBar* bar = GetParent().GetTweakBar();
+	std::string tweakId = GetParent().GetID();
+
+	TwAddVarRW(bar, "TessFactor", TW_TYPE_FLOAT, &m_tessFactor, "step=0.01");
+	m_tweakBarInitialized = true;
+}
 
 VisualTessellatedPlanetComponent& VisualTessellatedPlanetComponent::operator=(const VisualTessellatedPlanetComponent& other)
 {
@@ -73,6 +88,8 @@ void VisualTessellatedPlanetComponent::ComponentID(componentId_t& out) const
 
 void VisualTessellatedPlanetComponent::Update(float timeElapsed)
 {
+	if(!m_tweakBarInitialized)
+		InitTweakBar();
     m_totalTime += timeElapsed;
 }
 
@@ -225,22 +242,22 @@ void VisualTessellatedPlanetComponent::DrawWithShadows(D3D& d3d)
         SetShader(G_ShaderManager().GetShader("PlanetTerrain"));
 	}
 
-	ConstantBuffers::TessellationBuffer tessBuffer
-	{
-		2.0f,
-		glm::vec3(0.0f)
-	};
+	ConstantBuffers::TessellationBuffer tessBuffer;
+	//{
+	tessBuffer.tesselationAmount = m_tessFactor;
+		//glm::vec3(0.0f)
+	//};
 
 	GetShader().HSSetConstBufferData(d3d, std::string("TessellationBuffer"), (void*)&tessBuffer, 
 		sizeof(tessBuffer), 0);
 
 
-	ConstantBuffers::MVPBuffer mvpBuffer
-	{
-		glm::transpose( GetParent().GetTransform().GetMatrix() ),
-		glm::transpose( GetParent().GetParent().GetActiveCamera()->GetViewMatrix() ),
-		glm::transpose( GetParent().GetParent().GetActiveCamera()->GetProjMatrix() )
-	};
+	ConstantBuffers::MVPBuffer mvpBuffer;
+	//{
+		mvpBuffer.modelMatrix = glm::transpose( GetParent().GetTransform().GetMatrix() );
+			mvpBuffer.viewMatrix = glm::transpose( GetParent().GetParent().GetActiveCamera()->GetViewMatrix() );
+			mvpBuffer.projectionMatrix = glm::transpose( GetParent().GetParent().GetActiveCamera()->GetProjMatrix() );
+	//};
 
 	GetShader().DSSetConstBufferData(d3d, std::string("MatrixBuffer"), (void*)&mvpBuffer, 
 									 sizeof(mvpBuffer), 0);

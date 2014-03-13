@@ -50,6 +50,8 @@ private:
      */
     void DrawWithShadows(D3D& d3d);
 
+	void InitTweakBar();
+
 private:
     StaticMesh                  m_mesh;
 	Texture&                    m_texture;
@@ -57,5 +59,7 @@ private:
     std::vector<RenderTarget*>& m_shadowMaps;
     bool                        m_castShadows;
     bool                        m_recieveShadows;
+	bool						m_tweakBarInitialized;
+	float						m_tessFactor;
 };
 
