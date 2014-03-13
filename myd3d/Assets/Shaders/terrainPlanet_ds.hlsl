@@ -16,9 +16,11 @@ struct PixelInputType
 
 struct HullOutputType
 {
-	float3 position : POSITION;
+	float3 position : POSITION; 
+	float3 normal   : NORMAL;
 	float4 color	: COLOR;
 };
+
 
 // Output patch constant data.
 struct HullConstantOutputType

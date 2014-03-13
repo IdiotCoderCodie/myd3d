@@ -490,12 +490,21 @@ void Shader::RenderShader(D3D& d3d, int indexCount) const
         d3d.GetDeviceContext().HSSetShader(m_hullShader, NULL, 0);
         d3d.GetDeviceContext().DSSetShader(m_domainShader, NULL, 0);
     }
+	else
+	{
+		d3d.GetDeviceContext().HSSetShader(NULL, NULL, 0);
+		d3d.GetDeviceContext().DSSetShader(NULL, NULL, 0);
+	}
 
     // Set geom shader.
     if(m_geomShader)
     {
         d3d.GetDeviceContext().GSSetShader(m_geomShader, NULL, 0);
     }
+	else
+	{
+		d3d.GetDeviceContext().GSSetShader(NULL, NULL, 0);
+	}
 
     // Set the sampler states.
     int i = 0;

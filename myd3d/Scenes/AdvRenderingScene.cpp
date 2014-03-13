@@ -16,9 +16,9 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 
 	EntityFactory::CreatePerspectiveFpCameraEntity(*this, 60.0f, aspect, 0.1f, 500.0f, "mmainCam");
 
-	/*EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\teapot.obj", L"cement.dds",
+	EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\cube.obj", L"cement.dds",
 		GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f),
-		"testCube");*/
+		"testCube");
 
 	EntityFactory::CreateTessellatedPlanetEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"cement.dds",
 		GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), "testTessellation");
