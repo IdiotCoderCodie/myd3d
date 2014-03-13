@@ -20,7 +20,7 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 		GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f),
 		"testCube");*/
 
-	EntityFactory::CreateTessellatedPlanetEntity(*this, d3d, "Assets\\Models\\plane.obj", L"cement.dds",
+	EntityFactory::CreateTessellatedPlanetEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"cement.dds",
 		GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), "testTessellation");
 
 	Entity* light = EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.05f, 0.1f, 0.05f, 1.0f),

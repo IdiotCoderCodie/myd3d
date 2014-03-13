@@ -61,5 +61,6 @@ private:
     bool                        m_recieveShadows;
 	bool						m_tweakBarInitialized;
 	float						m_tessFactor;
+	int							m_tessPartitioning;
 };
 

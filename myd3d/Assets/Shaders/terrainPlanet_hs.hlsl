@@ -50,11 +50,71 @@ HullConstantOutputType CalcHSPatchConstants(InputPatch<HullInputType, NUM_CONTRO
 }
 
 [domain("tri")]
-[partitioning("fractional_even")]
+[partitioning("integer")]
 [outputtopology("triangle_cw")]
 [outputcontrolpoints(3)]
 [patchconstantfunc("CalcHSPatchConstants")]
 HullOutputType main( 
+	InputPatch<HullInputType, NUM_CONTROL_POINTS> patch, 
+	uint i : SV_OutputControlPointID,
+	uint PatchID : SV_PrimitiveID )
+{
+	HullOutputType output;
+
+	// Insert code to compute Output here
+	output.position = patch[i].position;
+	output.color	= float4(patch[i].normal, 1.0f);
+
+	return output;
+}
+
+
+[domain("tri")]
+[partitioning("fractional_even")]
+[outputtopology("triangle_cw")]
+[outputcontrolpoints(3)]
+[patchconstantfunc("CalcHSPatchConstants")]
+HullOutputType main_fractional_even( 
+	InputPatch<HullInputType, NUM_CONTROL_POINTS> patch, 
+	uint i : SV_OutputControlPointID,
+	uint PatchID : SV_PrimitiveID )
+{
+	HullOutputType output;
+
+	// Insert code to compute Output here
+	output.position = patch[i].position;
+	output.color	= float4(patch[i].normal, 1.0f);
+
+	return output;
+}
+
+
+[domain("tri")]
+[partitioning("fractional_odd")]
+[outputtopology("triangle_cw")]
+[outputcontrolpoints(3)]
+[patchconstantfunc("CalcHSPatchConstants")]
+HullOutputType main_fractional_odd( 
+	InputPatch<HullInputType, NUM_CONTROL_POINTS> patch, 
+	uint i : SV_OutputControlPointID,
+	uint PatchID : SV_PrimitiveID )
+{
+	HullOutputType output;
+
+	// Insert code to compute Output here
+	output.position = patch[i].position;
+	output.color	= float4(patch[i].normal, 1.0f);
+
+	return output;
+}
+
+
+[domain("tri")]
+[partitioning("pow2")]
+[outputtopology("triangle_cw")]
+[outputcontrolpoints(3)]
+[patchconstantfunc("CalcHSPatchConstants")]
+HullOutputType main_pow2( 
 	InputPatch<HullInputType, NUM_CONTROL_POINTS> patch, 
 	uint i : SV_OutputControlPointID,
 	uint PatchID : SV_PrimitiveID )

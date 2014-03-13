@@ -22,7 +22,8 @@ VisualTessellatedPlanetComponent::VisualTessellatedPlanetComponent(D3D& d3d, con
       m_castShadows(false),
       m_recieveShadows(false),
 	  m_tessFactor(1.0f),
-	  m_tweakBarInitialized(false)
+	  m_tweakBarInitialized(false),
+	  m_tessPartitioning(1)
 {
     if(!G_ShaderManager().IsLoaded())
     {
@@ -42,7 +43,8 @@ VisualTessellatedPlanetComponent::VisualTessellatedPlanetComponent(D3D& d3d, con
       m_castShadows(false),
       m_recieveShadows(false),
 	  m_tessFactor(1.0f),
-	  m_tweakBarInitialized(false)
+	  m_tweakBarInitialized(false),
+	  m_tessPartitioning(1)
 {
     if(!G_ShaderManager().IsLoaded())
     {
@@ -65,6 +67,8 @@ void VisualTessellatedPlanetComponent::InitTweakBar()
 	std::string tweakId = GetParent().GetID();
 
 	TwAddVarRW(bar, "TessFactor", TW_TYPE_FLOAT, &m_tessFactor, "step=0.01");
+	TwAddVarRW(bar, "TessPartitioning", TW_TYPE_INT32, &m_tessPartitioning, "max=3 min=0");
+
 	m_tweakBarInitialized = true;
 }
 
@@ -233,14 +237,34 @@ void VisualTessellatedPlanetComponent::DrawNoShadows(D3D& d3d)
 
 void VisualTessellatedPlanetComponent::DrawWithShadows(D3D& d3d)
 {
-    if(m_mesh.DoesContainTanBin())
+    /*if(m_mesh.DoesContainTanBin())
     {
         SetShader(G_ShaderManager().GetShader("PlanetTerrain"));
     }
     else
     {
         SetShader(G_ShaderManager().GetShader("PlanetTerrain"));
+	}*/
+
+
+	switch(m_tessPartitioning)
+	{
+	case 0 :
+		SetShader(G_ShaderManager().GetShader("PlanetTerrain"));
+		break;
+	case 1:
+		SetShader(G_ShaderManager().GetShader("PlanetTerrain_FractionalEven"));
+		break;
+	case 2:
+		SetShader(G_ShaderManager().GetShader("PlanetTerrain_FractionalOdd"));
+		break;
+	case 3:
+		SetShader(G_ShaderManager().GetShader("PlanetTerrain_Pow2"));
+		break;
+	default:
+		break;
 	}
+
 
 	ConstantBuffers::TessellationBuffer tessBuffer;
 	//{
