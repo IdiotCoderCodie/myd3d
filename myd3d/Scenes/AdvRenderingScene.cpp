@@ -2,6 +2,7 @@
 
 #include "../Entities/EntityFactory.h"
 #include "../Components/Visual/VisualMeshComponent.h"
+#include "../Components/Visual/VisualTessellatedPlanetComponent.h"
 #include "SceneManager.h"
 
 AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* sceneMgr)
@@ -15,9 +16,12 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 
 	EntityFactory::CreatePerspectiveFpCameraEntity(*this, 60.0f, aspect, 0.1f, 500.0f, "mmainCam");
 
-	EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\teapot.obj", L"cement.dds",
+	/*EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\teapot.obj", L"cement.dds",
 		GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f),
-		"testCube");
+		"testCube");*/
+
+	EntityFactory::CreateTessellatedPlanetEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"cement.dds",
+		GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), "testTessellation");
 
 	Entity* light = EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.05f, 0.1f, 0.05f, 1.0f),
 		glm::vec4(0.1f, 0.5f, 0.1f, 1.0f),
@@ -26,6 +30,9 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 		10.0f,
 		12.0f,
 		"mainLight");
+
+
+	
 
 	/*Entity* light2 = EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.1f, 0.05f, 0.05f, 1.0f),
 		glm::vec4(0.5f, 0.1f, 0.1f, 1.0f),
@@ -66,7 +73,7 @@ void AdvRenderingScene::Draw(D3D& d3d)
 		{
 			// entity has a VMC.
 			VisualMeshComponent* vmc = static_cast<VisualMeshComponent*>(vmcCheck);
-			vmc->ShadowPass(d3d);
+			//vmc->ShadowPass(d3d);
 		}
 	}
 

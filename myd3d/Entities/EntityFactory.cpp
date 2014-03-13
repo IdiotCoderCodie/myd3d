@@ -7,6 +7,7 @@
 #include "../Components/Physics/FreeRoamFpComponent.h"
 #include "../Components/Light/LightComponent.h"
 #include "../Components/Visual/VisualMeshComponent.h"
+#include "../Components/Visual/VisualTessellatedPlanetComponent.h"
 #include "../Components/Visual/VisualBitmapComponent.h"
 #include "../Components/Visual/ParticleSystemComponent.h"
 #include "../Components/Collision/CollisionComponent.h"
@@ -137,7 +138,6 @@ Entity* EntityFactory::CreateMeshEntity(Scene& scene, D3D& d3d, const std::strin
     return newEntity;
 }
 
-
 Entity* EntityFactory::CreateBumpMappedMeshEntity(Scene& scene, D3D& d3d, const std::string& objFilename, 
                                         WCHAR* textureName, WCHAR* bmpMapTextureName, 
                                         std::vector<RenderTarget*>& shadowMaps,
@@ -192,6 +192,49 @@ Entity* EntityFactory::CreateBumpMappedMeshEntity(Scene& scene, D3D& d3d, const 
     scene.AddEntity(newEntity);
 
     return newEntity;
+}
+
+
+Entity* EntityFactory::CreateTessellatedPlanetEntity(Scene& scene, D3D& d3d, const std::string& objFilename,
+	WCHAR* textureName, std::vector<RenderTarget*>& shadowMaps,
+	const glm::vec3& position, const glm::vec3& scale,
+	const std::string& id)
+{
+	// Create the entity.
+	Entity* newEntity = new Entity(scene, id);
+
+	// Get the standard string from WCHAR*.
+	std::wstring ws(textureName);
+	std::string  ssTexName(ws.begin(), ws.end());
+
+	// Check if texture is already loaded...
+	Texture* tex = G_TextureManager().GetTexture(ssTexName);
+	if (!tex)
+	{
+		// It's not, so load it.
+		tex = G_TextureManager().LoadTexture(d3d, textureName, ssTexName);
+	}
+
+	// Create the mesh component, enable shadows (both cast and recieve).
+	VisualTessellatedPlanetComponent* mesh = new VisualTessellatedPlanetComponent(d3d, objFilename, *tex, shadowMaps);
+	mesh->EnableCastShadows();
+	mesh->EnableRecieveShadows();
+	newEntity->SetComponent(mesh);
+
+	// Move to requested position.
+	newEntity->MoveForward(position.z);
+	newEntity->MoveRight(position.x);
+	newEntity->MoveUp(position.y);
+
+	// Scale to requested scale.
+	newEntity->SetScaleX(scale.x);
+	newEntity->SetScaleY(scale.y);
+	newEntity->SetScaleZ(scale.z);
+
+	// Add to the scene.
+	scene.AddEntity(newEntity);
+
+	return newEntity;
 }
 
 

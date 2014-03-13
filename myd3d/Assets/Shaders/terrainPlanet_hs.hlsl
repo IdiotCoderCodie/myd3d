@@ -13,8 +13,8 @@ struct HullInputType
 	float4 position										: SV_POSITION;
 	float2 uv											: TEXCOORD0;
 	float3 normal										: NORMAL;
-	float4 lightViewPosition[MAX_SHADOWCASTING_LIGHTS]	: TEXCOORD1;
-	float3 lightPos[MAX_SHADOWCASTING_LIGHTS]			: COLOR0;
+	//float4 lightViewPosition[MAX_SHADOWCASTING_LIGHTS]	: TEXCOORD1;
+	//float3 lightPos[MAX_SHADOWCASTING_LIGHTS]			: COLOR0;
 };
 
 // Output control point
@@ -50,7 +50,7 @@ HullConstantOutputType CalcHSPatchConstants(InputPatch<HullInputType, NUM_CONTRO
 }
 
 [domain("tri")]
-[partitioning("fractional_odd")]
+[partitioning("integer")]
 [outputtopology("triangle_cw")]
 [outputcontrolpoints(3)]
 [patchconstantfunc("CalcHSPatchConstants")]

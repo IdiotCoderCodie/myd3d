@@ -87,6 +87,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Components\Visual\VisualTessellatedPlanetComponent.cpp" />
     <ClCompile Include="Physics\RigidBody\Circle.cpp" />
     <ClCompile Include="Physics\ContactManifold.cpp" />
     <ClCompile Include="Physics\PhysicsSystem.cpp" />
@@ -130,6 +131,7 @@
     <ClCompile Include="Scenes\TerrainDestructionScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\Visual\VisualTessellatedPlanetComponent.h" />
     <ClInclude Include="Physics\RigidBody\Circle.h" />
     <ClInclude Include="Physics\ContactManifold.h" />
     <ClInclude Include="Physics\PhysicsSystem.h" />
