@@ -10,7 +10,7 @@ cbuffer TessellationBuffer
 // Input control point
 struct HullInputType
 {
-	float4 position										: SV_POSITION;
+	float4 position										: POSITION;
 	float2 uv											: TEXCOORD0;
 	float3 normal										: NORMAL;
 	//float4 lightViewPosition[MAX_SHADOWCASTING_LIGHTS]	: TEXCOORD1;
