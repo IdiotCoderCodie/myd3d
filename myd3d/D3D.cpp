@@ -17,6 +17,7 @@ D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscre
     m_depthDisabledStencilState(0),
     m_depthStencilView(0),
     m_rasterState(0),
+    m_rasterStateWireframe(0),
     m_screenWidth(screenWidth),
     m_screenHeight(screenHeight),
     m_alphaEnableBlendingState(0),
@@ -300,7 +301,7 @@ bool D3D::InitializeD3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd
 	rasterDesc.DepthBias                = 0;
 	rasterDesc.DepthBiasClamp           = 0.0f;
 	rasterDesc.DepthClipEnable          = true;
-	rasterDesc.FillMode                 = D3D11_FILL_WIREFRAME;
+	rasterDesc.FillMode                 = D3D11_FILL_SOLID;
 	rasterDesc.FrontCounterClockwise    = false;
 	rasterDesc.MultisampleEnable        = false;
 	rasterDesc.ScissorEnable            = false;
@@ -310,7 +311,26 @@ bool D3D::InitializeD3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd
     if(FAILED(result))
         return false;
 
+
     m_deviceContext->RSSetState(m_rasterState);
+
+    // Create rasterizer state with wireframe fill mode.
+    D3D11_RASTERIZER_DESC rasterWireframeDesc;
+    rasterWireframeDesc.AntialiasedLineEnable    = false;
+	rasterWireframeDesc.CullMode                 = D3D11_CULL_BACK;
+	rasterWireframeDesc.DepthBias                = 0;
+	rasterWireframeDesc.DepthBiasClamp           = 0.0f;
+	rasterWireframeDesc.DepthClipEnable          = true;
+    rasterWireframeDesc.FillMode                 = D3D11_FILL_WIREFRAME;
+	rasterWireframeDesc.FrontCounterClockwise    = false;
+	rasterWireframeDesc.MultisampleEnable        = false;
+	rasterWireframeDesc.ScissorEnable            = false;
+	rasterWireframeDesc.SlopeScaledDepthBias     = 0.0;
+
+    result = m_device->CreateRasterizerState(&rasterWireframeDesc, &m_rasterStateWireframe);
+
+    if(FAILED(result))
+        return false;
 
     // Set up viewport.
     D3D11_VIEWPORT viewport;
@@ -367,6 +387,12 @@ void D3D::Shutdown()
 	{
 		m_rasterState->Release();
 		m_rasterState = 0;
+	}
+
+    if(m_rasterStateWireframe)
+	{
+		m_rasterStateWireframe->Release();
+		m_rasterStateWireframe = 0;
 	}
 
 	if(m_depthStencilView)
@@ -506,3 +532,15 @@ void D3D::DisableAlphaBlending()
 
     m_deviceContext->OMSetBlendState(m_alphaDisableBlendingState, blendFactor, 0xffffffff);
 }
+
+
+void D3D::EnableWireframe()
+{
+    m_deviceContext->RSSetState(m_rasterStateWireframe);
+}
+
+void D3D::DisableWireframe()
+{
+    m_deviceContext->RSSetState(m_rasterState);
+}
+

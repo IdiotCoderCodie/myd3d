@@ -47,6 +47,9 @@ public:
     void EnableAlphaBlending();
     void DisableAlphaBlending();
 
+    void EnableWireframe();
+    void DisableWireframe();
+
 private:
     bool                        m_initialized;
     bool                        m_vsyncEnabled;
@@ -61,6 +64,7 @@ private:
     ID3D11DepthStencilState*    m_depthDisabledStencilState;
     ID3D11DepthStencilView*     m_depthStencilView;
     ID3D11RasterizerState*      m_rasterState;
+    ID3D11RasterizerState*      m_rasterStateWireframe;
     int                         m_screenWidth;
     int                         m_screenHeight;
 

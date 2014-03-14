@@ -14,13 +14,16 @@ Graphics::Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen
         m_sceneMgr(m_d3d),
         m_timer(),
         m_statsTweakBar(0),
-        m_fps(0.0f)
+        m_fps(0.0f),
+        m_wireframe(true)
 {
     m_sceneMgr.AddScene(new AdvRenderingScene("TerrainDestruction", &m_sceneMgr));
     m_timer.Start();
 
     m_statsTweakBar = TwNewBar("Performance Stats");
     TwAddVarRO(m_statsTweakBar, "FPS", TW_TYPE_FLOAT, &m_fps, " precision=2 ");   
+
+    TwAddVarRW(m_statsTweakBar, "Wireframe", TW_TYPE_BOOLCPP, &m_wireframe, "");
 }
 
 
@@ -45,6 +48,8 @@ bool Graphics::Frame()
     m_fps = 1.0f / elapsedTime;
 
     m_sceneMgr.Update(elapsedTime);
+
+    m_wireframe ? m_d3d.EnableWireframe() : m_d3d.DisableWireframe();
 
 	m_sceneMgr.Draw(m_d3d);
 

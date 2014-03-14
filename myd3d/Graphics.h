@@ -28,4 +28,5 @@ private:
     HiResTimer      m_timer;
     TwBar*          m_statsTweakBar;
     float           m_fps;
+    bool            m_wireframe;
 };
