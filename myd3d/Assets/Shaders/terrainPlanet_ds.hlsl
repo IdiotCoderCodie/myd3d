@@ -10,6 +10,7 @@ cbuffer MatrixBuffer
 struct PixelInputType
 {
 	float4 position  : SV_POSITION;
+    float3 normal    : NORMAL;
 	float4 color	 : COLOR;
 	// TODO: change/add other stuff
 };
@@ -42,9 +43,20 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
 							+ domain.y * patch[1].position
 							+ domain.z * patch[2].position;
 
-	output.position = mul(float4(vertexPosition, 1.0f), modelMatrix);
+    output.position = mul(float4(vertexPosition, 1.0f), modelMatrix);
 	output.position = mul(output.position, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);
+
+    // Interpolate normal.
+    float3 edge1 = patch[1].position - patch[0].position;
+    float3 edge2 = patch[2].position - patch[0].position;
+
+    float3 thisNormal = patch[0].normal * domain.x 
+                        + patch[1].normal * domain.y 
+                        + patch[2].normal * domain.z;
+
+    thisNormal = normalize(thisNormal);
+    output.normal = thisNormal;
 
 	output.color = patch[0].color;
 
