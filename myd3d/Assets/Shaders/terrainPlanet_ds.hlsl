@@ -16,7 +16,7 @@ cbuffer TerrainBuffer
 	float terrainHeight;
 	float terrainHeightMin;
 	float terrainHeightMax;
-	float padding;
+	float terrainTexelSize;
 };
 
 struct PixelInputType
@@ -80,6 +80,24 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
 	output.position = mul(float4(vertexPosition, 1.0f), modelMatrix);
 	output.position = mul(output.position, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);
+
+
+	// Test Calculating Normal
+	float4 h;
+	float texelSize = terrainTexelSize;
+	h[0] = heightMapTex.Gather(SampleTypeWrap, heightUV + texelSize * float2( 0,-1)).r;
+	h[1] = heightMapTex.Gather(SampleTypeWrap, heightUV + texelSize * float2(-1, 0)).r;
+	h[2] = heightMapTex.Gather(SampleTypeWrap, heightUV + texelSize * float2( 1, 0)).r;
+	h[3] = heightMapTex.Gather(SampleTypeWrap, heightUV + texelSize * float2( 0, 1)).r;
+
+	float3 n;
+	n.z = h[0] - h[3];
+	n.x = h[1] - h[2];
+	n.y = 1;
+
+	n = normalize(n);
+
+	output.normal = n;
 
 	output.color = float4(heightMapVal, heightMapVal, heightMapVal, 1.0f);
 

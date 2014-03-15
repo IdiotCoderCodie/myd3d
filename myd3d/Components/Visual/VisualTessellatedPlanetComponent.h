@@ -63,5 +63,6 @@ private:
 	float						m_tessFactor;
 	int							m_tessPartitioning;
 	float						m_terrainMagnitude;
+	float						m_texelSize;
 };
 

@@ -24,7 +24,8 @@ VisualTessellatedPlanetComponent::VisualTessellatedPlanetComponent(D3D& d3d, con
 	  m_tessFactor(1.0f),
 	  m_tweakBarInitialized(false),
 	  m_tessPartitioning(1),
-	  m_terrainMagnitude(1.0f)
+	  m_terrainMagnitude(1.0f),
+	  m_texelSize(0.05f)
 {
     if(!G_ShaderManager().IsLoaded())
     {
@@ -70,6 +71,7 @@ void VisualTessellatedPlanetComponent::InitTweakBar()
 	TwAddVarRW(bar, "TessFactor", TW_TYPE_FLOAT, &m_tessFactor, "step=0.01");
 	TwAddVarRW(bar, "TessPartitioning", TW_TYPE_INT32, &m_tessPartitioning, "max=3 min=0");
 	TwAddVarRW(bar, "TerrainMagnitude", TW_TYPE_FLOAT, &m_terrainMagnitude, "step=0.01");
+	TwAddVarRW(bar, "TerrainTexelSize", TW_TYPE_FLOAT, &m_texelSize, "step=0.0001");
 	m_tweakBarInitialized = true;
 }
 
@@ -286,6 +288,7 @@ void VisualTessellatedPlanetComponent::DrawWithShadows(D3D& d3d)
 
 	ConstantBuffers::TerrainBuffer terrainBuffer;
 	terrainBuffer.terrainHeight = m_terrainMagnitude;
+	terrainBuffer.padding = m_texelSize;
 
 	GetShader().DSSetConstBufferData(d3d, std::string("TerrainBuffer"), (void*)&terrainBuffer,
 									 sizeof(terrainBuffer), 1);

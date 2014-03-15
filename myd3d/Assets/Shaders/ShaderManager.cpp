@@ -306,7 +306,7 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
 		sizeof(ConstantBuffers::TerrainBuffer),
 		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
-	m_shaders[name].AddSamplerState(d3d, "SampleTypeWrap", SamplerDesc::DEFAULT_WRAP);
+	m_shaders[name].AddSamplerState(d3d, "SampleTypeWrap", SamplerDesc::SAMPLE_CLAMP);
 	//----------------------------------------------------------------------------------------------
 
     m_loaded = true;

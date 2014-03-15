@@ -37,4 +37,5 @@ namespace SamplerDesc
 	    0,                                  // MinLOD
 	    D3D11_FLOAT32_MAX                   // MaxLOD
     };
+	
 };
