@@ -148,4 +148,13 @@ namespace ConstantBuffers
 		float		tesselationAmount;
 		glm::vec3	padding;
 	};
+
+
+	struct TerrainBuffer
+	{
+		float terrainHeight;
+		float terrainHeightMin;
+		float terrainHeightMax;
+		float padding;
+	};
 };

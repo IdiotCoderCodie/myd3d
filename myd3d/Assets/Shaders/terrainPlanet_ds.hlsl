@@ -11,6 +11,14 @@ cbuffer MatrixBuffer
 	matrix projectionMatrix;
 };
 
+cbuffer TerrainBuffer
+{
+	float terrainHeight;
+	float terrainHeightMin;
+	float terrainHeightMax;
+	float padding;
+};
+
 struct PixelInputType
 {
 	float4 position  : SV_POSITION;
@@ -67,7 +75,7 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
 		+ domain.y * patch[1].position
 		+ domain.z * patch[2].position;
 
-	vertexPosition += thisNormal * heightMapVal;
+	vertexPosition += thisNormal * heightMapVal * terrainHeight;
 
 	output.position = mul(float4(vertexPosition, 1.0f), modelMatrix);
 	output.position = mul(output.position, viewMatrix);

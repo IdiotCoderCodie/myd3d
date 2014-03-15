@@ -62,5 +62,6 @@ private:
 	bool						m_tweakBarInitialized;
 	float						m_tessFactor;
 	int							m_tessPartitioning;
+	float						m_terrainMagnitude;
 };
 

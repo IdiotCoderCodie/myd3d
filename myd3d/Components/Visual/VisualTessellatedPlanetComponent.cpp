@@ -23,7 +23,8 @@ VisualTessellatedPlanetComponent::VisualTessellatedPlanetComponent(D3D& d3d, con
       m_recieveShadows(false),
 	  m_tessFactor(1.0f),
 	  m_tweakBarInitialized(false),
-	  m_tessPartitioning(1)
+	  m_tessPartitioning(1),
+	  m_terrainMagnitude(1.0f)
 {
     if(!G_ShaderManager().IsLoaded())
     {
@@ -68,7 +69,7 @@ void VisualTessellatedPlanetComponent::InitTweakBar()
 
 	TwAddVarRW(bar, "TessFactor", TW_TYPE_FLOAT, &m_tessFactor, "step=0.01");
 	TwAddVarRW(bar, "TessPartitioning", TW_TYPE_INT32, &m_tessPartitioning, "max=3 min=0");
-
+	TwAddVarRW(bar, "TerrainMagnitude", TW_TYPE_FLOAT, &m_terrainMagnitude, "step=0.01");
 	m_tweakBarInitialized = true;
 }
 
@@ -267,25 +268,27 @@ void VisualTessellatedPlanetComponent::DrawWithShadows(D3D& d3d)
 
 
 	ConstantBuffers::TessellationBuffer tessBuffer;
-	//{
 	tessBuffer.tesselationAmount = m_tessFactor;
-		//glm::vec3(0.0f)
-	//};
+	tessBuffer.padding.x		 = m_terrainMagnitude;
 
 	GetShader().HSSetConstBufferData(d3d, std::string("TessellationBuffer"), (void*)&tessBuffer, 
 		sizeof(tessBuffer), 0);
 
-
+	// Send mvp data.
 	ConstantBuffers::MVPBuffer mvpBuffer;
-	//{
-		mvpBuffer.modelMatrix = glm::transpose( GetParent().GetTransform().GetMatrix() );
-			mvpBuffer.viewMatrix = glm::transpose( GetParent().GetParent().GetActiveCamera()->GetViewMatrix() );
-			mvpBuffer.projectionMatrix = glm::transpose( GetParent().GetParent().GetActiveCamera()->GetProjMatrix() );
-	//};
+	mvpBuffer.modelMatrix = glm::transpose( GetParent().GetTransform().GetMatrix() );
+	mvpBuffer.viewMatrix = glm::transpose( GetParent().GetParent().GetActiveCamera()->GetViewMatrix() );
+	mvpBuffer.projectionMatrix = glm::transpose( GetParent().GetParent().GetActiveCamera()->GetProjMatrix() );
 
 	GetShader().DSSetConstBufferData(d3d, std::string("MatrixBuffer"), (void*)&mvpBuffer, 
 									 sizeof(mvpBuffer), 0);
 
+
+	ConstantBuffers::TerrainBuffer terrainBuffer;
+	terrainBuffer.terrainHeight = m_terrainMagnitude;
+
+	GetShader().DSSetConstBufferData(d3d, std::string("TerrainBuffer"), (void*)&terrainBuffer,
+									 sizeof(terrainBuffer), 1);
 
 	ID3D11ShaderResourceView* heightMap = m_heightMap.GetTexture();
 	d3d.GetDeviceContext().DSSetShaderResources(0, 1, &heightMap);
