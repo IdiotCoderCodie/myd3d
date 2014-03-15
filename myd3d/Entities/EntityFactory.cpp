@@ -195,8 +195,8 @@ Entity* EntityFactory::CreateBumpMappedMeshEntity(Scene& scene, D3D& d3d, const 
 }
 
 
-Entity* EntityFactory::CreateTessellatedPlanetEntity(Scene& scene, D3D& d3d, const std::string& objFilename,
-	WCHAR* textureName, std::vector<RenderTarget*>& shadowMaps,
+Entity* EntityFactory::CreateTessellatedTerrainEntity(Scene& scene, D3D& d3d, const std::string& objFilename,
+	WCHAR* textureName, WCHAR* heightMapTexture, std::vector<RenderTarget*>& shadowMaps,
 	const glm::vec3& position, const glm::vec3& scale,
 	const std::string& id)
 {
@@ -215,8 +215,20 @@ Entity* EntityFactory::CreateTessellatedPlanetEntity(Scene& scene, D3D& d3d, con
 		tex = G_TextureManager().LoadTexture(d3d, textureName, ssTexName);
 	}
 
+	std::wstring ws2(heightMapTexture);
+	std::string heightMapString(ws2.begin(), ws2.end());
+
+	Texture* heightMap = G_TextureManager().GetTexture(heightMapString);
+	if (!heightMap)
+	{ // It's not loaded... so load it.
+		heightMap = G_TextureManager().LoadTexture(d3d, heightMapTexture, heightMapString);
+	}
+
 	// Create the mesh component, enable shadows (both cast and recieve).
-	VisualTessellatedPlanetComponent* mesh = new VisualTessellatedPlanetComponent(d3d, objFilename, *tex, shadowMaps);
+	VisualTessellatedPlanetComponent* mesh = 
+		new VisualTessellatedPlanetComponent(d3d, objFilename, *tex, *heightMap, shadowMaps);
+
+
 	mesh->EnableCastShadows();
 	mesh->EnableRecieveShadows();
 	newEntity->SetComponent(mesh);

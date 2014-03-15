@@ -22,6 +22,7 @@ struct HullOutputType
 {
 	float3 position : POSITION; 
 	float3 normal   : NORMAL;
+	float2 uv		: TEXCOORD0;
 	float4 color	: COLOR;
 };
 
@@ -65,6 +66,7 @@ HullOutputType main(
 	// Insert code to compute Output here
 	output.position = patch[i].position;
     output.normal = patch[i].normal;
+	output.uv = patch[i].uv;
 	output.color	= float4(patch[i].normal, 1.0f);
 
 	return output;
@@ -86,6 +88,7 @@ HullOutputType main_fractional_even(
 	// Insert code to compute Output here
 	output.position = patch[i].position;
     output.normal = patch[i].normal;
+	output.uv = patch[i].uv;
 	output.color	= float4(patch[i].normal, 1.0f);
 
 	return output;
@@ -107,6 +110,7 @@ HullOutputType main_fractional_odd(
 	// Insert code to compute Output here
 	output.position = patch[i].position;
     output.normal = patch[i].normal;
+	output.uv = patch[i].uv;
 	output.color	= float4(patch[i].normal, 1.0f);
 
 	return output;
@@ -128,6 +132,7 @@ HullOutputType main_pow2(
 	// Insert code to compute Output here
 	output.position = patch[i].position;
     output.normal = patch[i].normal;
+	output.uv = patch[i].uv;
 	output.color	= float4(patch[i].normal, 1.0f);
 
 	return output;

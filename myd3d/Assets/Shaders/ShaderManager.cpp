@@ -207,6 +207,8 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
 	m_shaders[name].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
 										 sizeof(ConstantBuffers::MVPBuffer),
 										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddSamplerState(d3d, "SampleTypeWrap", SamplerDesc::DEFAULT_WRAP);
 	//----------------------------------------------------------------------------------------------
 
 
@@ -233,6 +235,8 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
 	m_shaders[name].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
 										 sizeof(ConstantBuffers::MVPBuffer),
 										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddSamplerState(d3d, "SampleTypeWrap", SamplerDesc::DEFAULT_WRAP);
 	//----------------------------------------------------------------------------------------------
 
 	//----------------------------------------------------------------------------------------------
@@ -258,6 +262,8 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
 	m_shaders[name].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
 										 sizeof(ConstantBuffers::MVPBuffer),
 										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddSamplerState(d3d, "SampleTypeWrap", SamplerDesc::DEFAULT_WRAP);
 	//----------------------------------------------------------------------------------------------
 
 	//----------------------------------------------------------------------------------------------
@@ -283,6 +289,8 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
 	m_shaders[name].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
 										 sizeof(ConstantBuffers::MVPBuffer),
 										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddSamplerState(d3d, "SampleTypeWrap", SamplerDesc::DEFAULT_WRAP);
 	//----------------------------------------------------------------------------------------------
 
     m_loaded = true;

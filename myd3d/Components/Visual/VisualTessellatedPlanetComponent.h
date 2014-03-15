@@ -9,10 +9,10 @@ class VisualTessellatedPlanetComponent : public VisualComponent
 {
 
 public:
-    VisualTessellatedPlanetComponent(D3D& d3d, const std::string& filename, Texture& texture, 
+    VisualTessellatedPlanetComponent(D3D& d3d, const std::string& filename, Texture& texture, Texture& heightMap,
                         std::vector<RenderTarget*>& shadowMaps);
-    VisualTessellatedPlanetComponent(D3D& d3d, const std::string& meshFilename, Texture& texture,
-                        Texture& bmpMap, std::vector<RenderTarget*>& shadowMaps);
+    /*VisualTessellatedPlanetComponent(D3D& d3d, const std::string& meshFilename, Texture& texture, Texture& heightMap,
+                        std::vector<RenderTarget*>& shadowMaps);*/
     ~VisualTessellatedPlanetComponent(void);
 
     VisualTessellatedPlanetComponent& operator=(const VisualTessellatedPlanetComponent& other);
@@ -55,7 +55,7 @@ private:
 private:
     StaticMesh                  m_mesh;
 	Texture&                    m_texture;
-    Texture&                    m_bumpTexture;
+	Texture&                    m_heightMap;;
     std::vector<RenderTarget*>& m_shadowMaps;
     bool                        m_castShadows;
     bool                        m_recieveShadows;

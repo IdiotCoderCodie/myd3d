@@ -1,5 +1,9 @@
 #define MAX_SHADOWCASTING_LIGHTS 4
 
+SamplerState SampleTypeWrap : register(s0);
+
+Texture2D heightMapTex	    : register(t0);
+
 cbuffer MatrixBuffer
 {
 	matrix modelMatrix;
@@ -19,6 +23,7 @@ struct HullOutputType
 {
 	float3 position : POSITION; 
 	float3 normal   : NORMAL;
+	float2 uv		: TEXCOORD0;
 	float4 color	: COLOR;
 };
 
@@ -39,13 +44,7 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
 {
 	PixelInputType output;
 
-	float3 vertexPosition = domain.x * patch[0].position
-							+ domain.y * patch[1].position
-							+ domain.z * patch[2].position;
-
-    output.position = mul(float4(vertexPosition, 1.0f), modelMatrix);
-	output.position = mul(output.position, viewMatrix);
-	output.position = mul(output.position, projectionMatrix);
+	
 
     // Interpolate normal.
     float3 edge1 = patch[1].position - patch[0].position;
@@ -55,10 +54,26 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
                         + patch[1].normal * domain.y 
                         + patch[2].normal * domain.z;
 
-    thisNormal = normalize(thisNormal);
-    output.normal = thisNormal;
+	thisNormal = normalize(thisNormal);
+	output.normal = thisNormal;
 
-	output.color = patch[0].color;
+	float2 heightUV = domain.x * patch[0].uv
+		+ domain.y * patch[1].uv
+		+ domain.z * patch[2].uv;
+
+	float heightMapVal = heightMapTex.Gather(SampleTypeWrap, heightUV).r;
+
+	float3 vertexPosition = domain.x * patch[0].position
+		+ domain.y * patch[1].position
+		+ domain.z * patch[2].position;
+
+	vertexPosition += thisNormal * heightMapVal;
+
+	output.position = mul(float4(vertexPosition, 1.0f), modelMatrix);
+	output.position = mul(output.position, viewMatrix);
+	output.position = mul(output.position, projectionMatrix);
+
+	output.color = float4(heightMapVal, heightMapVal, heightMapVal, 1.0f);
 
 	return output;
 }

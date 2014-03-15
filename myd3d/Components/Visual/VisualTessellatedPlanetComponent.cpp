@@ -12,12 +12,12 @@
 
 static float   m_totalTime = 0.0f;
 
-VisualTessellatedPlanetComponent::VisualTessellatedPlanetComponent(D3D& d3d, const std::string& filename, Texture& texture,
-                                         std::vector<RenderTarget*>& shadowMaps)
+VisualTessellatedPlanetComponent::VisualTessellatedPlanetComponent(D3D& d3d, const std::string& filename, 
+	Texture& texture, Texture& heightMap, std::vector<RenderTarget*>& shadowMaps)
     : VisualComponent(),
       m_mesh(filename, d3d, false), 
 	  m_texture(texture),
-      m_bumpTexture(texture), // Not used anyway, so set as same as m_texture for now?
+	  m_heightMap(heightMap), 
       m_shadowMaps(shadowMaps),
       m_castShadows(false),
       m_recieveShadows(false),
@@ -32,28 +32,28 @@ VisualTessellatedPlanetComponent::VisualTessellatedPlanetComponent(D3D& d3d, con
    SetShader(G_ShaderManager().GetShader("Normal_Shadows_Test"));
 }
 
-
-VisualTessellatedPlanetComponent::VisualTessellatedPlanetComponent(D3D& d3d, const std::string& filename, Texture& texture,
-                                         Texture& bmpMap, std::vector<RenderTarget*>& shadowMaps)
-    : VisualComponent(),
-      m_mesh(filename, d3d, true),
-      m_texture(texture),
-      m_bumpTexture(bmpMap),
-      m_shadowMaps(shadowMaps),
-      m_castShadows(false),
-      m_recieveShadows(false),
-	  m_tessFactor(1.0f),
-	  m_tweakBarInitialized(false),
-	  m_tessPartitioning(1)
-{
-    if(!G_ShaderManager().IsLoaded())
-    {
-        G_ShaderManager().LoadShaders(d3d, "configFile");
-    }
-    SetShader(G_ShaderManager().GetShader("Normal_Shadows_Test"));
-
-
-}
+//
+//VisualTessellatedPlanetComponent::VisualTessellatedPlanetComponent(D3D& d3d, const std::string& filename, 
+//	Texture& texture, Texture& heightMap, std::vector<RenderTarget*>& shadowMaps)
+//    : VisualComponent(),
+//      m_mesh(filename, d3d, true),
+//      m_texture(texture),
+//	  m_heightMap(heightMap),
+//      m_shadowMaps(shadowMaps),
+//      m_castShadows(false),
+//      m_recieveShadows(false),
+//	  m_tessFactor(1.0f),
+//	  m_tweakBarInitialized(false),
+//	  m_tessPartitioning(1)
+//{
+//    if(!G_ShaderManager().IsLoaded())
+//    {
+//        G_ShaderManager().LoadShaders(d3d, "configFile");
+//    }
+//    SetShader(G_ShaderManager().GetShader("Normal_Shadows_Test"));
+//
+//
+//}
 
 
 VisualTessellatedPlanetComponent::~VisualTessellatedPlanetComponent(void)
@@ -76,7 +76,7 @@ VisualTessellatedPlanetComponent& VisualTessellatedPlanetComponent::operator=(co
 {
     m_mesh = other.m_mesh;
     m_texture;
-    m_bumpTexture;
+    m_heightMap;
     m_shadowMaps;
     m_castShadows = other.m_castShadows;
     m_recieveShadows = other.m_recieveShadows;
@@ -285,6 +285,10 @@ void VisualTessellatedPlanetComponent::DrawWithShadows(D3D& d3d)
 
 	GetShader().DSSetConstBufferData(d3d, std::string("MatrixBuffer"), (void*)&mvpBuffer, 
 									 sizeof(mvpBuffer), 0);
+
+
+	ID3D11ShaderResourceView* heightMap = m_heightMap.GetTexture();
+	d3d.GetDeviceContext().DSSetShaderResources(0, 1, &heightMap);
 
     // Render shader.
     GetShader().RenderShader(d3d, m_mesh.GetIndexCount());
