@@ -19,11 +19,17 @@ cbuffer TerrainBuffer
 	float terrainTexelSize;
 };
 
+cbuffer LightPositionBuffer
+{
+	float4 lightPosition;
+};
+
 struct PixelInputType
 {
 	float4 position  : SV_POSITION;
     float3 normal    : NORMAL;
 	float4 color	 : COLOR;
+	float4 lightPos			 : TEXCOORD1;
 	// TODO: change/add other stuff
 };
 
@@ -93,13 +99,16 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
 	float3 n;
 	n.z = h[0] - h[3];
 	n.x = h[1] - h[2];
-	n.y = 1;
+	n.y = 2;
 
 	n = normalize(n);
 
 	output.normal = n;
 
 	output.color = float4(heightMapVal, heightMapVal, heightMapVal, 1.0f);
+
+	float4 worldPosition = mul(float4(vertexPosition, 1.0f), modelMatrix);
+	output.lightPos = normalize(lightPosition - worldPosition);
 
 	return output;
 }

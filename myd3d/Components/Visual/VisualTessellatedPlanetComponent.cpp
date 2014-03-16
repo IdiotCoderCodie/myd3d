@@ -21,10 +21,10 @@ VisualTessellatedPlanetComponent::VisualTessellatedPlanetComponent(D3D& d3d, con
       m_shadowMaps(shadowMaps),
       m_castShadows(false),
       m_recieveShadows(false),
-	  m_tessFactor(1.0f),
+	  m_tessFactor(48.0f),
 	  m_tweakBarInitialized(false),
 	  m_tessPartitioning(1),
-	  m_terrainMagnitude(1.0f),
+	  m_terrainMagnitude(0.4f),
 	  m_texelSize(0.05f)
 {
     if(!G_ShaderManager().IsLoaded())
@@ -278,9 +278,9 @@ void VisualTessellatedPlanetComponent::DrawWithShadows(D3D& d3d)
 
 	// Send mvp data.
 	ConstantBuffers::MVPBuffer mvpBuffer;
-	mvpBuffer.modelMatrix = glm::transpose( GetParent().GetTransform().GetMatrix() );
-	mvpBuffer.viewMatrix = glm::transpose( GetParent().GetParent().GetActiveCamera()->GetViewMatrix() );
-	mvpBuffer.projectionMatrix = glm::transpose( GetParent().GetParent().GetActiveCamera()->GetProjMatrix() );
+	mvpBuffer.modelMatrix		= glm::transpose( GetParent().GetTransform().GetMatrix() );
+	mvpBuffer.viewMatrix		= glm::transpose( GetParent().GetParent().GetActiveCamera()->GetViewMatrix() );
+	mvpBuffer.projectionMatrix	= glm::transpose( GetParent().GetParent().GetActiveCamera()->GetProjMatrix() );
 
 	GetShader().DSSetConstBufferData(d3d, std::string("MatrixBuffer"), (void*)&mvpBuffer, 
 									 sizeof(mvpBuffer), 0);
@@ -288,10 +288,50 @@ void VisualTessellatedPlanetComponent::DrawWithShadows(D3D& d3d)
 
 	ConstantBuffers::TerrainBuffer terrainBuffer;
 	terrainBuffer.terrainHeight = m_terrainMagnitude;
-	terrainBuffer.padding = m_texelSize;
+	terrainBuffer.padding		= m_texelSize;
 
 	GetShader().DSSetConstBufferData(d3d, std::string("TerrainBuffer"), (void*)&terrainBuffer,
 									 sizeof(terrainBuffer), 1);
+
+	// Light positions buffer.
+	auto lights						= GetParent().GetParent().GetLights();
+	ConstantBuffers::LightPosBuffer lightPosBuffer;
+	
+	LightComponent* light1			= static_cast<LightComponent*>(lights[0]);
+	lightPosBuffer.lightPosition	= glm::vec4(light1->GetParent().GetPos(), 0.0f);
+
+	GetShader().DSSetConstBufferData(d3d, std::string("LightPositionBuffer"), (void*)&lightPosBuffer,
+									sizeof(lightPosBuffer), 2);
+
+	// Light buffer.
+	ConstantBuffers::Light lightsBuffer[1];
+	for (size_t i = 0; i < 1; i++)
+	{
+		LightComponent* light = static_cast<LightComponent*>(lights[i]);
+		lightsBuffer[i].enabled = 1;
+		lightsBuffer[i].shadows = 0;
+		lightsBuffer[i].position = glm::vec4(light->GetParent().GetPos(), 1.0f);
+		lightsBuffer[i].ambient = light->GetAmbient();
+		lightsBuffer[i].diffuse = light->GetDiffuse();
+		lightsBuffer[i].specular = light->GetSpecular();
+		lightsBuffer[i].spotCutoff = glm::radians(light->GetSpotCutoff());
+		lightsBuffer[i].spotDirection = light->GetParent().GetTransform().GetForward();
+		lightsBuffer[i].spotExponent = light->GetSpotExponent();
+		lightsBuffer[i].attenuation = glm::vec3(0.0f, 0.0f, 0.0f);
+	}
+
+	GetShader().SetStructuredBufferData(d3d, std::string("LightBuffer"), (void*)&lightsBuffer,
+		sizeof(ConstantBuffers::Light) * 1);
+
+	ID3D11ShaderResourceView* lightBufferSRV = GetShader().GetBufferSRV(std::string("LightBuffer"));
+	d3d.GetDeviceContext().PSSetShaderResources(2, 1, &lightBufferSRV);
+
+
+	// Camera Buffer
+	ConstantBuffers::CameraPosBuffer cameraPosBuffer;
+	cameraPosBuffer.cameraPos = GetParent().GetParent().GetActiveCamera()->GetParent().GetPos();
+	GetShader().PSSetConstBufferData(d3d, std::string("CameraPosBuffer"),
+									(void*)&cameraPosBuffer, sizeof(cameraPosBuffer), 0);
 
 	ID3D11ShaderResourceView* heightMap = m_heightMap.GetTexture();
 	d3d.GetDeviceContext().DSSetShaderResources(0, 1, &heightMap);

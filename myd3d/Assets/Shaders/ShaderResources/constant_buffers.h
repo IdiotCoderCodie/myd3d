@@ -41,7 +41,7 @@ namespace ConstantBuffers
         glm::mat4 lightProjectionMatrix2;
     };
 
-    const int MAX_SHADOWCASTING_LIGHTS = 4;
+    const int MAX_SHADOWCASTING_LIGHTS = 1;
 
     struct ShadowMatrixBuffer
     {
