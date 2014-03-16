@@ -302,6 +302,7 @@ void VisualTessellatedPlanetComponent::DrawWithShadows(D3D& d3d)
 
 	GetShader().DSSetConstBufferData(d3d, std::string("LightPositionBuffer"), (void*)&lightPosBuffer,
 									sizeof(lightPosBuffer), 2);
+	
 
 	// Light buffer.
 	ConstantBuffers::Light lightsBuffer[1];
@@ -325,7 +326,6 @@ void VisualTessellatedPlanetComponent::DrawWithShadows(D3D& d3d)
 
 	ID3D11ShaderResourceView* lightBufferSRV = GetShader().GetBufferSRV(std::string("LightBuffer"));
 	d3d.GetDeviceContext().PSSetShaderResources(2, 1, &lightBufferSRV);
-
 
 	// Camera Buffer
 	ConstantBuffers::CameraPosBuffer cameraPosBuffer;

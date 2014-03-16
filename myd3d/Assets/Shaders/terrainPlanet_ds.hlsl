@@ -26,10 +26,12 @@ cbuffer LightPositionBuffer
 
 struct PixelInputType
 {
-	float4 position  : SV_POSITION;
-    float3 normal    : NORMAL;
-	float4 color	 : COLOR;
-	float4 lightPos			 : TEXCOORD1;
+	float4 position : SV_POSITION;
+    float3 normal   : NORMAL;
+	float4 color	: COLOR;
+	float2 uv		: TEXCOORD0;
+	float4 lightPos	: TEXCOORD1;
+	float  terrainHeight : TEXCOORD2;
 	// TODO: change/add other stuff
 };
 
@@ -64,6 +66,7 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
     float3 edge1 = patch[1].position - patch[0].position;
     float3 edge2 = patch[2].position - patch[0].position;
 
+	// Calculate interpolated normal, used for displacing vertex.
     float3 thisNormal = patch[0].normal * domain.x 
                         + patch[1].normal * domain.y 
                         + patch[2].normal * domain.z;
@@ -71,24 +74,30 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
 	thisNormal = normalize(thisNormal);
 	output.normal = thisNormal;
 
+	// Calculate interpolated UV coords.
 	float2 heightUV = domain.x * patch[0].uv
 		+ domain.y * patch[1].uv
 		+ domain.z * patch[2].uv;
 
+	output.uv = heightUV;
+
 	float heightMapVal = heightMapTex.Gather(SampleTypeWrap, heightUV).r;
 
+	// Calculate position of newly generated vertex, then displace.
 	float3 vertexPosition = domain.x * patch[0].position
 		+ domain.y * patch[1].position
 		+ domain.z * patch[2].position;
 
 	vertexPosition += thisNormal * heightMapVal * terrainHeight;
 
+	output.terrainHeight = heightMapVal;
+
 	output.position = mul(float4(vertexPosition, 1.0f), modelMatrix);
 	output.position = mul(output.position, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);
 
 
-	// Test Calculating Normal
+	// Test Calculating Normal - Works. Try in PS.
 	float4 h;
 	float texelSize = terrainTexelSize;
 	h[0] = heightMapTex.Gather(SampleTypeWrap, heightUV + texelSize * float2(0, -1)).r * terrainHeight;
@@ -99,7 +108,7 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
 	float3 n;
 	n.z = h[0] - h[3];
 	n.x = h[1] - h[2];
-	n.y = 1;
+	n.y = 0.8;
 
 	n = normalize(n);
 
@@ -109,6 +118,7 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
 
 	float4 worldPosition = mul(float4(vertexPosition, 1.0f), modelMatrix);
 	output.lightPos = normalize(lightPosition - worldPosition);
+
 
 	return output;
 }

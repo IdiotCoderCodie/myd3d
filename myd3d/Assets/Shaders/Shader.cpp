@@ -233,6 +233,17 @@ bool Shader::AddBuffer(D3D& d3d, const std::string& identity, D3D11_USAGE usage,
 }
 
 
+ID3D11Buffer* Shader::GetBuffer(std::string& identity)
+{
+	if (m_buffers.find(identity) != m_buffers.end())
+	{	
+		return m_buffers[identity];
+	}
+	
+	return nullptr;
+}
+
+
 bool Shader::AddStructuredBuffer(D3D& d3d, const std::string& identity, UINT stride, UINT numElems)
 {
     bool result = AddBuffer(d3d, identity, D3D11_USAGE_DYNAMIC, stride * numElems, 

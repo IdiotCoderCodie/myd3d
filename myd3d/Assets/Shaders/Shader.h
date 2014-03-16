@@ -74,7 +74,9 @@ public:
      * bufferNumber is the position of the buffer in the shader file.
      */
     //template<class T>
-    //bool SetConstBufferData (D3D& d3d, std::string& id, T* data, int bufferNumber); 
+    //bool SetConstBufferData (D3D& d3d, std::string& id, T* data, int bufferNumber);
+
+	ID3D11Buffer* GetBuffer(std::string& identity);
 
     bool VSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int bufferNumber);
     bool HSSetConstBufferData(D3D& d3d, std::string& id, void* data, size_t size, int bufferNumber);
