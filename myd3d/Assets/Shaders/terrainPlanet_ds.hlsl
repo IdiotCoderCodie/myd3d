@@ -91,15 +91,15 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
 	// Test Calculating Normal
 	float4 h;
 	float texelSize = terrainTexelSize;
-	h[0] = heightMapTex.Gather(SampleTypeWrap, heightUV + texelSize * float2( 0,-1)).r;
-	h[1] = heightMapTex.Gather(SampleTypeWrap, heightUV + texelSize * float2(-1, 0)).r;
-	h[2] = heightMapTex.Gather(SampleTypeWrap, heightUV + texelSize * float2( 1, 0)).r;
-	h[3] = heightMapTex.Gather(SampleTypeWrap, heightUV + texelSize * float2( 0, 1)).r;
+	h[0] = heightMapTex.Gather(SampleTypeWrap, heightUV + texelSize * float2(0, -1)).r * terrainHeight;
+	h[1] = heightMapTex.Gather(SampleTypeWrap, heightUV + texelSize * float2(-1, 0)).r * terrainHeight;
+	h[2] = heightMapTex.Gather(SampleTypeWrap, heightUV + texelSize * float2(1, 0)).r * terrainHeight;
+	h[3] = heightMapTex.Gather(SampleTypeWrap, heightUV + texelSize * float2(0, 1)).r * terrainHeight;
 
 	float3 n;
 	n.z = h[0] - h[3];
 	n.x = h[1] - h[2];
-	n.y = 2;
+	n.y = 1;
 
 	n = normalize(n);
 

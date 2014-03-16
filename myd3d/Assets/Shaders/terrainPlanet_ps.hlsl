@@ -65,11 +65,12 @@ float4 main(PixelInputType input) : SV_TARGET
 	float4 diffuse = float4(0.0, 0.0, 0.0, 1.0);
 	float4 specular = float4(0.0, 0.0, 0.0, 1.0);
 
-	accumulateLights(LightBuffer, input.position, input.normal, cameraPosition, 0.0,
+	accumulateLights(LightBuffer, input.position, input.normal, cameraPosition, 64.0,
 						ambient, diffuse, specular, input);
 
 	float4 finalColor = ambient;
 	finalColor += diffuse;
+	finalColor += specular;
 
 	finalColor = saturate(finalColor);
 
