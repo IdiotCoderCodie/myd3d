@@ -25,7 +25,8 @@ VisualTessellatedPlanetComponent::VisualTessellatedPlanetComponent(D3D& d3d, con
 	  m_tweakBarInitialized(false),
 	  m_tessPartitioning(1),
 	  m_terrainMagnitude(0.4f),
-	  m_texelSize(0.05f)
+	  m_texelSize(0.05f),
+      m_distanceBased(0)
 {
     if(!G_ShaderManager().IsLoaded())
     {
@@ -72,6 +73,7 @@ void VisualTessellatedPlanetComponent::InitTweakBar()
 	TwAddVarRW(bar, "TessPartitioning", TW_TYPE_INT32, &m_tessPartitioning, "max=3 min=0");
 	TwAddVarRW(bar, "TerrainMagnitude", TW_TYPE_FLOAT, &m_terrainMagnitude, "step=0.01");
 	TwAddVarRW(bar, "TerrainTexelSize", TW_TYPE_FLOAT, &m_texelSize, "step=0.0001");
+    TwAddVarRW(bar, "DistanceBased", TW_TYPE_INT32, &m_distanceBased, "min=0 max=1");
 	m_tweakBarInitialized = true;
 }
 
@@ -269,9 +271,15 @@ void VisualTessellatedPlanetComponent::DrawWithShadows(D3D& d3d)
 	}
 
 
-	ConstantBuffers::TessellationBuffer tessBuffer;
+	/*ConstantBuffers::TessellationBuffer tessBuffer; OLD
 	tessBuffer.tesselationAmount = m_tessFactor;
-	tessBuffer.padding.x		 = m_terrainMagnitude;
+	tessBuffer.padding.x		 = m_terrainMagnitude;*/
+
+    ConstantBuffers::TessellationBufferDist tessBuffer;
+    tessBuffer.distanceBased = m_distanceBased;
+    tessBuffer.tessellationAmount = m_tessFactor;
+    tessBuffer.eyePos = glm::vec4(GetParent().GetParent().GetActiveCamera()->GetParent().GetPos(), 0.0f);
+    tessBuffer.modelMatrix = glm::transpose( GetParent().GetTransform().GetMatrix() );   
 
 	GetShader().HSSetConstBufferData(d3d, std::string("TessellationBuffer"), (void*)&tessBuffer, 
 		sizeof(tessBuffer), 0);

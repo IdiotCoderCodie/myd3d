@@ -201,7 +201,7 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
 										      "ps_5_0");
 
 	m_shaders[name].AddBuffer(d3d, "TessellationBuffer", D3D11_USAGE_DYNAMIC,
-										 sizeof(ConstantBuffers::TessellationBuffer), 
+										 sizeof(ConstantBuffers::TessellationBufferDist), 
 										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
 	m_shaders[name].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
@@ -243,7 +243,7 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
 										      "ps_5_0");
 
 	m_shaders[name].AddBuffer(d3d, "TessellationBuffer", D3D11_USAGE_DYNAMIC,
-										 sizeof(ConstantBuffers::TessellationBuffer), 
+										 sizeof(ConstantBuffers::TessellationBufferDist), 
 										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
 	m_shaders[name].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
@@ -284,7 +284,7 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
 										      "ps_5_0");
 
 	m_shaders[name].AddBuffer(d3d, "TessellationBuffer", D3D11_USAGE_DYNAMIC,
-										 sizeof(ConstantBuffers::TessellationBuffer), 
+										 sizeof(ConstantBuffers::TessellationBufferDist), 
 										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
 	m_shaders[name].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
@@ -325,7 +325,7 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
 										      "ps_5_0");
 
 	m_shaders[name].AddBuffer(d3d, "TessellationBuffer", D3D11_USAGE_DYNAMIC,
-										 sizeof(ConstantBuffers::TessellationBuffer), 
+										 sizeof(ConstantBuffers::TessellationBufferDist), 
 										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
 	m_shaders[name].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,

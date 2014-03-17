@@ -2,8 +2,11 @@
 
 cbuffer TessellationBuffer
 {
+    int distanceBased;
 	float tessellationAmount;
-	float3 padding;
+    float4 eyePos;
+    matrix modelMatrix;
+    float2 padding;
 };
 
 
@@ -42,11 +45,27 @@ HullConstantOutputType CalcHSPatchConstants(InputPatch<HullInputType, NUM_CONTRO
 {
 	HullConstantOutputType Output;
 
-	// Insert code to compute Output here
-	Output.EdgeTessFactor[0] = 
+    if(distanceBased)
+    {
+        for(int i = 0; i < 3; i++)
+        {
+            float4 worldPosition = ip[i].position;
+            worldPosition = mul(ip[i].position, modelMatrix);
+            float cameraDist = length(eyePos - worldPosition);
+            Output.EdgeTessFactor[i] = 64.0f / cameraDist;
+        }
+    
+        Output.InsideTessFactor = max(max(Output.EdgeTessFactor[0], Output.EdgeTessFactor[1]), Output.EdgeTessFactor[2]);
+    }
+    else
+    {
+        Output.EdgeTessFactor[0] = 
 		Output.EdgeTessFactor[1] = 
 		Output.EdgeTessFactor[2] = 
 		Output.InsideTessFactor = tessellationAmount; // e.g. could calculate dynamic tessellation factors instead
+    }
+	// Insert code to compute Output here
+	
 
 	return Output;
 }
@@ -62,6 +81,11 @@ HullOutputType main(
 	uint PatchID : SV_PrimitiveID )
 {
 	HullOutputType output;
+
+    float4 worldPosition = patch[i].position;
+    worldPosition = mul(patch[i].position, modelMatrix);
+
+    float cameraDist = eyePos - worldPosition;
 
 	// Insert code to compute Output here
 	output.position = patch[i].position;

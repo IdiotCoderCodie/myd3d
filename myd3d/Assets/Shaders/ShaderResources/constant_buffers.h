@@ -149,6 +149,14 @@ namespace ConstantBuffers
 		glm::vec3	padding;
 	};
 
+    struct TessellationBufferDist
+    {
+        int distanceBased;
+        float tessellationAmount;
+        glm::vec4 eyePos;
+        glm::mat4 modelMatrix;
+        glm::vec2 padding;
+    };
 
 	struct TerrainBuffer
 	{
