@@ -16,6 +16,8 @@ public:
 
     bool LoadTorusTessellationShaders(D3D& d3d);
 
+    bool LoadEllipsoidTessellationShaders(D3D& d3d);
+
     Shader* GetShader(const std::string& id);
 
     bool IsLoaded() const { return m_loaded; }

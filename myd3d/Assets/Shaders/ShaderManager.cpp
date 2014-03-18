@@ -350,11 +350,13 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
 	//----------------------------------------------------------------------------------------------
 
     LoadTorusTessellationShaders(d3d);
+    LoadEllipsoidTessellationShaders(d3d);
 
     m_loaded = true;
     // NOTE: should be checking all of the above worked fine.
     return true;
 }
+
 
 bool ShaderManager::LoadTorusTessellationShaders(D3D& d3d)
 {
@@ -508,6 +510,177 @@ bool ShaderManager::LoadTorusTessellationShaders(D3D& d3d)
 
 	m_shaders[name].AddBuffer(d3d, "TorusBuffer", D3D11_USAGE_DYNAMIC,
 		sizeof(ConstantBuffers::TorusBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::LightPosBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D10_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "CameraPosBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::CameraPosBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+	
+	m_shaders[name].AddStructuredBuffer(d3d, "LightBuffer", sizeof(ConstantBuffers::Light), 1);
+
+	m_shaders[name].AddSamplerState(d3d, "SampleTypeWrap", SamplerDesc::SAMPLE_CLAMP);
+	//----------------------------------------------------------------------------------------------
+
+    return false;
+}
+
+
+bool ShaderManager::LoadEllipsoidTessellationShaders(D3D& d3d)
+{
+    //----------------------------------------------------------------------------------------------
+	// Ellipsoid
+	std::string name = "EllipsoidTessellation";
+	m_shaders[name] = Shader();
+	m_shaders[name].SetVertexShader(d3d, 0, L"Assets\\Shaders\\ellipsoid_vs.hlsl", "main",
+											   "vs_5_0", &PolyLayouts::POS3_TEX2_NORM3[0], 3);
+
+	m_shaders[name].SetHullShader(d3d, 0, L"Assets\\Shaders\\ellipsoid_hs.hlsl", "main",
+											 "hs_5_0");
+
+	m_shaders[name].SetDomainShader(d3d, 0, L"Assets\\Shaders\\ellipsoid_ds.hlsl", "main",
+											   "ds_5_0");
+
+	m_shaders[name].SetPixelShader(d3d, 0, L"Assets\\Shaders\\ellipsoid_ps.hlsl", "main",
+										      "ps_5_0");
+
+	m_shaders[name].AddBuffer(d3d, "TessellationBuffer", D3D11_USAGE_DYNAMIC,
+										 sizeof(ConstantBuffers::TessellationBufferDist), 
+										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
+										 sizeof(ConstantBuffers::MVPBuffer),
+										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "EllipsoidBuffer", D3D11_USAGE_DYNAMIC,
+							  sizeof(ConstantBuffers::EllipsoidBuffer),
+							  D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::LightPosBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D10_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "CameraPosBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::CameraPosBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddStructuredBuffer(d3d, "LightBuffer", sizeof(ConstantBuffers::Light), 1);
+
+	m_shaders[name].AddSamplerState(d3d, "SampleTypeWrap", SamplerDesc::DEFAULT_WRAP);
+	//----------------------------------------------------------------------------------------------
+
+
+	//----------------------------------------------------------------------------------------------
+	// Ellipsoid Fractional_even
+	name = "EllipsoidTessellation_FractionalEven";
+	m_shaders[name] = Shader();
+	m_shaders[name].SetVertexShader(d3d, 0, L"Assets\\Shaders\\ellipsoid_vs.hlsl", "main",
+											   "vs_5_0", &PolyLayouts::POS3_TEX2_NORM3[0], 3);
+
+	m_shaders[name].SetHullShader(d3d, 0, L"Assets\\Shaders\\ellipsoid_hs.hlsl", "main_fractional_even",
+											 "hs_5_0");
+
+	m_shaders[name].SetDomainShader(d3d, 0, L"Assets\\Shaders\\ellipsoid_ds.hlsl", "main",
+											   "ds_5_0");
+
+	m_shaders[name].SetPixelShader(d3d, 0, L"Assets\\Shaders\\ellipsoid_ps.hlsl", "main",
+										      "ps_5_0");
+
+	m_shaders[name].AddBuffer(d3d, "TessellationBuffer", D3D11_USAGE_DYNAMIC,
+										 sizeof(ConstantBuffers::TessellationBufferDist), 
+										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
+										 sizeof(ConstantBuffers::MVPBuffer),
+										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "EllipsoidBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::EllipsoidBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::LightPosBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D10_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "CameraPosBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::CameraPosBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddStructuredBuffer(d3d, "LightBuffer", sizeof(ConstantBuffers::Light), 1);
+
+	m_shaders[name].AddSamplerState(d3d, "SampleTypeWrap", SamplerDesc::DEFAULT_WRAP);
+	//----------------------------------------------------------------------------------------------
+
+	//----------------------------------------------------------------------------------------------
+	// Ellipsoid Fractional_odd
+	name = "EllipsoidTessellation_FractionalOdd";
+	m_shaders[name] = Shader();
+	m_shaders[name].SetVertexShader(d3d, 0, L"Assets\\Shaders\\ellipsoid_vs.hlsl", "main",
+											   "vs_5_0", &PolyLayouts::POS3_TEX2_NORM3[0], 3);
+
+	m_shaders[name].SetHullShader(d3d, 0, L"Assets\\Shaders\\ellipsoid_hs.hlsl", "main_fractional_odd",
+											 "hs_5_0");
+
+	m_shaders[name].SetDomainShader(d3d, 0, L"Assets\\Shaders\\ellipsoid_ds.hlsl", "main",
+											   "ds_5_0");
+
+	m_shaders[name].SetPixelShader(d3d, 0, L"Assets\\Shaders\\ellipsoid_ps.hlsl", "main",
+										      "ps_5_0");
+
+	m_shaders[name].AddBuffer(d3d, "TessellationBuffer", D3D11_USAGE_DYNAMIC,
+										 sizeof(ConstantBuffers::TessellationBufferDist), 
+										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
+										 sizeof(ConstantBuffers::MVPBuffer),
+										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "EllipsoidBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::EllipsoidBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::LightPosBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D10_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "CameraPosBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::CameraPosBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddStructuredBuffer(d3d, "LightBuffer", sizeof(ConstantBuffers::Light), 1);
+
+	m_shaders[name].AddSamplerState(d3d, "SampleTypeWrap", SamplerDesc::DEFAULT_WRAP);
+	//----------------------------------------------------------------------------------------------
+
+	//----------------------------------------------------------------------------------------------
+	// Ellipsoid pow2
+	name = "EllipsoidTessellation_Pow2";
+	m_shaders[name] = Shader();
+	m_shaders[name].SetVertexShader(d3d, 0, L"Assets\\Shaders\\ellipsoid_vs.hlsl", "main",
+											   "vs_5_0", &PolyLayouts::POS3_TEX2_NORM3[0], 3);
+
+	m_shaders[name].SetHullShader(d3d, 0, L"Assets\\Shaders\\ellipsoid_hs.hlsl", "main_pow2",
+											 "hs_5_0");
+
+	m_shaders[name].SetDomainShader(d3d, 0, L"Assets\\Shaders\\ellipsoid_ds.hlsl", "main",
+											   "ds_5_0");
+
+	m_shaders[name].SetPixelShader(d3d, 0, L"Assets\\Shaders\\ellipsoid_ps.hlsl", "main",
+										      "ps_5_0");
+
+	m_shaders[name].AddBuffer(d3d, "TessellationBuffer", D3D11_USAGE_DYNAMIC,
+										 sizeof(ConstantBuffers::TessellationBufferDist), 
+										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
+										 sizeof(ConstantBuffers::MVPBuffer),
+										 D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "EllipsoidBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::EllipsoidBuffer),
 		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
 	m_shaders[name].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,

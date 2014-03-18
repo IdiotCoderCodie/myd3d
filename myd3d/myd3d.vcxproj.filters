@@ -144,6 +144,9 @@
     <ClCompile Include="Components\Visual\VisualTessellatedTorusComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Components\Visual\VisualTessellatedEllipsoidComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D.h">
@@ -284,6 +287,9 @@
     <ClInclude Include="Components\Visual\VisualTessellatedTorusComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\Visual\VisualTessellatedEllipsoidComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="window_config.txt" />
@@ -312,5 +318,9 @@
     <FxCompile Include="Assets\Shaders\torus_hs.hlsl" />
     <FxCompile Include="Assets\Shaders\torus_ps.hlsl" />
     <FxCompile Include="Assets\Shaders\torus_vs.hlsl" />
+    <FxCompile Include="Assets\Shaders\ellipsoid_ds.hlsl" />
+    <FxCompile Include="Assets\Shaders\ellipsoid_hs.hlsl" />
+    <FxCompile Include="Assets\Shaders\ellipsoid_ps.hlsl" />
+    <FxCompile Include="Assets\Shaders\ellipsoid_vs.hlsl" />
   </ItemGroup>
 </Project>

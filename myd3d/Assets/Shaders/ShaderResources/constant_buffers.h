@@ -172,4 +172,12 @@ namespace ConstantBuffers
         float tubeRadius;
         glm::vec2 padding;
     };
+
+    struct EllipsoidBuffer
+    {
+        float a;
+        float b;
+        float c;
+        float padding;
+    };
 };
