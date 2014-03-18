@@ -91,21 +91,12 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
     float y = b * sin(UV.y) * sin(UV.x);
     float z = c * cos(UV.x);
 
-  /*  float x = (c + a * cos(UV.x)) * cos(UV.y);
-    float y = (c + a * cos(UV.x)) * sin(UV.y);
-    float z = a * sin(UV.x);*/
-
     float3 vertexPosition = float3(x, y, z);
 
-
-    // calculate torus normal.
-    float nx = c * cos(UV.y);
-    float ny = c * sin(UV.y);
-    float nz = 0.0;
-
-    float3 torusNormal = normalize(float3(x - nx, y - ny, z - nz));
+    // Calculate ellipsoid normal.. TEST2
+    float3 ellipsoidNormal = normalize(float3(x * b * c, y * a * c, z * a * b));
     
-    output.normal = mul(float4(torusNormal, 0.0f), modelMatrix);
+    output.normal = mul(float4(ellipsoidNormal, 0.0f), modelMatrix);
 	//float heightMapVal = heightMapTex.Gather(SampleTypeWrap, heightUV).r;
 
 	//// Calculate position of newly generated vertex, then displace.

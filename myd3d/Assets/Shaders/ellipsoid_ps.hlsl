@@ -64,9 +64,8 @@ void accumulateLights(StructuredBuffer<light> lights, float3 pos, float3 norm, f
 
 float4 main(PixelInputType input) : SV_TARGET
 {
-    return float4(0.0, 1.0, 0.0, 1.0);
- /*   return float4(input.normal, 1.0f);
-    return float4(0.0, 1.0, 0.0, 1.0);*/
+    //return float4(0.0, 1.0, 0.0, 1.0);
+    //return float4(input.normal, 1.0f);
 
 	float4 ambient = float4(0.0, 0.0, 0.0, 1.0);
 	float4 diffuse = float4(0.0, 0.0, 0.0, 1.0);

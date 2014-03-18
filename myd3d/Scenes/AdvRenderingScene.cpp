@@ -29,8 +29,10 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 
     torusJesus->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(120.0f, 60.0f, 15.0f)));
 
-     EntityFactory::CreateTessellatedEllipsoidEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
+     Entity* ellipsoidEnt = EntityFactory::CreateTessellatedEllipsoidEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
 		L"noisyHeightmap.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), "Ellipsoid");
+
+     ellipsoidEnt->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(120.0f, 0.0f, 0.0f)));
 
 	Entity* light = EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.05f, 0.05f, 0.05f, 1.0f),
 		glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
