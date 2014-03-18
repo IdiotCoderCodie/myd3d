@@ -88,6 +88,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Components\Visual\VisualTessellatedPlanetComponent.cpp" />
+    <ClCompile Include="Components\Visual\VisualTessellatedTorusComponent.cpp" />
     <ClCompile Include="Physics\RigidBody\Circle.cpp" />
     <ClCompile Include="Physics\ContactManifold.cpp" />
     <ClCompile Include="Physics\PhysicsSystem.cpp" />
@@ -132,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\Visual\VisualTessellatedPlanetComponent.h" />
+    <ClInclude Include="Components\Visual\VisualTessellatedTorusComponent.h" />
     <ClInclude Include="Physics\RigidBody\Circle.h" />
     <ClInclude Include="Physics\ContactManifold.h" />
     <ClInclude Include="Physics\PhysicsSystem.h" />
@@ -288,6 +290,22 @@
     <FxCompile Include="Assets\Shaders\terrainPlanet_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Assets\Shaders\torus_ds.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Domain</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Assets\Shaders\torus_hs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Hull</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Assets\Shaders\torus_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Assets\Shaders\torus_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
     </FxCompile>
   </ItemGroup>

@@ -141,6 +141,9 @@
     <ClCompile Include="Components\Visual\VisualTessellatedPlanetComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Components\Visual\VisualTessellatedTorusComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D.h">
@@ -278,6 +281,9 @@
     <ClInclude Include="Components\Visual\VisualTessellatedPlanetComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\Visual\VisualTessellatedTorusComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="window_config.txt" />
@@ -302,5 +308,9 @@
     <FxCompile Include="Assets\Shaders\terrainPlanet_ds.hlsl" />
     <FxCompile Include="Assets\Shaders\terrainPlanet_hs.hlsl" />
     <FxCompile Include="Assets\Shaders\terrainPlanet_ps.hlsl" />
+    <FxCompile Include="Assets\Shaders\torus_ds.hlsl" />
+    <FxCompile Include="Assets\Shaders\torus_hs.hlsl" />
+    <FxCompile Include="Assets\Shaders\torus_ps.hlsl" />
+    <FxCompile Include="Assets\Shaders\torus_vs.hlsl" />
   </ItemGroup>
 </Project>
