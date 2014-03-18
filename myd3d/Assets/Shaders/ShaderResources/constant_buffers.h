@@ -165,4 +165,11 @@ namespace ConstantBuffers
 		float terrainHeightMax;
 		float padding;
 	};
+
+    struct TorusBuffer
+    {
+        float innerRadius;
+        float tubeRadius;
+        glm::vec2 padding;
+    };
 };

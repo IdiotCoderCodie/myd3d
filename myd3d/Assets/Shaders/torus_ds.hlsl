@@ -11,12 +11,11 @@ cbuffer MatrixBuffer
 	matrix projectionMatrix;
 };
 
-cbuffer TerrainBuffer
+cbuffer TorusBuffer
 {
-	float terrainHeight;
-	float terrainHeightMin;
-	float terrainHeightMax;
-	float terrainTexelSize;
+	float innerRadius;
+    float tubeRadius;
+    float2 padding;
 };
 
 cbuffer LightPositionBuffer
@@ -81,16 +80,27 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
 
 	output.uv = heightUV;
 
-	float heightMapVal = heightMapTex.Gather(SampleTypeWrap, heightUV).r;
+    float2 UV = heightUV * 2 * 3.1415;
 
-	// Calculate position of newly generated vertex, then displace.
-	float3 vertexPosition = domain.x * patch[0].position
-		+ domain.y * patch[1].position
-		+ domain.z * patch[2].position;
+    float c = innerRadius;
+    float a = tubeRadius;
 
-	vertexPosition += thisNormal * heightMapVal * terrainHeight;
+    float x = (c + a * cos(UV.x)) * cos(UV.y);
+    float y = (c + a * cos(UV.x)) * sin(UV.y);
+    float z = a * sin(UV.x);
 
-	output.terrainHeight = heightMapVal;
+    float3 vertexPosition = float3(x, y, z);
+
+	//float heightMapVal = heightMapTex.Gather(SampleTypeWrap, heightUV).r;
+
+	//// Calculate position of newly generated vertex, then displace.
+	//float3 vertexPosition = domain.x * patch[0].position
+	//	+ domain.y * patch[1].position
+	//	+ domain.z * patch[2].position;
+
+	//vertexPosition += thisNormal * heightMapVal * terrainHeight;
+
+	//output.terrainHeight = heightMapVal;
 
 	output.position = mul(float4(vertexPosition, 1.0f), modelMatrix);
 	output.position = mul(output.position, viewMatrix);
@@ -98,7 +108,7 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
 
 
 	// Test Calculating Normal - Works. Try in PS.
-	float4 h;
+	/*float4 h;
 	float texelSize = terrainTexelSize;
 	h[0] = heightMapTex.Gather(SampleTypeWrap, heightUV + texelSize * float2(0, -1)).r * terrainHeight;
 	h[1] = heightMapTex.Gather(SampleTypeWrap, heightUV + texelSize * float2(-1, 0)).r * terrainHeight;
@@ -112,9 +122,9 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
 
 	n = normalize(n);
 
-	output.normal = n;
+	output.normal = n;*/
 
-	output.color = float4(heightMapVal, heightMapVal, heightMapVal, 1.0f);
+	//output.color = float4(heightMapVal, heightMapVal, heightMapVal, 1.0f);
 
 	float4 worldPosition = mul(float4(vertexPosition, 1.0f), modelMatrix);
 	output.lightPos = normalize(lightPosition - worldPosition);

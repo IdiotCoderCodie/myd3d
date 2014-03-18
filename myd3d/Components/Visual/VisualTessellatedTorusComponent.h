@@ -65,5 +65,7 @@ private:
 	float						m_terrainMagnitude;
 	float						m_texelSize;
     int                         m_distanceBased;
+    float                       m_innerRadius;
+    float                       m_tubeRadius;
 };
 

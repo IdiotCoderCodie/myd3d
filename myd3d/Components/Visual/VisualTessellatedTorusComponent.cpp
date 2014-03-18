@@ -26,7 +26,9 @@ VisualTessellatedTorusComponent::VisualTessellatedTorusComponent(D3D& d3d, const
 	  m_tessPartitioning(1),
 	  m_terrainMagnitude(0.4f),
 	  m_texelSize(0.05f),
-      m_distanceBased(0)
+      m_distanceBased(0),
+      m_innerRadius(1.0f),
+      m_tubeRadius(0.3f)
 {
     if(!G_ShaderManager().IsLoaded())
     {
@@ -71,9 +73,11 @@ void VisualTessellatedTorusComponent::InitTweakBar()
 
 	TwAddVarRW(bar, "TessFactor", TW_TYPE_FLOAT, &m_tessFactor, "step=0.01");
 	TwAddVarRW(bar, "TessPartitioning", TW_TYPE_INT32, &m_tessPartitioning, "max=3 min=0");
-	TwAddVarRW(bar, "TerrainMagnitude", TW_TYPE_FLOAT, &m_terrainMagnitude, "step=0.01");
-	TwAddVarRW(bar, "TerrainTexelSize", TW_TYPE_FLOAT, &m_texelSize, "step=0.0001");
+	//TwAddVarRW(bar, "TerrainMagnitude", TW_TYPE_FLOAT, &m_terrainMagnitude, "step=0.01");
+	//TwAddVarRW(bar, "TerrainTexelSize", TW_TYPE_FLOAT, &m_texelSize, "step=0.0001");
     TwAddVarRW(bar, "DistanceBased", TW_TYPE_INT32, &m_distanceBased, "min=0 max=1");
+    TwAddVarRW(bar, "InnerRadius", TW_TYPE_FLOAT, &m_innerRadius, "step=0.01");
+    TwAddVarRW(bar, "TubeRadius", TW_TYPE_FLOAT, &m_tubeRadius, "step=0.01");
 	m_tweakBarInitialized = true;
 }
 
@@ -255,16 +259,16 @@ void VisualTessellatedTorusComponent::DrawWithShadows(D3D& d3d)
 	switch(m_tessPartitioning)
 	{
 	case 0 :
-		SetShader(G_ShaderManager().GetShader("PlanetTerrain"));
+		SetShader(G_ShaderManager().GetShader("TorusTessellation"));
 		break;
 	case 1:
-		SetShader(G_ShaderManager().GetShader("PlanetTerrain_FractionalEven"));
+		SetShader(G_ShaderManager().GetShader("TorusTessellation_FractionalEven"));
 		break;
 	case 2:
-		SetShader(G_ShaderManager().GetShader("PlanetTerrain_FractionalOdd"));
+		SetShader(G_ShaderManager().GetShader("TorusTessellation_FractionalOdd"));
 		break;
 	case 3:
-		SetShader(G_ShaderManager().GetShader("PlanetTerrain_Pow2"));
+		SetShader(G_ShaderManager().GetShader("TorusTessellation_Pow2"));
 		break;
 	default:
 		break;
@@ -294,12 +298,17 @@ void VisualTessellatedTorusComponent::DrawWithShadows(D3D& d3d)
 									 sizeof(mvpBuffer), 0);
 
 
-	ConstantBuffers::TerrainBuffer terrainBuffer;
+	/*ConstantBuffers::TerrainBuffer terrainBuffer;
 	terrainBuffer.terrainHeight = m_terrainMagnitude;
 	terrainBuffer.padding		= m_texelSize;
 
 	GetShader().DSSetConstBufferData(d3d, std::string("TerrainBuffer"), (void*)&terrainBuffer,
-									 sizeof(terrainBuffer), 1);
+									 sizeof(terrainBuffer), 1);*/
+    ConstantBuffers::TorusBuffer torusBuffer;
+    torusBuffer.innerRadius = m_innerRadius;
+    torusBuffer.tubeRadius  = m_tubeRadius;
+    GetShader().DSSetConstBufferData(d3d, std::string("TorusBuffer"), (void*)&torusBuffer,
+									 sizeof(torusBuffer), 1);
 
 	// Light positions buffer.
 	auto lights						= GetParent().GetParent().GetLights();

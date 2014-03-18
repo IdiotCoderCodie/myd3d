@@ -14,6 +14,8 @@ public:
 
     bool LoadShaders(D3D& d3d, const std::string& configFilename);
 
+    bool LoadTorusTessellationShaders(D3D& d3d);
+
     Shader* GetShader(const std::string& id);
 
     bool IsLoaded() const { return m_loaded; }
