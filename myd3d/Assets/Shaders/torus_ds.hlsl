@@ -91,6 +91,15 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
 
     float3 vertexPosition = float3(x, y, z);
 
+
+    // calculate torus normal.
+    float nx = c * cos(UV.y);
+    float ny = c * sin(UV.y);
+    float nz = 0.0;
+
+    float3 torusNormal = normalize(float3(x - nx, y - ny, z - nz));
+    
+    output.normal = mul(float4(torusNormal, 0.0f), modelMatrix);
 	//float heightMapVal = heightMapTex.Gather(SampleTypeWrap, heightUV).r;
 
 	//// Calculate position of newly generated vertex, then displace.
