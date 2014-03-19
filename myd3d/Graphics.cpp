@@ -15,7 +15,7 @@ Graphics::Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen
         m_timer(),
         m_statsTweakBar(0),
         m_fps(0.0f),
-        m_wireframe(true)
+        m_wireframe(false)
 {
     m_sceneMgr.AddScene(new AdvRenderingScene("TerrainDestruction", &m_sceneMgr));
     m_timer.Start();

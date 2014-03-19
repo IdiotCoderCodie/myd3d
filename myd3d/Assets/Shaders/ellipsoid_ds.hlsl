@@ -81,7 +81,7 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
 
 	output.uv = heightUV;
 
-    float2 UV = heightUV * 2 * 3.1415;
+	float2 UV = heightUV * 2 * 3.14159265359;
 
     float a = ellipA;
     float b = ellipB;
