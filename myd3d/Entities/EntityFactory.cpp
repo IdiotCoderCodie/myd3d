@@ -10,6 +10,7 @@
 #include "../Components/Visual/VisualTessellatedPlanetComponent.h"
 #include "../Components/Visual/VisualTessellatedTorusComponent.h"
 #include "../Components/Visual/VisualTessellatedEllipsoidComponent.h"
+#include "../Components/Visual/VisualGeomParticlesComponent.h"
 #include "../Components/Visual/VisualBitmapComponent.h"
 #include "../Components/Visual/ParticleSystemComponent.h"
 #include "../Components/Collision/CollisionComponent.h"
@@ -355,6 +356,48 @@ Entity* EntityFactory::CreateTessellatedEllipsoidEntity(Scene& scene, D3D& d3d, 
 	newEntity->SetScaleZ(scale.z);
 
 	// Add to the scene.
+	scene.AddEntity(newEntity);
+
+	return newEntity;
+}
+
+
+Entity* EntityFactory::CreateGeometryParticleEntity(Scene& scene, D3D& d3d, const std::string& objFilename,
+                                    WCHAR* textureName, std::vector<RenderTarget*>& shadowMaps,
+                                    const glm::vec3& position, const glm::vec3& scale,
+                                    const std::string& id)
+{
+    Entity* newEntity = new Entity(scene, id);
+
+    // Get the standard string from WCHAR*.
+	std::wstring ws(textureName);
+	std::string  ssTexName(ws.begin(), ws.end());
+
+    Texture* tex = G_TextureManager().GetTexture(ssTexName);
+	if (!tex)
+	{
+		// It's not, so load it.
+		tex = G_TextureManager().LoadTexture(d3d, textureName, ssTexName);
+	}
+
+    VisualGeomParticlesComponent* visCom = 
+        new VisualGeomParticlesComponent(d3d, objFilename, *tex, shadowMaps);
+
+    visCom->EnableCastShadows();
+    visCom->EnableRecieveShadows();
+    newEntity->SetComponent(visCom);
+
+    // Move to requested position.
+	newEntity->MoveForward(position.z);
+	newEntity->MoveRight(position.x);
+	newEntity->MoveUp(position.y);
+
+    // Scale to requested scale.
+	newEntity->SetScaleX(scale.x);
+	newEntity->SetScaleY(scale.y);
+	newEntity->SetScaleZ(scale.z);
+
+    // Add to the scene.
 	scene.AddEntity(newEntity);
 
 	return newEntity;

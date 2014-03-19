@@ -34,6 +34,10 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 
      ellipsoidEnt->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(120.0f, 0.0f, 0.0f)));
 
+
+     EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\cube.obj", L"noisyHeightmap.dds", 
+         GetShadowMaps(), glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.0f), "Geom");
+
 	Entity* light = EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.05f, 0.05f, 0.05f, 1.0f),
 		glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
 		glm::vec4(0.7f, 0.9f, 0.7f, 0.5f),

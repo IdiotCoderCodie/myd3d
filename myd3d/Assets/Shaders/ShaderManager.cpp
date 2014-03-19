@@ -351,6 +351,7 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
 
     LoadTorusTessellationShaders(d3d);
     LoadEllipsoidTessellationShaders(d3d);
+    LoadGeometryShaderTests(d3d);
 
     m_loaded = true;
     // NOTE: should be checking all of the above worked fine.
@@ -697,6 +698,44 @@ bool ShaderManager::LoadEllipsoidTessellationShaders(D3D& d3d)
 	//----------------------------------------------------------------------------------------------
 
     return false;
+}
+
+bool ShaderManager::LoadGeometryShaderTests(D3D& d3d)
+{
+    m_shaders["GeomTest"] = Shader();
+    m_shaders["GeomTest"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\geomParticles_vs.hlsl", 
+                                        "main", "vs_5_0", &PolyLayouts::POS3_TEX2_NORM3[0], 3);
+    m_shaders["GeomTest"].SetGeomShader(d3d, 0, L"Assets\\Shaders\\geomParticles_gs.hlsl", "main", 
+                                        "gs_5_0");
+    m_shaders["GeomTest"].SetPixelShader(d3d, 0, L"Assets\\Shaders\\geomParticles_ps.hlsl", 
+                                        "main", "ps_5_0");
+
+    // Add all the buffers.
+    m_shaders["GeomTest"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
+                                      sizeof(ConstantBuffers::MVPBuffer), 
+                                      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);  
+
+    m_shaders["GeomTest"].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
+                                          sizeof(ConstantBuffers::LightPositionBuffer), 
+    								      D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+    /*m_shaders["GeomTest"].AddBuffer(d3d, "TimeBuffer", D3D11_USAGE_DYNAMIC, 
+                                          sizeof(ConstantBuffers::TimeBuffer), 
+                                          D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);*/
+
+    m_shaders["GeomTest"].AddBuffer(d3d, "CameraBuffer", D3D11_USAGE_DYNAMIC,
+                                          sizeof(ConstantBuffers::CameraPosBuffer),
+                                          D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+    m_shaders["GeomTest"].AddStructuredBuffer(d3d, "LightBuffer", 
+                                                         sizeof(ConstantBuffers::Light), 
+                                                         1);
+
+    // Add the sampler states.
+    m_shaders["GeomTest"].AddSamplerState(d3d, "SampleTypeWrap", 
+                                                      SamplerDesc::DEFAULT_WRAP);
+
+    return true;
 }
 
 Shader* ShaderManager::GetShader(const std::string& id) 

@@ -147,6 +147,9 @@
     <ClCompile Include="Components\Visual\VisualTessellatedEllipsoidComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Components\Visual\VisualGeomParticlesComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D.h">
@@ -290,6 +293,9 @@
     <ClInclude Include="Components\Visual\VisualTessellatedEllipsoidComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\Visual\VisualGeomParticlesComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="window_config.txt" />
@@ -322,5 +328,8 @@
     <FxCompile Include="Assets\Shaders\ellipsoid_hs.hlsl" />
     <FxCompile Include="Assets\Shaders\ellipsoid_ps.hlsl" />
     <FxCompile Include="Assets\Shaders\ellipsoid_vs.hlsl" />
+    <FxCompile Include="Assets\Shaders\geomParticles_ps.hlsl" />
+    <FxCompile Include="Assets\Shaders\geomParticles_vs.hlsl" />
+    <FxCompile Include="Assets\Shaders\geomParticles_gs.hlsl" />
   </ItemGroup>
 </Project>
