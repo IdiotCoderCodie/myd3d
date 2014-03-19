@@ -22,7 +22,7 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 		"testCube");
 
 	EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
-		L"noisyHeightmap.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), "testTessellation");
+		L"lightning.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), "testTessellation");
 
     Entity* torusJesus = EntityFactory::CreateTessellatedTorusEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
 		L"noisyHeightmap.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), "TorusJesus");

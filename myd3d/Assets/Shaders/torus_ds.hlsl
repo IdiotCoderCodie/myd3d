@@ -74,13 +74,13 @@ PixelInputType main( HullConstantOutputType input, float3 domain : SV_DomainLoca
 	output.normal = thisNormal;
 
 	// Calculate interpolated UV coords.
-	float2 heightUV = domain.x * patch[0].uv
+	float2 newUV = domain.x * patch[0].uv
 		+ domain.y * patch[1].uv
 		+ domain.z * patch[2].uv;
 
-	output.uv = heightUV;
+	output.uv = newUV;
 
-    float2 UV = heightUV * 2 * 3.14159265359;
+    float2 UV = newUV * 2 * 3.14159265359;
 
     float c = innerRadius;
     float a = tubeRadius;
