@@ -26,8 +26,8 @@ VisualGeomParticlesComponent::VisualGeomParticlesComponent(D3D& d3d, const std::
 	  m_terrainMagnitude(0.4f),
 	  m_texelSize(0.05f),
       m_distanceBased(0),
-      m_innerRadius(1.0f),
-      m_tubeRadius(0.3f)
+      m_innerRadius(2.0f),
+      m_tubeRadius(0.15f)
 {
     if(!G_ShaderManager().IsLoaded())
     {
