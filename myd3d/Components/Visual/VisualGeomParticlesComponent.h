@@ -66,5 +66,6 @@ private:
     int                         m_distanceBased;
     int                         m_particleCount;
     float                       m_particleSize;
+    float m_totalTime;
 };
 

@@ -17,6 +17,12 @@ cbuffer ParticleBuffer
     float2  padding;
 };
 
+cbuffer TimeBuffer
+{
+    float   timePassed;
+    float3  padding4;
+};
+
 struct VertexOutputType
 {
 	float4 position										: POSITION;
@@ -40,52 +46,19 @@ void main(
 	inout TriangleStream< GeometryOutputType > output
 )
 {
-
-    //float explode = 2.0f;
-    //float3 edgeA = input[1].position.xyz - input[0].position.xyz;
-    //float3 edgeB = input[2].position.xyz - input[0].position.xyz;
-    //float3 triNormal = normalize(cross(edgeA, edgeB));
-    //float3 scaling = triNormal * explode;
-
-    //// Calc centre of triangle.
-    //float3 centrePos = (input[0].position.xyz + input[1].position.xyz + input[2].position.xyz) / 3.0;
-    //float2 centreUV = (input[0].uv + input[1].uv + input[2].uv) / 3.0;
-    //centrePos += triNormal * explode;
-    //float3 centreLightPos = normalize(lightPosition - mul(float4(centrePos, 1.0), modelMatrix));
-    /*for(uint i = 0; i < 3; i++)
-    {
-        GeometryOutputType element;
-        element.position = mul((input[i].position + float4(scaling, 1.0)), modelMatrix);
-        element.lightPos = normalize(lightPosition - element.position);
-        element.position = mul(element.position, viewMatrix);
-        element.position = mul(element.position, projectionMatrix);
-        element.uv       = input[i].uv;
-        element.color    = float4(1.0, 1.0, 1.0, 1.0);
-        element.normal = input[i].normal;
-        element.normal = mul(float4(element.normal, 1.0), modelMatrix);
-        output.Append(element);
-    }
-
-    for(uint i = 0; i < 3; i++)
-    {
-        GeometryOutputType element;
-        element.position = mul((input[i].position + float4(scaling, 1.0)), modelMatrix);
-        element.lightPos = normalize(lightPosition - element.position);
-        element.position = mul(element.position, viewMatrix);
-        element.position = mul(element.position, projectionMatrix);
-        element.uv       = input[i].uv;
-        element.color    = float4(1.0, 1.0, 1.0, 1.0);
-        element.normal = input[i].normal;
-        element.normal = mul(float4(element.normal, 1.0), modelMatrix);
-        output.Append(element);
-    }*/
-
-    
-
     for(uint i = 0; i < 3; i++)
     {
         if(input[i].id > particleCount)
             return;
+        
+        float timeLoop = fmod(timePassed, 2.50f);//timePassed % 10.0f;
+
+        float3 velocityDir = normalize(input[i].position.xyz);
+         //   float4 centrePos = input[i].position;
+        float4 centrePos = float4(0.0f, 0.0f, 0.0f, 1.0f);
+        centrePos.xyz += (timeLoop) * velocityDir * 2.0f;
+
+
        // float zVal = 10.0f / input[i].id;
         float zVal = input[i].id / 50.0f;
         float xVal = sin(input[i].id / 100.0f) / 100.0f;
@@ -96,8 +69,8 @@ void main(
         element.normal = mul(float4(input[i].normal, 1.0), modelMatrix);
         element.lightPos = normalize(lightPosition - mul(input[i].position, modelMatrix)); 
         //top left.
-        float4 centrePos = float4(0.0f, 0.0f, zVal, 1.0f);
-        //float4 centrePos = mul(input[i].position, modelMatrix);
+        //float4 centrePos = float4(0.0f, 0.0f, zVal, 1.0f);
+        centrePos = mul(centrePos, modelMatrix);
         centrePos = mul(centrePos, viewMatrix);
         centrePos = mul(centrePos, projectionMatrix);
         element.position = centrePos + float4(-particleSize, +particleSize, 0.0, 0.0);
@@ -134,55 +107,5 @@ void main(
         output.RestartStrip();
 
     }
-    
-
-    //GeometryOutputType element;
-    //// third vertex.
-    //float3 V = normalize(input[1].position.xyz - input[0].position.xyz);
-    //element.position = input[2].position + (0.2)*float4(V, 0.0);
-    //element.position = mul(element.position, modelMatrix);
-    //element.lightPos = normalize(lightPosition - element.position);
-    //element.position = mul(element.position, viewMatrix);
-    //element.position = mul(element.position, projectionMatrix);
-    //element.uv = input[1].uv - input[0].uv + input[2].uv;
-    //element.color = float4(1.0, 1.0, 1.0, 1.0);
-    //element.normal = input[2].normal;
-
-    //output.Append(element);
-
-   // output.RestartStrip();
-
-	//for (uint i = 0; i < 3; i++)
-	//{
-	//	GeometryOutputType element;
-	//	element.position = input[i].position;
- //       element.position = mul(element.position, modelMatrix);
- //       element.position = mul(element.position, viewMatrix);
- //       element.position = mul(element.position, projectionMatrix);
- //       element.uv       = input[i].uv;
- //       element.color    = float4(1.0, 1.0, 1.0, 1.0);
- //       element.normal   = input[i].normal;
- //       element.normal   = mul(float4(input[i].normal, 0.0), modelMatrix);
- //       element.lightPos = normalize(lightPosition - mul(input[i].position, modelMatrix));
-	//	output.Append(element);
-	//}
- //   output.RestartStrip();
-
- //   // Clone, move right +5
- //   for (uint i = 0; i < 3; i++)
-	//{
-	//	GeometryOutputType element;
-	//	element.position = input[i].position;
- //       element.position.x += 5.0;
- //       element.position = mul(element.position, modelMatrix);
- //       element.lightPos = normalize(lightPosition - element.position);
- //       element.position = mul(element.position, viewMatrix);
- //       element.position = mul(element.position, projectionMatrix);
- //       element.uv = input[i].uv;
- //       element.color    = float4(1.0, 1.0, 1.0, 1.0);
- //       element.normal = input[i].normal;
- //       element.normal = mul(float4(input[i].normal, 0.0), modelMatrix);
- //       
-	//	output.Append(element);
-	//}
+  
 }

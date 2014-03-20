@@ -731,6 +731,10 @@ bool ShaderManager::LoadGeometryShaderTests(D3D& d3d)
                                     sizeof(ConstantBuffers::GeometryParticlesBuffer), 
                                     D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
+    m_shaders["GeomTest"].AddBuffer(d3d, "TimeBuffer", D3D11_USAGE_DYNAMIC,
+        sizeof(ConstantBuffers::TimeBuffer),
+        D3D11_BIND_CONSTANT_BUFFER, D3D10_CPU_ACCESS_WRITE, 0, 0);
+
     m_shaders["GeomTest"].AddStructuredBuffer(d3d, "LightBuffer", 
                                                          sizeof(ConstantBuffers::Light), 
                                                          1);

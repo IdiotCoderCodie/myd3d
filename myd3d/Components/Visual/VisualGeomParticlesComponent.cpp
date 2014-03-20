@@ -26,8 +26,9 @@ VisualGeomParticlesComponent::VisualGeomParticlesComponent(D3D& d3d, const std::
 	  m_terrainMagnitude(0.4f),
 	  m_texelSize(0.05f),
       m_distanceBased(0),
-      m_particleCount(10),
-      m_particleSize(0.1f)
+      m_particleCount(-1),
+      m_particleSize(0.1f),
+      m_totalTime(0.0f)
 {
     if(!G_ShaderManager().IsLoaded())
     {
@@ -300,6 +301,11 @@ void VisualGeomParticlesComponent::DrawWithShadows(D3D& d3d)
     particleBuffer.particleSize  = m_particleSize;
     GetShader().GSSetConstBufferData(d3d, std::string("ParticleBuffer"),
         (void*)&particleBuffer, sizeof(particleBuffer), 2);
+
+    ConstantBuffers::TimeBuffer timeBuffer;
+    timeBuffer.time = m_totalTime;
+    GetShader().GSSetConstBufferData(d3d, std::string("TimeBuffer"),
+        (void*)&timeBuffer, sizeof(timeBuffer), 3);
 
 	ID3D11ShaderResourceView* particleTexture = m_texture.GetTexture();
 	d3d.GetDeviceContext().PSSetShaderResources(0, 1, &particleTexture);
