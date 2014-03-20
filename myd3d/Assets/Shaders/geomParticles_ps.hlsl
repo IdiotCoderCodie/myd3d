@@ -70,7 +70,8 @@ float4 main(PixelInputType input) : SV_TARGET
  /*   return float4(input.normal, 1.0f);
     return float4(0.0, 1.0, 0.0, 1.0);*/
 
-    return particleTexture.Sample(SampleTypeWrap, input.uv);
+    return input.color;
+    float4 texColor = particleTexture.Sample(SampleTypeWrap, input.uv);
 
 	float4 ambient = float4(0.0, 0.0, 0.0, 1.0);
 	float4 diffuse = float4(0.0, 0.0, 0.0, 1.0);

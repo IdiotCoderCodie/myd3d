@@ -50,14 +50,34 @@ void main(
     {
         if(input[i].id > particleCount)
             return;
+
+        int randFacSeed = input[i].id % 20;
+
+        float randomFactor = ((randFacSeed / 20.0f) * 2.0) - 1.0f;
+        
         
         float timeLoop = fmod(timePassed, 2.50f);//timePassed % 10.0f;
 
-        float3 velocityDir = normalize(input[i].position.xyz);
+        float3 velocityDir = normalize(input[i].position.xyz) * randomFactor;
+        velocityDir.x += 0.1 * randomFactor;
+        velocityDir.y += 0.1 * randomFactor;
+        velocityDir.z += 0.1 * randomFactor;
+
+        float3 yellowCol = float3(1.0, 1.0, 0.0);
+        float3 redCol = float3(1.0, 0.0, 0.0);
+
+      /*  float particleColorStep = smoothstep(randomFactor, -1.0, 1.0);
+        float3 particleColor = lerp(yellowCol, redCol, particleColorStep);
+*/
          //   float4 centrePos = input[i].position;
-        float4 centrePos = float4(0.0f, 0.0f, 0.0f, 1.0f);
+        float4 origin = float4(0.0f, 0.0f, 0.0f, 1.0f);
+        float4 centrePos = origin;
         centrePos.xyz += (timeLoop) * velocityDir * 2.0f;
 
+        float particleDist = distance(origin, centrePos);
+        float maxDist = 5.0f;
+        
+        float3 particleColor = lerp(yellowCol, redCol, particleDist / maxDist);
 
        // float zVal = 10.0f / input[i].id;
         float zVal = input[i].id / 50.0f;
@@ -65,7 +85,7 @@ void main(
         float yVal = sin(input[i].id / 100.0f) / 100.0f;
         GeometryOutputType element;
         element.uv = input[i].uv;
-        element.color = float4(1.0, 1.0, 1.0, 1.0);
+        element.color = float4(particleColor, 1.0);
         element.normal = mul(float4(input[i].normal, 1.0), modelMatrix);
         element.lightPos = normalize(lightPosition - mul(input[i].position, modelMatrix)); 
         //top left.
