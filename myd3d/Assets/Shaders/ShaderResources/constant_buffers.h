@@ -180,4 +180,11 @@ namespace ConstantBuffers
         float c;
         float padding;
     };
+
+    struct GeometryParticlesBuffer
+    {
+        int particleCount;
+        float particleSize;
+        glm::vec2 padding;
+    };
 };

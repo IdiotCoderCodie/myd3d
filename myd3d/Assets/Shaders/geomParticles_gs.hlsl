@@ -10,11 +10,19 @@ cbuffer LightPositionBuffer
 	float4 lightPosition;
 };
 
+cbuffer ParticleBuffer
+{
+    int     particleCount;
+    float   particleSize;
+    float2  padding;
+};
+
 struct VertexOutputType
 {
 	float4 position										: POSITION;
 	float2 uv											: TEXCOORD0;
 	float3 normal										: NORMAL;
+    uint   id : TEXCOORD1;
 };
 
 struct GeometryOutputType
@@ -72,41 +80,57 @@ void main(
         output.Append(element);
     }*/
 
+    
+
     for(uint i = 0; i < 3; i++)
     {
+        if(input[i].id > particleCount)
+            return;
+       // float zVal = 10.0f / input[i].id;
+        float zVal = input[i].id / 50.0f;
+        float xVal = sin(input[i].id / 100.0f) / 100.0f;
+        float yVal = sin(input[i].id / 100.0f) / 100.0f;
         GeometryOutputType element;
         element.uv = input[i].uv;
         element.color = float4(1.0, 1.0, 1.0, 1.0);
         element.normal = mul(float4(input[i].normal, 1.0), modelMatrix);
         element.lightPos = normalize(lightPosition - mul(input[i].position, modelMatrix)); 
         //top left.
-        float4 centrePos = mul(input[i].position, modelMatrix);
+        float4 centrePos = float4(0.0f, 0.0f, zVal, 1.0f);
+        //float4 centrePos = mul(input[i].position, modelMatrix);
         centrePos = mul(centrePos, viewMatrix);
         centrePos = mul(centrePos, projectionMatrix);
-        element.position = centrePos + float4(-0.05, +0.05, 0.0, 0.0);
+        element.position = centrePos + float4(-particleSize, +particleSize, 0.0, 0.0);
+        element.uv = float2(1.0, 0.0);
         output.Append(element);
 
         // top right.
-        element.position = centrePos + float4(0.05, 0.05, 0.0, 0.0);
+        element.position = centrePos + float4(particleSize, particleSize, 0.0, 0.0);
+        element.uv = float2(0.0, 0.0);
         output.Append(element);
 
         // bot right
-        element.position = centrePos + float4(0.05, -0.05, 0.0, 0.0);
+        element.position = centrePos + float4(particleSize, -particleSize, 0.0, 0.0);
+        element.uv = float2(0.0, 1.0);
         output.Append(element);
         output.RestartStrip();
 
 
         // bot right
-        element.position = centrePos + float4(0.05, -0.05, 0.0, 0.0);
+        element.position = centrePos + float4(particleSize, -particleSize, 0.0, 0.0);
+        element.uv = float2(0.0, 1.0);
         output.Append(element);
 
         // bot left
-        element.position = centrePos + float4(-0.05, -0.05, 0.0, 0.0);
+        element.position = centrePos + float4(-particleSize, -particleSize, 0.0, 0.0);
+        element.uv = float2(1.0, 1.0);
         output.Append(element);
 
         // top left.
-        element.position = centrePos + float4(-0.05, +0.05, 0.0, 0.0);
+        element.position = centrePos + float4(-particleSize, +particleSize, 0.0, 0.0);
+        element.uv = float2(1.0, 0.0);
         output.Append(element);
+
         output.RestartStrip();
 
     }

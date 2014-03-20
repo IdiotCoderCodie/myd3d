@@ -26,8 +26,8 @@ VisualGeomParticlesComponent::VisualGeomParticlesComponent(D3D& d3d, const std::
 	  m_terrainMagnitude(0.4f),
 	  m_texelSize(0.05f),
       m_distanceBased(0),
-      m_innerRadius(2.0f),
-      m_tubeRadius(0.15f)
+      m_particleCount(10),
+      m_particleSize(0.1f)
 {
     if(!G_ShaderManager().IsLoaded())
     {
@@ -75,8 +75,8 @@ void VisualGeomParticlesComponent::InitTweakBar()
 	//TwAddVarRW(bar, "TerrainMagnitude", TW_TYPE_FLOAT, &m_terrainMagnitude, "step=0.01");
 	//TwAddVarRW(bar, "TerrainTexelSize", TW_TYPE_FLOAT, &m_texelSize, "step=0.0001");
     TwAddVarRW(bar, "DistanceBased", TW_TYPE_INT32, &m_distanceBased, "min=0 max=1");
-    TwAddVarRW(bar, "InnerRadius", TW_TYPE_FLOAT, &m_innerRadius, "step=0.01");
-    TwAddVarRW(bar, "TubeRadius", TW_TYPE_FLOAT, &m_tubeRadius, "step=0.01");
+    TwAddVarRW(bar, "particleCount", TW_TYPE_INT32, &m_particleCount, "step=1");
+    TwAddVarRW(bar, "particleSize", TW_TYPE_FLOAT, &m_particleSize, "step=0.01");
 	m_tweakBarInitialized = true;
 }
 
@@ -295,8 +295,14 @@ void VisualGeomParticlesComponent::DrawWithShadows(D3D& d3d)
 	GetShader().PSSetConstBufferData(d3d, std::string("CameraPosBuffer"),
 									(void*)&cameraPosBuffer, sizeof(cameraPosBuffer), 0);
 
-	/*ID3D11ShaderResourceView* heightMap = m_heightMap.GetTexture();
-	d3d.GetDeviceContext().DSSetShaderResources(0, 1, &heightMap);*/
+    ConstantBuffers::GeometryParticlesBuffer particleBuffer;
+    particleBuffer.particleCount = m_particleCount;
+    particleBuffer.particleSize  = m_particleSize;
+    GetShader().GSSetConstBufferData(d3d, std::string("ParticleBuffer"),
+        (void*)&particleBuffer, sizeof(particleBuffer), 2);
+
+	ID3D11ShaderResourceView* particleTexture = m_texture.GetTexture();
+	d3d.GetDeviceContext().PSSetShaderResources(0, 1, &particleTexture);
 
     // Render shader.
     GetShader().RenderShader(d3d, m_mesh.GetIndexCount());
