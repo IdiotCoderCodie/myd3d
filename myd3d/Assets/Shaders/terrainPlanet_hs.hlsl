@@ -47,15 +47,28 @@ HullConstantOutputType CalcHSPatchConstants(InputPatch<HullInputType, NUM_CONTRO
 
     if(distanceBased)
     {
-        for(int i = 0; i < 3; i++)
+        float d0 = 5.0f;
+        float d1 = 40.0f;
+        float3 centrePatch = (ip[0].position.xyz + ip[1].position.xyz + ip[2].position.xyz) / 3.0f;
+
+        centrePatch = mul(float4(centrePatch, 1.0f), modelMatrix).xyz;
+
+        float dist = distance(centrePatch, eyePos.xyz);
+        float tessAmount = 64.0f * saturate((d1 - dist) / (d1-d0));
+       // tessAmount = lerp(0.0, 64.0, tessAmount);
+
+        Output.EdgeTessFactor[0] = Output.EdgeTessFactor[1] = Output.EdgeTessFactor[2] = Output.InsideTessFactor = tessAmount;
+
+        /*for(int i = 0; i < 3; i++)
         {
+           
             float4 worldPosition = ip[i].position;
             worldPosition = mul(ip[i].position, modelMatrix);
-            float cameraDist = length(eyePos - worldPosition);
+            float cameraDist = distance(eyePos.xyz, worldPosition.xyz);
             Output.EdgeTessFactor[i] = 64.0f / cameraDist;
         }
     
-        Output.InsideTessFactor = max(max(Output.EdgeTessFactor[0], Output.EdgeTessFactor[1]), Output.EdgeTessFactor[2]);
+        Output.InsideTessFactor = max(max(Output.EdgeTessFactor[0], Output.EdgeTessFactor[1]), Output.EdgeTessFactor[2]);*/
     }
     else
     {

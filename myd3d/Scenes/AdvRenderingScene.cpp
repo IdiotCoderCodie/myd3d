@@ -22,7 +22,16 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 		"testCube");
 
 	EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
-		L"lightning.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), "testTessellation");
+		L"lightning.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation");
+
+   /* EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
+		L"lightning.dds", GetShadowMaps(), glm::vec3(10.0f, 0.0f, 0.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation1");
+
+    EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
+		L"lightning.dds", GetShadowMaps(), glm::vec3(10.0f, 0.0f, 10.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation2");
+
+    EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
+		L"lightning.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation3");*/
 
     Entity* torusJesus = EntityFactory::CreateTessellatedTorusEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
 		L"noisyHeightmap.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), "TorusJesus");
@@ -35,8 +44,8 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
      ellipsoidEnt->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(120.0f, 0.0f, 0.0f)));
 
 
-    Entity* particles = EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 
-         GetShadowMaps(), glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.0f), "Geom");
+   /* Entity* particles = EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 
+         GetShadowMaps(), glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.0f), "Geom");*/
 
 
 	Entity* light = EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.05f, 0.05f, 0.05f, 1.0f),
