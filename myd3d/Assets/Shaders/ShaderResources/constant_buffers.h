@@ -185,6 +185,7 @@ namespace ConstantBuffers
     {
         int particleCount;
         float particleSize;
-        glm::vec2 padding;
+		int effectId;
+        float padding;
     };
 };

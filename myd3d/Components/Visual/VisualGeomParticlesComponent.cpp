@@ -28,6 +28,7 @@ VisualGeomParticlesComponent::VisualGeomParticlesComponent(D3D& d3d, const std::
       m_distanceBased(0),
       m_particleCount(-1),
       m_particleSize(0.1f),
+	  m_effectId(0),
       m_totalTime(0.0f)
 {
     if(!G_ShaderManager().IsLoaded())
@@ -78,6 +79,7 @@ void VisualGeomParticlesComponent::InitTweakBar()
     TwAddVarRW(bar, "DistanceBased", TW_TYPE_INT32, &m_distanceBased, "min=0 max=1");
     TwAddVarRW(bar, "particleCount", TW_TYPE_INT32, &m_particleCount, "step=1");
     TwAddVarRW(bar, "particleSize", TW_TYPE_FLOAT, &m_particleSize, "step=0.01");
+	TwAddVarRW(bar, "effectId", TW_TYPE_INT32, &m_effectId, "");
 	m_tweakBarInitialized = true;
 }
 
@@ -299,6 +301,7 @@ void VisualGeomParticlesComponent::DrawWithShadows(D3D& d3d)
     ConstantBuffers::GeometryParticlesBuffer particleBuffer;
     particleBuffer.particleCount = m_particleCount;
     particleBuffer.particleSize  = m_particleSize;
+	particleBuffer.effectId = m_effectId;
     GetShader().GSSetConstBufferData(d3d, std::string("ParticleBuffer"),
         (void*)&particleBuffer, sizeof(particleBuffer), 2);
 
