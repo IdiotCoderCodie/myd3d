@@ -80,6 +80,7 @@ void main(
 				float4 origin = float4(0.0f, 0.0f, 0.0f, 1.0f);
 				centrePos = origin;
 				centrePos.xyz += (timeLoop)* velocityDir * 2.0f;
+				centrePos.y -= (timeLoop) * (timeLoop);
 
 			float particleDist = distance(origin, centrePos);
 			float maxDist = 5.0f;
