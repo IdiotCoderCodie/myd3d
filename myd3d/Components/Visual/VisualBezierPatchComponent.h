@@ -5,18 +5,17 @@
 #include "../../RenderTarget.h"
 #include <DirectXMath.h>
 
-class VisualTessellatedTorusComponent : public VisualComponent
+class VisualBezierPatchComponent : public VisualComponent
 {
 
 public:
-	// TODO: Add parameters to set torus specific data (inner + outer radii).
-	VisualTessellatedTorusComponent(D3D& d3d, const std::string& filename, Texture& texture, Texture& heightMap,
+	VisualBezierPatchComponent(D3D& d3d, const std::string& filename, Texture& texture, Texture& heightMap,
                         std::vector<RenderTarget*>& shadowMaps);
     /*VisualTessellatedPlanetComponent(D3D& d3d, const std::string& meshFilename, Texture& texture, Texture& heightMap,
                         std::vector<RenderTarget*>& shadowMaps);*/
-	~VisualTessellatedTorusComponent(void);
+	~VisualBezierPatchComponent(void);
 
-	VisualTessellatedTorusComponent& operator=(const VisualTessellatedTorusComponent& other);
+	VisualBezierPatchComponent& operator=(const VisualBezierPatchComponent& other);
 
     virtual void ComponentID(componentId_t& out) const;
 
@@ -27,6 +26,10 @@ public:
     bool DoesRecieveShadows() const { return m_recieveShadows; }
     void EnableRecieveShadows()     { m_recieveShadows = true; }
     void DisableRecieveShadows()    { m_recieveShadows = false; }
+
+	bool InitBuffers(D3D& d3d);
+
+	void UpdateBuffers(D3D& d3d);
 
     virtual void Update(float timeElapsed);
 
@@ -54,7 +57,10 @@ private:
 	void InitTweakBar();
 
 private:
-    StaticMesh                  m_mesh;
+    //StaticMesh                  m_mesh;
+	glm::vec3					m_controlPoints[16];
+	ID3D11Buffer*				m_vertexBuffer;
+	ID3D11Buffer*				m_indexBuffer;
 	Texture&                    m_texture;
 	Texture&                    m_heightMap;;
     std::vector<RenderTarget*>& m_shadowMaps;
@@ -66,7 +72,5 @@ private:
 	float						m_terrainMagnitude;
 	float						m_texelSize;
     int                         m_distanceBased;
-    float                       m_innerRadius;
-    float                       m_tubeRadius;
 };
 

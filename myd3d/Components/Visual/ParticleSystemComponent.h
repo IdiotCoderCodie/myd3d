@@ -167,6 +167,7 @@ private:
     bool TweakBarSetup();
 
 private:
+	// TODO: Struct this shit up.
     std::vector<Particle>  m_engagedParticles;
     unsigned int           m_maxParticleCount;
     unsigned int           m_currentParticleCount;

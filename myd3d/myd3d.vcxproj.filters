@@ -150,6 +150,9 @@
     <ClCompile Include="Components\Visual\VisualGeomParticlesComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Components\Visual\VisualBezierPatchComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D.h">
@@ -296,6 +299,9 @@
     <ClInclude Include="Components\Visual\VisualGeomParticlesComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\Visual\VisualBezierPatchComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="window_config.txt" />
@@ -331,5 +337,9 @@
     <FxCompile Include="Assets\Shaders\geomParticles_ps.hlsl" />
     <FxCompile Include="Assets\Shaders\geomParticles_vs.hlsl" />
     <FxCompile Include="Assets\Shaders\geomParticles_gs.hlsl" />
+    <FxCompile Include="Assets\Shaders\bezierPatch_ds.hlsl" />
+    <FxCompile Include="Assets\Shaders\bezierPatch_hs.hlsl" />
+    <FxCompile Include="Assets\Shaders\bezierPatch_ps.hlsl" />
+    <FxCompile Include="Assets\Shaders\bezierPatch_vs.hlsl" />
   </ItemGroup>
 </Project>
