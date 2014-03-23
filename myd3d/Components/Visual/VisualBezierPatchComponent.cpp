@@ -79,7 +79,7 @@ void VisualBezierPatchComponent::InitTweakBar()
 	//TwAddVarRW(bar, "TerrainTexelSize", TW_TYPE_FLOAT, &m_texelSize, "step=0.0001");
     TwAddVarRW(bar, "DistanceBased", TW_TYPE_INT32, &m_distanceBased, "min=0 max=1");
 
-	for (int i = 0; i < 15; i++)
+	for (int i = 0; i < 16; i++)
 	{
 		TwAddVarRW(bar, std::string("CtrlPoint" + std::to_string(i)).c_str(), TW_TYPE_DIR3F, &m_controlPoints[i], "group=ControlPoints");
 	}

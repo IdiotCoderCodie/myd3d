@@ -64,20 +64,20 @@ float4 main(PixelInputType input) : SV_TARGET
 {
  /*   return float4(input.normal, 1.0f);
     return float4(0.0, 1.0, 0.0, 1.0);*/
-	return float4(0.0, 1.0, 0.0, 1.0);
+	//return float4(0.0, 1.0, 0.0, 1.0);
 	float4 ambient = float4(0.0, 0.0, 0.0, 1.0);
 	float4 diffuse = float4(0.0, 0.0, 0.0, 1.0);
 	float4 specular = float4(0.0, 0.0, 0.0, 1.0);
 
-	static float4 grassColor = float4(0.2, 0.6, 0.2, 1.0f);
-	static float4 snowColor = float4(0.95, 0.95, 0.95, 1.0f);
+	/*static float4 grassColor = float4(0.2, 0.6, 0.2, 1.0f);
+	static float4 snowColor = float4(0.95, 0.95, 0.95, 1.0f);*/
 
 	//float terrainBlend = smoothstep(0.0, 1.0, input.terrainHeight);
 	//float4 terrainColor = lerp(grassColor, snowColor, terrainBlend);
 
     
 
-	accumulateLights(LightBuffer, input.position, input.normal, cameraPosition, 1.0,
+	accumulateLights(LightBuffer, input.position, -input.normal, cameraPosition, 1.0,
 						ambient, diffuse, specular, input);
 
 	float4 lightColor = ambient;
