@@ -20,6 +20,8 @@ public:
 
     bool LoadGeometryShaderTests(D3D& d3d);
 
+	bool LoadBezierPatchShaders(D3D& d3d);
+
     Shader* GetShader(const std::string& id);
 
     bool IsLoaded() const { return m_loaded; }

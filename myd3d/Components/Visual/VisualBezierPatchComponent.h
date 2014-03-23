@@ -9,7 +9,7 @@ class VisualBezierPatchComponent : public VisualComponent
 {
 
 public:
-	VisualBezierPatchComponent(D3D& d3d, const std::string& filename, Texture& texture, Texture& heightMap,
+	VisualBezierPatchComponent(D3D& d3d, Texture& texture,
                         std::vector<RenderTarget*>& shadowMaps);
     /*VisualTessellatedPlanetComponent(D3D& d3d, const std::string& meshFilename, Texture& texture, Texture& heightMap,
                         std::vector<RenderTarget*>& shadowMaps);*/
@@ -62,7 +62,6 @@ private:
 	ID3D11Buffer*				m_vertexBuffer;
 	ID3D11Buffer*				m_indexBuffer;
 	Texture&                    m_texture;
-	Texture&                    m_heightMap;;
     std::vector<RenderTarget*>& m_shadowMaps;
     bool                        m_castShadows;
     bool                        m_recieveShadows;

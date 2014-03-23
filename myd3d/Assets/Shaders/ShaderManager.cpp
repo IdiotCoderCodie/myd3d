@@ -352,6 +352,7 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
     LoadTorusTessellationShaders(d3d);
     LoadEllipsoidTessellationShaders(d3d);
     LoadGeometryShaderTests(d3d);
+	LoadBezierPatchShaders(d3d);
 
     m_loaded = true;
     // NOTE: should be checking all of the above worked fine.
@@ -744,6 +745,40 @@ bool ShaderManager::LoadGeometryShaderTests(D3D& d3d)
                                                       SamplerDesc::DEFAULT_WRAP);
 
     return true;
+}
+// TODO: Add BezierPatch shader.
+bool ShaderManager::LoadBezierPatchShaders(D3D& d3d)
+{
+	m_shaders["BezierPatch"] = Shader();
+	m_shaders["BezierPatch"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\bezierPatch_vs.hlsl",
+		"main", "vs_5_0", &PolyLayouts::POS3[0], 1);
+	m_shaders["BezierPatch"].SetHullShader(d3d, 0, L"Assets\\Shaders\\bezierPatch_hs.hlsl",
+		"main", "hs_5_0");
+	m_shaders["BezierPatch"].SetDomainShader(d3d, 0, L"Assets\\Shaders\\bezierPatch_ds.hlsl",
+		"main", "ds_5_0");
+	m_shaders["BezierPatch"].SetPixelShader(d3d, 0, L"Assets\\Shaders\\bezierPatch_ps.hlsl",
+		"main", "ps_5_0");
+
+	m_shaders["BezierPatch"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC,
+									   sizeof(ConstantBuffers::MVPBuffer), 
+									   D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders["BezierPatch"].AddBuffer(d3d, "LightPositionBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::LightPositionBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders["BezierPatch"].AddBuffer(d3d, "CameraBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::CameraPosBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders["BezierPatch"].AddStructuredBuffer(d3d, "LightBuffer",
+		sizeof(ConstantBuffers::Light),
+		1);
+
+	m_shaders["BezierPatch"].AddSamplerState(d3d, "SampleTypeWrap",
+		SamplerDesc::DEFAULT_WRAP);
+
+	return true;
 }
 
 Shader* ShaderManager::GetShader(const std::string& id) 

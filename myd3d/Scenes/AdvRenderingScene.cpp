@@ -21,8 +21,8 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 		GetShadowMaps(), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.005f),
 		"testCube");
 
-	EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
-		L"lightning.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation");
+	/*EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
+		L"lightning.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation");*/
 
    /* EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
 		L"lightning.dds", GetShadowMaps(), glm::vec3(10.0f, 0.0f, 0.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation1");
@@ -38,7 +38,7 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 
     torusJesus->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(120.0f, 60.0f, 15.0f)));
 
-     Entity* ellipsoidEnt = EntityFactory::CreateTessellatedEllipsoidEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
+     /*Entity* ellipsoidEnt = EntityFactory::CreateTessellatedEllipsoidEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
 		L"noisyHeightmap.dds", GetShadowMaps(), glm::vec3(-5.0f, 0.0f, 0.0f), glm::vec3(1.0f), "Ellipsoid");
 
      ellipsoidEnt->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(120.0f, 0.0f, 0.0f)));
@@ -48,8 +48,10 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
          GetShadowMaps(), glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.0f), "Geom");
 
     EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 
-         GetShadowMaps(), glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.0f), "GeomSmoke");
+         GetShadowMaps(), glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.0f), "GeomSmoke");*/
 
+	EntityFactory::CreateBezierPatchEntity(*this, d3d, L"bullshit.dds", GetShadowMaps(), glm::vec3(0.0f), glm::vec3(1.0f),
+		"BezierPatch");
 
 	Entity* light = EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.05f, 0.05f, 0.05f, 1.0f),
 		glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),

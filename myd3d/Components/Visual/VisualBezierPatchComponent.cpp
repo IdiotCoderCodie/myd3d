@@ -10,15 +10,16 @@
 
 #include "../../glm/gtc/matrix_transform.hpp"
 
+#include <string>
+
 static float   m_totalTime = 0.0f;
 
-VisualBezierPatchComponent::VisualBezierPatchComponent(D3D& d3d, const std::string& filename,
-	Texture& texture, Texture& heightMap, std::vector<RenderTarget*>& shadowMaps)
+VisualBezierPatchComponent::VisualBezierPatchComponent(D3D& d3d,
+	Texture& texture, std::vector<RenderTarget*>& shadowMaps)
     : VisualComponent(),
 	  m_vertexBuffer(0),
 	  m_indexBuffer(0),
 	  m_texture(texture),
-	  m_heightMap(heightMap), 
       m_shadowMaps(shadowMaps),
       m_castShadows(false),
       m_recieveShadows(false),
@@ -77,6 +78,11 @@ void VisualBezierPatchComponent::InitTweakBar()
 	//TwAddVarRW(bar, "TerrainMagnitude", TW_TYPE_FLOAT, &m_terrainMagnitude, "step=0.01");
 	//TwAddVarRW(bar, "TerrainTexelSize", TW_TYPE_FLOAT, &m_texelSize, "step=0.0001");
     TwAddVarRW(bar, "DistanceBased", TW_TYPE_INT32, &m_distanceBased, "min=0 max=1");
+
+	for (int i = 0; i < 15; i++)
+	{
+		TwAddVarRW(bar, std::string("CtrlPoint" + std::to_string(i)).c_str(), TW_TYPE_DIR3F, &m_controlPoints[i], "group=ControlPoints");
+	}
     
 	m_tweakBarInitialized = true;
 }
@@ -84,7 +90,6 @@ void VisualBezierPatchComponent::InitTweakBar()
 VisualBezierPatchComponent& VisualBezierPatchComponent::operator=(const VisualBezierPatchComponent& other)
 {
     m_texture;
-    m_heightMap;
     m_shadowMaps;
     m_castShadows = other.m_castShadows;
     m_recieveShadows = other.m_recieveShadows;
@@ -127,7 +132,7 @@ bool VisualBezierPatchComponent::InitBuffers(D3D& d3d)
 
 	for (int i = 0; i < 16; i++)
 	{
-		indices[i] = 0;
+		indices[i] = i;
 	}
 
 	// Create vertex buffer.
@@ -451,10 +456,18 @@ void VisualBezierPatchComponent::DrawWithShadows(D3D& d3d)
 	GetShader().PSSetConstBufferData(d3d, std::string("CameraPosBuffer"),
 									(void*)&cameraPosBuffer, sizeof(cameraPosBuffer), 0);
 
-	ID3D11ShaderResourceView* heightMap = m_heightMap.GetTexture();
-	d3d.GetDeviceContext().DSSetShaderResources(0, 1, &heightMap);
+	//ID3D11ShaderResourceView* heightMap = m_heightMap.GetTexture();
+	//d3d.GetDeviceContext().DSSetShaderResources(0, 1, &heightMap);
 
     // Render shader.
 	// TODO: Replace GetIndexCount() with 16?
+	unsigned int stride = sizeof(glm::vec3);
+	unsigned int offset = 0;
+	d3d.GetDeviceContext().IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
+
+	d3d.GetDeviceContext().IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+	d3d.GetDeviceContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_16_CONTROL_POINT_PATCHLIST);
+
     GetShader().RenderShader(d3d, 16);
 }

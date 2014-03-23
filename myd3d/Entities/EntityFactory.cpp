@@ -11,6 +11,7 @@
 #include "../Components/Visual/VisualTessellatedTorusComponent.h"
 #include "../Components/Visual/VisualTessellatedEllipsoidComponent.h"
 #include "../Components/Visual/VisualGeomParticlesComponent.h"
+#include "../Components/Visual/VisualBezierPatchComponent.h"
 #include "../Components/Visual/VisualBitmapComponent.h"
 #include "../Components/Visual/ParticleSystemComponent.h"
 #include "../Components/Collision/CollisionComponent.h"
@@ -403,6 +404,46 @@ Entity* EntityFactory::CreateGeometryParticleEntity(Scene& scene, D3D& d3d, cons
 	return newEntity;
 }
 
+
+Entity* EntityFactory::CreateBezierPatchEntity(Scene& scene, D3D& d3d, WCHAR* textureName,
+	std::vector<RenderTarget*>&shadowMaps,
+	const glm::vec3& position, const glm::vec3& scale,
+	const std::string& id)
+{
+	Entity* newEntity = new Entity(scene, id);
+
+	// Get the standard string from WCHAR*.
+	std::wstring ws(textureName);
+	std::string  ssTexName(ws.begin(), ws.end());
+
+	Texture* tex = G_TextureManager().GetTexture(ssTexName);
+	if (!tex)
+	{
+		// It's not, so load it.
+		tex = G_TextureManager().LoadTexture(d3d, textureName, ssTexName);
+	}
+
+	VisualBezierPatchComponent* bezierComp =
+		new VisualBezierPatchComponent(d3d, *tex, shadowMaps);
+	bezierComp->EnableCastShadows();
+	bezierComp->EnableRecieveShadows();
+	newEntity->SetComponent(bezierComp);
+
+	// Move to requested position.
+	newEntity->MoveForward(position.z);
+	newEntity->MoveRight(position.x);
+	newEntity->MoveUp(position.y);
+
+	// Scale to requested scale.
+	newEntity->SetScaleX(scale.x);
+	newEntity->SetScaleY(scale.y);
+	newEntity->SetScaleZ(scale.z);
+
+	// Add to the scene.
+	scene.AddEntity(newEntity);
+
+	return newEntity;
+}
 
 Entity* EntityFactory::CreateBmpEntity(Scene& scene, D3D& d3d, ID3D11ShaderResourceView* srcTexture,
                                        int width, int height, int screenWidth, int screenHeight,

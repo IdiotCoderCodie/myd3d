@@ -22,12 +22,10 @@ StructuredBuffer<light> LightBuffer : register(t2);
 
 struct PixelInputType
 {
-	float4 position	: SV_POSITION;
-    float3 normal	: NORMAL;
-	float4 color	: COLOR;
+	float4 position : SV_POSITION;
+	float3 normal   : NORMAL;
 	float2 uv		: TEXCOORD0;
 	float4 lightPos	: TEXCOORD1;
-	float  terrainHeight : TEXCOORD2;
 	// TODO: change/add other stuff
 };
 
@@ -66,7 +64,7 @@ float4 main(PixelInputType input) : SV_TARGET
 {
  /*   return float4(input.normal, 1.0f);
     return float4(0.0, 1.0, 0.0, 1.0);*/
-
+	return float4(0.0, 1.0, 0.0, 1.0);
 	float4 ambient = float4(0.0, 0.0, 0.0, 1.0);
 	float4 diffuse = float4(0.0, 0.0, 0.0, 1.0);
 	float4 specular = float4(0.0, 0.0, 0.0, 1.0);

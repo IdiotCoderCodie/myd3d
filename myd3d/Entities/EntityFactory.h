@@ -95,6 +95,11 @@ namespace EntityFactory
                                     const glm::vec3& position, const glm::vec3& scale,
                                     const std::string& id);
 
+	 Entity* CreateBezierPatchEntity(Scene& scene, D3D& d3d, WCHAR* textureName,
+		 std::vector<RenderTarget*>&shadowMaps,
+		 const glm::vec3& position, const glm::vec3& scale,
+		 const std::string& id);
+
     Entity* CreateBmpEntity(Scene& scene, D3D& d3d, ID3D11ShaderResourceView* srcTexture,
                                        int width, int height, int screenWidth, int screenHeight,
                                        const std::string& id);
