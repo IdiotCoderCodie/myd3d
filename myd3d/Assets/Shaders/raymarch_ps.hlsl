@@ -6,13 +6,14 @@ cbuffer CameraBuffer
     float viewportW;
     float viewportH;
     matrix viewInverse;
+	float padding;
 };
 
 cbuffer LightBuffer
 {
     float3 lightPosition;
     float4 lightColor;
-    float padding;
+    float paddingfd;
 };
 
 cbuffer BackgroundBuffer
@@ -27,23 +28,23 @@ struct Sphere {
    float Kd, Ks, Kr, shininess;
 };
 
-float4 sphereColor_1;
-float4 sphereColor_2;
-float4 sphereColor_3;
-float shininess;
+//static float4 sphereColor_1 = float4(0.0, 1.0, 0.0, 1.0);
+//float4 sphereColor_2;
+//float4 sphereColor_3;
+//float shininess;
 
-int fDepth;
+//int fDepth;
 #define PI 3.14159265359
 #define INTERVALS 100
 #define SQR(N) (N*N)
-#define NOBJECTS 3
+#define NOBJECTS 1
 static Sphere object[NOBJECTS] = {
    //sphere 1
-   {0.0, 0.0, 0.0, SQR(1.0), sphereColor_1, 1.0, 1.0, 1.0, shininess},
-   //sphere 2
-   {2.0, -1.0, 0.0, SQR(0.5), sphereColor_2, 1.0, 1.0, 1.0, shininess},
-   //sphere3
-   {0.0, -201.5, 0.0, SQR(200.0), sphereColor_3, 0.8, 0.3, 0.3, shininess}
+	{ float3(0.0, 0.0, 0.0), SQR(1.0), float4(0.0, 1.0, 0.0, 1.0), 1.0, 1.0, 1.0, 128.0 },
+ //  //sphere 2
+	//{ 2.0, -1.0, 0.0, SQR(0.5), sphereColor_1, 1.0, 1.0, 1.0, 128.0 },
+ //  //sphere3
+	//{ 0.0, -201.5, 0.0, SQR(200.0), sphereColor_1, 0.8, 0.3, 0.3, 128.0 }
 };
 
 struct Ray {
@@ -64,6 +65,7 @@ float4 Phong(float3 norm, float3 Ldir, float3 Vdir, float shininess, float4 diff
 
 float4 Shade(float3 hitPos, float3 normal, float3 viewDir, int hitobj, float lightIntensity)
 {
+	//return float4(0.0, 1.0, 0.0, 1.0);
    float3 lightDir = normalize(lightPosition - hitPos);
    float4 diff = object[hitobj].color * object[hitobj].Kd;
    float4 spec = object[hitobj].color * object[hitobj].Ks;
@@ -109,12 +111,15 @@ float3 SphereNormal(Sphere s, float3 pos)
 
 #define MIN_XYZ -200.1
 #define MAX_XYZ 200.1
-const float3 BoxMinimum = (float3)MIN_XYZ;
-const float3 BoxMaximum = (float3)MAX_XYZ;
+#define BOXMIN (float3)MIN_XYZ
+#define BOXMAX (float3)MAX_XYZ
 // Fine entering and leaving position of ray. (timeIn, timeOut).
 bool IntersectBox(in Ray ray, in float3 minimum, in float3 maximum,
                   out float timeIn, out float timeOut)
 {
+   const float3 BoxMinimum = (float3)MIN_XYZ;
+   const float3 BoxMaximum = (float3)MAX_XYZ;
+
    float3 OMIN = (minimum - ray.o) / ray.d;
    float3 OMAX = (maximum - ray.o) / ray.d;
    float3 MAX = max(OMAX, OMIN);
@@ -224,14 +229,16 @@ bool IntersectSurface(in Ray ray, in float start, in float final, out float val)
    return false;
 }
 
-const float3 Zero = float3(0.0, 0.0, 0.0);
-const float3 Unit = float3(1.0, 1.0, 1.0);
-const float3 AxisX = float3(1.0, 0.0, 0.0);
-const float3 AxisY = float3(0.0, 1.0, 0.0);
-const float3 AxisZ = float3(0.0, 0.0, 1.0);
+
 #define STEP 0.01
 float3 CalcNormal(float3 Position)
 {
+	static const float3 Zero = float3(0.0, 0.0, 0.0);
+	static const float3 Unit = float3(1.0, 1.0, 1.0);
+	static const float3 AxisX = float3(1.0, 0.0, 0.0);
+	static const float3 AxisY = float3(0.0, 1.0, 0.0);
+	static const float3 AxisZ = float3(0.0, 0.0, 1.0);
+
     float A = Function(Position + AxisX * STEP)
                 - Function(Position - AxisX * STEP);
     float B = Function(Position + AxisY * STEP)
@@ -247,13 +254,13 @@ float4 Raytrace(Ray ray)
    float4 result = (float4)0.0;
    float start, final;
    float t;
-   if(IntersectBox(ray, BoxMinimum, BoxMaximum, start, final))
+   if(IntersectBox(ray, BOXMIN, BOXMAX, start, final))
    {
       if(IntersectSurface(ray, start, final, t))
       {
          float3 Position = ray.o + ray.d * t;
          float3 normal = CalcNormal(Position);
-         float3 color = (Position - BoxMinimum) / (BoxMaximum - BoxMinimum);
+         float3 color = (Position - BOXMIN) / (BOXMAX - BOXMIN);
          result = Shade(Position, normal, ray.d, 0, 1.0);
       }
    }
@@ -300,8 +307,8 @@ bool AnyHit(Ray ray)
 
 struct PixelInput 
 {
-   float4 Position : POSITION0;
-   float4 Tex      : TEXCOORD0; 
+   float4 Position : SV_POSITION;
+   float2 Tex      : TEXCOORD0; 
 };
 
 float4 main(PixelInput input) : SV_Target
@@ -320,45 +327,45 @@ float4 main(PixelInput input) : SV_Target
    
    return Raytrace(eyeray);
    // find the nearest hit
-   int hitobj;
-   bool hit;
-   float3 norm;
-   float4 RTColor = 0;
-   float lightIntensity = 1.0;
-   
-   // specify the eyeray
-   Ray currRay = eyeray;
-   
-   float3 IntSectP = NearestHit(eyeray, hitobj, hit);
-   
-   for(int depth =1; depth < fDepth; depth++)
-   {
-      float depthIntensity = 1.0 / depth;
-      if(hit)
-      {
-         Ray shadowRay; 
-         shadowRay.d = normalize(lightPosition - IntSectP);
-         shadowRay.o = IntSectP;
-         norm = SphereNormal(object[hitobj], IntSectP);
-         if(!AnyHit(shadowRay))
-         {
-            RTColor += depthIntensity * Shade(IntSectP, norm, currRay.d, hitobj, lightIntensity);
-         }
+   //int hitobj;
+   //bool hit;
+   //float3 norm;
+   //float4 RTColor = 0;
+   //float lightIntensity = 1.0;
+   //
+   //// specify the eyeray
+   //Ray currRay = eyeray;
+   //
+   //float3 IntSectP = NearestHit(eyeray, hitobj, hit);
+   //
+   //for(int depth =1; depth < fDepth; depth++)
+   //{
+   //   float depthIntensity = 1.0 / depth;
+   //   if(hit)
+   //   {
+   //      Ray shadowRay; 
+   //      shadowRay.d = normalize(lightPosition - IntSectP);
+   //      shadowRay.o = IntSectP;
+   //      norm = SphereNormal(object[hitobj], IntSectP);
+   //      if(!AnyHit(shadowRay))
+   //      {
+   //         RTColor += depthIntensity * Shade(IntSectP, norm, currRay.d, hitobj, lightIntensity);
+   //      }
 
-         // shoot reflected ray
-         lightIntensity *= object[hitobj].Kr;
-         currRay.o = IntSectP;
-         currRay.d = reflect(currRay.d, norm);
-         IntSectP = NearestHit(currRay, hitobj, hit);
-         
-      }
-      else
-      {
-         RTColor += backgroundColor;
-      }
-   }
-   
-   return RTColor;
+   //      // shoot reflected ray
+   //      lightIntensity *= object[hitobj].Kr;
+   //      currRay.o = IntSectP;
+   //      currRay.d = reflect(currRay.d, norm);
+   //      IntSectP = NearestHit(currRay, hitobj, hit);
+   //      
+   //   }
+   //   else
+   //   {
+   //      RTColor += backgroundColor;
+   //   }
+   //}
+   //
+   //return RTColor;
 }
 
 

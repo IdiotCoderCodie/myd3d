@@ -28,7 +28,8 @@ VisualBezierPatchComponent::VisualBezierPatchComponent(D3D& d3d,
 	  m_tessPartitioning(1),
 	  m_terrainMagnitude(0.4f),
 	  m_texelSize(0.05f),
-      m_distanceBased(0)
+      m_distanceBased(0),
+	  m_timeElapsed(0.0f)
 {
     if(!G_ShaderManager().IsLoaded())
     {
@@ -203,7 +204,7 @@ void VisualBezierPatchComponent::UpdateBuffers(D3D& d3d)
 	{
 		return;// false;
 	}
-
+	
 	// Send updated data. (NOTE: Currently no checking to see if the data has actually been
 	// updated since the last frame, so could be sending the same data. Would be best to do
 	// a check.
@@ -218,7 +219,8 @@ void VisualBezierPatchComponent::Update(float timeElapsed)
 	if(!m_tweakBarInitialized)
 		InitTweakBar();
     m_totalTime += timeElapsed;
-
+	//m_controlPoints[0].y = 0.0f + glm::cos(m_totalTime);
+	//m_controlPoints[15].y = 0.0f + glm::cos(m_totalTime);
 	UpdateBuffers(GetParent().GetParent().GetParent().GetD3DInstance());
 }
 

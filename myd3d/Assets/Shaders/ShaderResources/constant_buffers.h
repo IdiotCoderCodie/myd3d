@@ -3,6 +3,11 @@
 
 namespace ConstantBuffers
 {
+	typedef glm::vec3 float3;
+	typedef glm::vec2 float2;
+	typedef glm::vec4 float4;
+	typedef glm::mat4 matrix;
+
     struct MVPBuffer
     {
         glm::mat4 modelMatrix;
@@ -188,4 +193,27 @@ namespace ConstantBuffers
 		int effectId;
         float padding;
     };
+
+	struct RayMarchCameraBuffer
+	{
+		glm::vec3	eyePos;
+		float	nearPlane;
+		float	farPlane;
+		float	viewportW;
+		float	viewportH;
+		glm::mat4	viewInverse;
+		float padding;
+	};
+
+	struct RayMarchLightBuffer
+	{
+		float3	lightPosition;
+		float4	lightColor;
+		float	padding;
+	};
+
+	struct RayMarchBackgroundColorBuffer
+	{
+		float4 backgroundColor;
+	};
 };

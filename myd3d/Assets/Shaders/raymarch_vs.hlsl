@@ -1,6 +1,8 @@
 struct VertexInput
 {
     float4 Position : POSITION;
+	float2 uv		: TEXCOORD0;
+	float3 normal	: NORMAL;
 };
 
 struct VertexOutput

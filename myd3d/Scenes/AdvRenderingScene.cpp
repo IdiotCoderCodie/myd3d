@@ -4,6 +4,7 @@
 #include "../Components/Visual/VisualMeshComponent.h"
 #include "../Components/Visual/VisualTessellatedPlanetComponent.h"
 #include "../Components/Physics/PhysicsComponent.h"
+
 #include "SceneManager.h"
 
 AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* sceneMgr)
@@ -17,12 +18,15 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 
 	EntityFactory::CreatePerspectiveFpCameraEntity(*this, 60.0f, aspect, 0.1f, 500.0f, "mmainCam");
 
-	EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\teapot.obj", L"cement.dds",
-		GetShadowMaps(), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.005f),
-		"testCube");
+	//EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\teapot.obj", L"cement.dds",
+	//	GetShadowMaps(), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.005f),
+	//	"testCube");
 
-	EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
-		L"lightning.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation");
+	//EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
+	//	L"lightning.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation");
+
+	EntityFactory::CreateRaymarchEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"cement.dds",
+		GetShadowMaps(), glm::vec3(0.0f), glm::vec3(1.0f), "Raymarch");
 
   //  EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
 		//L"lightning.dds", GetShadowMaps(), glm::vec3(10.0f, 0.0f, 0.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation1");
@@ -33,7 +37,7 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
   //  EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
 		//L"lightning.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation3");
 
-    Entity* torusJesus = EntityFactory::CreateTessellatedTorusEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
+   /* Entity* torusJesus = EntityFactory::CreateTessellatedTorusEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
 		L"noisyHeightmap.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), "TorusJesus");
 
     torusJesus->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(120.0f, 60.0f, 15.0f)));
@@ -51,7 +55,7 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
          GetShadowMaps(), glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.0f), "GeomSmoke");
 
 	EntityFactory::CreateBezierPatchEntity(*this, d3d, L"bullshit.dds", GetShadowMaps(), glm::vec3(0.0f), glm::vec3(1.0f),
-		"BezierPatch");
+		"BezierPatch");*/
 
 	Entity* light = EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.05f, 0.05f, 0.05f, 1.0f),
 		glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),

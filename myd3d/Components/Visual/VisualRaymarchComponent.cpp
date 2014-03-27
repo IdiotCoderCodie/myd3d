@@ -219,125 +219,43 @@ void VisualRaymarchComponent::DrawNoShadows(D3D& d3d)
 
 void VisualRaymarchComponent::DrawWithShadows(D3D& d3d)
 {
-    if(m_mesh.DoesContainTanBin())
-    {
-        SetShader(G_ShaderManager().GetShader("Mesh_Bump_Shadows"));
-    }
-    else
-    {
-        SetShader(G_ShaderManager().GetShader("Allen_Like"));
-    }
+	SetShader(G_ShaderManager().GetShader("Raymarch"));
+
+	// CAMERA BUFFER
+	ConstantBuffers::RayMarchCameraBuffer cameraBuffer;
+	cameraBuffer.eyePos = GetParent().GetParent().GetActiveCamera()->GetParent().GetPos();
+	cameraBuffer.nearPlane = 0.01f;
+	cameraBuffer.farPlane = 200.0f;
+	glm::mat4 inverse = glm::inverse(GetParent().GetParent().GetActiveCamera()->GetViewMatrix());
+	cameraBuffer.viewInverse = glm::transpose( 
+		inverse ) ;
+	cameraBuffer.viewportH = d3d.GetScreenHeight();
+	cameraBuffer.viewportW = d3d.GetScreenWidth();
+
+	GetShader().PSSetConstBufferData(d3d, std::string("RaymarchCameraBuffer"), (void*)&cameraBuffer,
+		sizeof(cameraBuffer), 0);
 
 
-    const std::vector<Component*>& lights = GetParent().GetParent().GetLights();
-	int totalLights = glm::min(ConstantBuffers::MAX_SHADOWCASTING_LIGHTS, (int)lights.size());
+	// LIGHT BUFFER
+	const std::vector<Component*>& lights = GetParent().GetParent().GetLights();
+	LightComponent* light = static_cast<LightComponent*>(lights[0]);
 
-    //----------------------------------------------------------------------------------------------
-    // Get matrices and put in buffer format.
-    ConstantBuffers::ShadowMatrixBuffer matBuffer;
+	ConstantBuffers::RayMarchLightBuffer lightBuffer;
+	lightBuffer.lightColor = light->GetDiffuse();
+	lightBuffer.lightPosition = light->GetParent().GetPos();
 
-    matBuffer.modelMatrix       = glm::transpose(
-                                    GetParent().GetTransform().GetMatrix());
-    matBuffer.viewMatrix        = glm::transpose(
-                                    GetParent().GetParent().GetActiveCamera()->GetViewMatrix());
-    matBuffer.projectionMatrix  = glm::transpose(
-                                    GetParent().GetParent().GetActiveCamera()->GetProjMatrix());
-
-    ConstantBuffers::LightPositionBuffer lightPosBuffer;
-
-    // Loop through the lights (up to the max stated) and add their data to the buffer(s).
-	for (int i = 0; i < totalLights; i++)
-    {
-        // Only do this if there are enough lights to do so.
-        LightComponent* light = static_cast<LightComponent*>(lights[i]);
-            
-        matBuffer.lightViewMatrix[i]       = glm::transpose(light->GetViewMatrix());
-        matBuffer.lightProjectionMatrix[i] = glm::transpose(light->GetProjMatrix());
-
-        lightPosBuffer.lightPosition[i]    = glm::vec4(light->GetParent().GetPos(), 0.0f);
-    }
+	GetShader().PSSetConstBufferData(d3d, std::string("RaymarchLightBuffer"), (void*)&lightBuffer,
+		sizeof(lightBuffer), 1);
 
 
-    // Setup time buffer.
-    ConstantBuffers::TimeBuffer timeBuffer;
-    timeBuffer.time = m_totalTime;
+	// BACKGROUND BUFFER
+	ConstantBuffers::RayMarchBackgroundColorBuffer backgroundBuffer;
+	backgroundBuffer.backgroundColor = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
 
-    
-    // Set the buffers using the data put into the structures above.
-    GetShader().VSSetConstBufferData(d3d, std::string("MatrixBuffer"), 
-                                  (void*)&matBuffer, sizeof(matBuffer), 0);
-
-    GetShader().VSSetConstBufferData(d3d, std::string("LightPositionBuffer"), 
-            (void*)&lightPosBuffer, sizeof(lightPosBuffer), 1);
-
-    GetShader().VSSetConstBufferData(d3d, std::string("TimeBuffer"), 
-            (void*)&timeBuffer, sizeof(timeBuffer), 2);
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------------------------------------------------------------------------
+	GetShader().PSSetConstBufferData(d3d, std::string("RaymarchBackgroundColorBuffer"),
+		(void*)&backgroundBuffer, sizeof(backgroundBuffer), 2);
 
 
-    //----------------------------------------------------------------------------------------------
-    // Set light buffer data.
-	ConstantBuffers::Light lightsBuffer[ConstantBuffers::MAX_SHADOWCASTING_LIGHTS];
-    
-	for (int i = 0; i < totalLights; i++)
-    {
-        LightComponent* light = static_cast<LightComponent*>(lights[i]);
-
-        lightsBuffer[i].enabled       = 1;
-		lightsBuffer[i].shadows		  = 0;
-        lightsBuffer[i].position      = glm::vec4(light->GetParent().GetPos(), 1.0f);
-        lightsBuffer[i].ambient       = light->GetAmbient();
-        lightsBuffer[i].diffuse       = light->GetDiffuse();
-        lightsBuffer[i].specular      = light->GetSpecular();
-        lightsBuffer[i].spotCutoff    = glm::radians(light->GetSpotCutoff());
-        lightsBuffer[i].spotDirection = light->GetParent().GetTransform().GetForward();
-        lightsBuffer[i].spotExponent  = light->GetSpotExponent();
-        lightsBuffer[i].attenuation   = glm::vec3(0.0f, 0.0f, 0.0f);
-    }
-            
-    GetShader().SetStructuredBufferData(d3d, std::string("LightBuffer"), (void*)&lightsBuffer, 
-                                        sizeof(ConstantBuffers::Light) * totalLights);
-        
-    ID3D11ShaderResourceView* lightBuffer = GetShader().GetBufferSRV(std::string("LightBuffer"));
-    d3d.GetDeviceContext().PSSetShaderResources(2, 1, &lightBuffer);
-
-    // Set camera buffer data. (pixel shader).
-    glm::vec4 cameraPos = 
-        glm::vec4(GetParent().GetParent().GetActiveCamera()->GetParent().GetPos(), 1.0f);
-
-    GetShader().PSSetConstBufferData(d3d, std::string("CameraBuffer"),
-        (void*)&cameraPos, sizeof(glm::vec4), 0);           
-    //----------------------------------------------------------------------------------------------
-    //----------------------------------------------------------------------------------------------
-
-
-    //----------------------------------------------------------------------------------------------
-    // Get textures for this model and set for shader.
-	ID3D11ShaderResourceView* tex = m_texture.GetTexture();
-	d3d.GetDeviceContext().PSSetShaderResources(0, 1, &tex);
-
-    if(m_mesh.DoesContainTanBin())
-    {
-        ID3D11ShaderResourceView* bumpTex = m_bumpTexture.GetTexture();
-        d3d.GetDeviceContext().PSSetShaderResources(1, 1, &bumpTex);
-    }
-	ID3D11ShaderResourceView* shadowTextures[ConstantBuffers::MAX_SHADOWCASTING_LIGHTS];
-	for (int i = 0; i < totalLights; ++i)
-    {
-        shadowTextures[i] = m_shadowMaps[i]->GetShaderResourceView();
-    }
-    
-	d3d.GetDeviceContext().PSSetShaderResources(3, totalLights,
-                                                shadowTextures);
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------------------------------------------------------------------------
-
-    // Get appropriate shader and then render with it.
-
-
-    // Render shader.
+    // Render with shader.
     GetShader().RenderShader(d3d, m_mesh.GetIndexCount());
 }

@@ -65,6 +65,11 @@ namespace EntityFactory
                                     const glm::vec3& position, const glm::vec3& scale,
                                     const std::string& id);
 
+	Entity* CreateRaymarchEntity(Scene& scene, D3D& d3d, const std::string& objFilename,
+		WCHAR* textureName, std::vector<RenderTarget*>& shadowMaps,
+		const glm::vec3& position, const glm::vec3& scale,
+		const std::string& id);
+
     Entity* CreateBumpMappedMeshEntity(Scene& scene, D3D& d3d, 
                                               const std::string& objFilename, WCHAR* textureName, 
                                               WCHAR* bmpMapTextureName, 

@@ -349,6 +349,30 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
 	m_shaders[name].AddSamplerState(d3d, "SampleTypeWrap", SamplerDesc::SAMPLE_CLAMP);
 	//----------------------------------------------------------------------------------------------
 
+
+	// Load raymarching shaders.
+	name = "Raymarch";
+	m_shaders[name] = Shader();
+	m_shaders[name].SetVertexShader(d3d, 0, L"Assets\\Shaders\\raymarch_vs.hlsl", "main", "vs_5_0",
+		PolyLayouts::POS3_TEX2_NORM3, 3);
+
+	m_shaders[name].SetPixelShader(d3d, 0, L"Assets\\Shaders\\raymarch_ps.hlsl", "main", "ps_5_0");
+
+	m_shaders[name].AddBuffer(d3d, "RaymarchCameraBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::RayMarchCameraBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "RaymarchLightBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::RayMarchLightBuffer), D3D11_BIND_CONSTANT_BUFFER,
+		D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "RaymarchBackgroundColorBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::RayMarchBackgroundColorBuffer), D3D11_BIND_CONSTANT_BUFFER,
+		D3D11_CPU_ACCESS_WRITE, 0, 0);
+	// Done loading raymarching shaders. 
+
+
+
     LoadTorusTessellationShaders(d3d);
     LoadEllipsoidTessellationShaders(d3d);
     LoadGeometryShaderTests(d3d);
