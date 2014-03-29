@@ -257,12 +257,12 @@ Entity* EntityFactory::CreateTessellatedTerrainEntity(Scene& scene, D3D& d3d, co
 	std::string  ssTexName(ws.begin(), ws.end());
 
 	// Check if texture is already loaded...
-	Texture* tex = G_TextureManager().GetTexture(ssTexName);
-	if (!tex)
-	{
-		// It's not, so load it.
-		tex = G_TextureManager().LoadTexture(d3d, textureName, ssTexName);
-	}
+	//Texture* tex = G_TextureManager().GetTexture(ssTexName);
+	//if (!tex)
+	//{
+	//	// It's not, so load it.
+	//	tex = G_TextureManager().LoadTexture(d3d, textureName, ssTexName);
+	//}
 
 	std::wstring ws2(heightMapTexture);
 	std::string heightMapString(ws2.begin(), ws2.end());
@@ -273,10 +273,28 @@ Entity* EntityFactory::CreateTessellatedTerrainEntity(Scene& scene, D3D& d3d, co
 		heightMap = G_TextureManager().LoadTexture(d3d, heightMapTexture, heightMapString);
 	}
 
+	Texture* grassTex = G_TextureManager().GetTexture("grassTexture.dds");
+	if (!grassTex)
+	{
+		grassTex = G_TextureManager().LoadTexture(d3d, L"grassTexture.dds", "grassTexture.dds");
+	}
+
+	Texture* rockTex = G_TextureManager().GetTexture("rockTexture.dds");
+	if (!rockTex)
+	{
+		rockTex = G_TextureManager().LoadTexture(d3d, L"rockTexture.dds", "rockTexture.dds");
+	}
+
+	Texture* snowTex = G_TextureManager().GetTexture("snowTexture.dds");
+	if (!snowTex)
+	{
+		snowTex = G_TextureManager().LoadTexture(d3d, L"snowTexture.dds", "snowTexture.dds");
+	}
+
 	// Create the mesh component, enable shadows (both cast and recieve).
 	VisualTessellatedPlanetComponent* mesh = 
-		new VisualTessellatedPlanetComponent(d3d, objFilename, *tex, *heightMap, shadowMaps);
-
+		new VisualTessellatedPlanetComponent(d3d, objFilename, *grassTex, *rockTex, *snowTex,
+											 *heightMap, shadowMaps);
 
 	mesh->EnableCastShadows();
 	mesh->EnableRecieveShadows();

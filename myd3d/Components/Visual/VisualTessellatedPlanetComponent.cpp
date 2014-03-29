@@ -13,10 +13,13 @@
 static float   m_totalTime = 0.0f;
 
 VisualTessellatedPlanetComponent::VisualTessellatedPlanetComponent(D3D& d3d, const std::string& filename, 
-	Texture& texture, Texture& heightMap, std::vector<RenderTarget*>& shadowMaps)
+	Texture& grassTexture, Texture& rockTexture, Texture& snowTexture, 
+	Texture& heightMap, std::vector<RenderTarget*>& shadowMaps)
     : VisualComponent(),
       m_mesh(filename, d3d, false), 
-	  m_texture(texture),
+	  m_grassTexture(grassTexture),
+	  m_rockTexture(rockTexture),
+	  m_snowTexture(snowTexture),
 	  m_heightMap(heightMap), 
       m_shadowMaps(shadowMaps),
       m_castShadows(false),
@@ -80,7 +83,6 @@ void VisualTessellatedPlanetComponent::InitTweakBar()
 VisualTessellatedPlanetComponent& VisualTessellatedPlanetComponent::operator=(const VisualTessellatedPlanetComponent& other)
 {
     m_mesh = other.m_mesh;
-    m_texture;
     m_heightMap;
     m_shadowMaps;
     m_castShadows = other.m_castShadows;
@@ -229,8 +231,8 @@ void VisualTessellatedPlanetComponent::DrawNoShadows(D3D& d3d)
 
     //----------------------------------------------------------------------------------------------
     // Get texture for this model and set for shader.
-	ID3D11ShaderResourceView* tex = m_texture.GetTexture();
-	d3d.GetDeviceContext().PSSetShaderResources(0, 1, &tex);
+	/*ID3D11ShaderResourceView* tex = m_texture.GetTexture();
+	d3d.GetDeviceContext().PSSetShaderResources(0, 1, &tex);*/
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
 
@@ -334,7 +336,7 @@ void VisualTessellatedPlanetComponent::DrawWithShadows(D3D& d3d)
 		sizeof(ConstantBuffers::Light) * 1);
 
 	ID3D11ShaderResourceView* lightBufferSRV = GetShader().GetBufferSRV(std::string("LightBuffer"));
-	d3d.GetDeviceContext().PSSetShaderResources(2, 1, &lightBufferSRV);
+	d3d.GetDeviceContext().PSSetShaderResources(3, 1, &lightBufferSRV);
 
 	// Camera Buffer
 	ConstantBuffers::CameraPosBuffer cameraPosBuffer;
@@ -344,6 +346,15 @@ void VisualTessellatedPlanetComponent::DrawWithShadows(D3D& d3d)
 
 	ID3D11ShaderResourceView* heightMap = m_heightMap.GetTexture();
 	d3d.GetDeviceContext().DSSetShaderResources(0, 1, &heightMap);
+
+	ID3D11ShaderResourceView* grassTex = m_grassTexture.GetTexture();
+	d3d.GetDeviceContext().PSSetShaderResources(0, 1, &grassTex);
+
+	ID3D11ShaderResourceView* rockTex = m_rockTexture.GetTexture();
+	d3d.GetDeviceContext().PSSetShaderResources(1, 1, &rockTex);
+
+	ID3D11ShaderResourceView* snowTex = m_snowTexture.GetTexture();
+	d3d.GetDeviceContext().PSSetShaderResources(2, 1, &snowTex);
 
     // Render shader.
     GetShader().RenderShader(d3d, m_mesh.GetIndexCount());
