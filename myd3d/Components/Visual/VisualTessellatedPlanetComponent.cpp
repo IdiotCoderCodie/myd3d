@@ -279,7 +279,8 @@ void VisualTessellatedPlanetComponent::DrawWithShadows(D3D& d3d)
     tessBuffer.distanceBased = m_distanceBased;
     tessBuffer.tessellationAmount = m_tessFactor;
     tessBuffer.eyePos = glm::vec4(GetParent().GetParent().GetActiveCamera()->GetParent().GetPos(), 1.0f);
-    tessBuffer.modelMatrix = glm::transpose( GetParent().GetTransform().GetMatrix() );   
+    tessBuffer.modelMatrix = glm::transpose( GetParent().GetTransform().GetMatrix() ); 
+	tessBuffer.padding = glm::vec2(0.0f);
 
 	GetShader().HSSetConstBufferData(d3d, std::string("TessellationBuffer"), (void*)&tessBuffer, 
 		sizeof(tessBuffer), 0);

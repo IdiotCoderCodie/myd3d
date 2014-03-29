@@ -226,9 +226,9 @@ void VisualRaymarchComponent::DrawWithShadows(D3D& d3d)
 	cameraBuffer.eyePos = GetParent().GetParent().GetActiveCamera()->GetParent().GetPos();
 	cameraBuffer.nearPlane = 0.01f;
 	cameraBuffer.farPlane = 200.0f;
-	glm::mat4 inverse = glm::inverse(GetParent().GetParent().GetActiveCamera()->GetViewMatrix());
-	cameraBuffer.viewInverse = glm::transpose( 
-		inverse ) ;
+	glm::mat4 inverse = GetParent().GetParent().GetActiveCamera()->GetViewMatrix();
+	cameraBuffer.viewInverse =/* glm::transpose( */
+		inverse  ;
 	cameraBuffer.viewportH = d3d.GetScreenHeight();
 	cameraBuffer.viewportW = d3d.GetScreenWidth();
 

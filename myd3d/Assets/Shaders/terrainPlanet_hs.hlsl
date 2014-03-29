@@ -4,9 +4,9 @@ cbuffer TessellationBuffer
 {
     int distanceBased;
 	float tessellationAmount;
+	float2 padding;
     float4 eyePos;
-    matrix modelMatrix;
-    float2 padding;
+    matrix modelMatrix; 
 };
 
 
@@ -47,17 +47,46 @@ HullConstantOutputType CalcHSPatchConstants(InputPatch<HullInputType, NUM_CONTRO
 
     if(distanceBased)
     {
-        float d0 = 5.0f;
-        float d1 = 40.0f;
-        float3 centrePatch = (ip[0].position.xyz + ip[1].position.xyz + ip[2].position.xyz) / 3.0f;
+        float d0 = 1.0f;
+        float d1 = 25.0f;
 
-        centrePatch = mul(float4(centrePatch, 1.0f), modelMatrix).xyz;
+		float3 edge0 = (ip[1].position.xyz + ip[2].position.xyz) / 2.0f;
+		edge0 = mul(float4(edge0, 0.0), modelMatrix).xyz;
+		float3 edge1 = (ip[0].position.xyz + ip[2].position.xyz) / 2.0f;
+		edge1 = mul(float4(edge1, 0.0), modelMatrix).xyz;
+		float3 edge2 = (ip[0].position.xyz + ip[1].position.xyz) / 2.0f;
+		edge2 = mul(float4(edge2, 0.0), modelMatrix).xyz;
 
-        float dist = distance(centrePatch, eyePos.xyz);
-        float tessAmount = 64.0f * saturate((d1 - dist) / (d1-d0));
-       // tessAmount = lerp(0.0, 64.0, tessAmount);
 
-        Output.EdgeTessFactor[0] = Output.EdgeTessFactor[1] = Output.EdgeTessFactor[2] = Output.InsideTessFactor = tessAmount;
+		float dist0 = distance(edge0, -eyePos.xyz);
+		float dist1 = distance(edge1, -eyePos.xyz);
+		float dist2 = distance(edge2, -eyePos.xyz);
+
+		float tess0 = 64.0f * saturate((d1 - dist0) / (d1 - d0));
+		float tess1 = 64.0f * saturate((d1 - dist1) / (d1 - d0));
+		float tess2 = 64.0f * saturate((d1 - dist2) / (d1 - d0));
+
+		float tessInner = min(tess0, min(tess1, tess2));
+
+		Output.EdgeTessFactor[0]	= max(4.0, tess0);
+		Output.EdgeTessFactor[1]	= max(4.0, tess1);
+		Output.EdgeTessFactor[2]	= max(4.0, tess2);
+		Output.InsideTessFactor		= max(4.0, tessInner);
+
+
+
+
+  //      float3 centrePatch = (ip[0].position.xyz + ip[1].position.xyz + ip[2].position.xyz) / 3.0f;
+
+  //      centrePatch = mul(float4(centrePatch, 1.0f), modelMatrix).xyz;
+
+		//float dist = length(centrePatch - eyePos.xyz);
+  //      //float dist = distance(centrePatch, eyePos.xyz);
+  //      float tessAmount = 64.0f * saturate((d1 - dist) / (d1-d0));
+		//tessAmount = max(tessAmount, 8.0);
+  //     // tessAmount = lerp(0.0, 64.0, tessAmount);
+
+  //      Output.EdgeTessFactor[0] = Output.EdgeTessFactor[1] = Output.EdgeTessFactor[2] = Output.InsideTessFactor = tessAmount;
 
         /*for(int i = 0; i < 3; i++)
         {

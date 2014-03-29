@@ -158,9 +158,9 @@ namespace ConstantBuffers
     {
         int distanceBased;
         float tessellationAmount;
+		glm::vec2 padding;
         glm::vec4 eyePos;
-        glm::mat4 modelMatrix;
-        glm::vec2 padding;
+        glm::mat4 modelMatrix;      
     };
 
 	struct TerrainBuffer
@@ -201,15 +201,15 @@ namespace ConstantBuffers
 		float	farPlane;
 		float	viewportW;
 		float	viewportH;
-		glm::mat4	viewInverse;
 		float padding;
+		glm::mat4	viewInverse;		
 	};
 
 	struct RayMarchLightBuffer
 	{
 		float3	lightPosition;
-		float4	lightColor;
 		float	padding;
+		float4	lightColor;		
 	};
 
 	struct RayMarchBackgroundColorBuffer

@@ -5,15 +5,17 @@ cbuffer CameraBuffer
     float farPlane;
     float viewportW;
     float viewportH;
-    matrix viewInverse;
 	float padding;
+    matrix viewInverse;
+	
 };
 
 cbuffer LightBuffer
 {
     float3 lightPosition;
+	float paddingfd;
     float4 lightColor;
-    float paddingfd;
+    
 };
 
 cbuffer BackgroundBuffer
