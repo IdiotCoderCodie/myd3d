@@ -224,8 +224,8 @@ void VisualRaymarchComponent::DrawWithShadows(D3D& d3d)
 	// CAMERA BUFFER
 	ConstantBuffers::RayMarchCameraBuffer cameraBuffer;
 	cameraBuffer.eyePos = GetParent().GetParent().GetActiveCamera()->GetParent().GetPos();
-	cameraBuffer.nearPlane = 0.01f;
-	cameraBuffer.farPlane = 200.0f;
+	cameraBuffer.nearPlane = 1.0f;
+	cameraBuffer.farPlane = 1000.0f;
 	glm::mat4 inverse = GetParent().GetParent().GetActiveCamera()->GetViewMatrix();
 	cameraBuffer.viewInverse =/* glm::transpose( */
 		inverse  ;

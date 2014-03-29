@@ -25,8 +25,8 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 	EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad4.obj", L"cement.dds",
 		L"lightning.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation");
 
-	//EntityFactory::CreateRaymarchEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"cement.dds",
-	//	GetShadowMaps(), glm::vec3(0.0f), glm::vec3(1.0f), "Raymarch");
+	EntityFactory::CreateRaymarchEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"cement.dds",
+		GetShadowMaps(), glm::vec3(0.0f), glm::vec3(1.0f), "Raymarch");
 
    // EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
 	//	L"lightning.dds", GetShadowMaps(), glm::vec3(10.0f, 0.0f, 0.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation1");
