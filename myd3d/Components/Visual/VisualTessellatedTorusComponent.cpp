@@ -28,7 +28,9 @@ VisualTessellatedTorusComponent::VisualTessellatedTorusComponent(D3D& d3d, const
 	  m_texelSize(0.05f),
       m_distanceBased(0),
       m_innerRadius(10.0f),
-      m_tubeRadius(0.15f)
+      m_tubeRadius(0.15f),
+	  m_matColor(1.0, 1.0, 1.0),
+	  m_matShininess(1.0)
 {
     if(!G_ShaderManager().IsLoaded())
     {
@@ -78,6 +80,8 @@ void VisualTessellatedTorusComponent::InitTweakBar()
     TwAddVarRW(bar, "DistanceBased", TW_TYPE_INT32, &m_distanceBased, "min=0 max=1");
     TwAddVarRW(bar, "InnerRadius", TW_TYPE_FLOAT, &m_innerRadius, "step=0.01");
     TwAddVarRW(bar, "TubeRadius", TW_TYPE_FLOAT, &m_tubeRadius, "step=0.01");
+	TwAddVarRW(bar, "MatColor", TW_TYPE_COLOR3F, &m_matColor, "");
+	TwAddVarRW(bar, "MatShininess", TW_TYPE_FLOAT, &m_matShininess, "min=1.0 max=128.0 step=0.1");
 	m_tweakBarInitialized = true;
 }
 
@@ -344,11 +348,16 @@ void VisualTessellatedTorusComponent::DrawWithShadows(D3D& d3d)
 	ID3D11ShaderResourceView* lightBufferSRV = GetShader().GetBufferSRV(std::string("LightBuffer"));
 	d3d.GetDeviceContext().PSSetShaderResources(2, 1, &lightBufferSRV);
 
+	ConstantBuffers::MaterialBuffer matBuffer;
+	matBuffer.color		= m_matColor;
+	matBuffer.shininess = m_matShininess;
+	GetShader().PSSetConstBufferData(d3d, std::string("MaterialBuffer"), (void*)&matBuffer, 
+								     sizeof(matBuffer), 0);
 	// Camera Buffer
 	ConstantBuffers::CameraPosBuffer cameraPosBuffer;
 	cameraPosBuffer.cameraPos = GetParent().GetParent().GetActiveCamera()->GetParent().GetPos();
 	GetShader().PSSetConstBufferData(d3d, std::string("CameraPosBuffer"),
-									(void*)&cameraPosBuffer, sizeof(cameraPosBuffer), 0);
+									(void*)&cameraPosBuffer, sizeof(cameraPosBuffer), 1);
 
 	ID3D11ShaderResourceView* heightMap = m_heightMap.GetTexture();
 	d3d.GetDeviceContext().DSSetShaderResources(0, 1, &heightMap);

@@ -68,5 +68,7 @@ private:
     int                         m_distanceBased;
     float                       m_innerRadius;
     float                       m_tubeRadius;
+	glm::vec3					m_matColor;
+	float						m_matShininess;
 };
 
