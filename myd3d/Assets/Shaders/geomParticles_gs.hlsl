@@ -65,7 +65,7 @@ void main(
 
 		float4 centrePos;
 		float3 particleColor;
-
+		float newParticleSize = particleSize;
 		switch (effectId)
 		{
 		case 0:
@@ -75,8 +75,16 @@ void main(
 			float randomFactor = ((randFacSeed / 20.0f) * 2.0) - 1.0f;
 
 			float timeLoop = fmod(timePassed, 5.0f);//timePassed % 10.0f;
-            if(timeLoop > 2.5f)
-                return;
+			
+			float scale = 1.0f;
+			if (timeLoop > 2.5f)
+			{
+				scale = (timeLoop - 2.5f) / 2.5f;
+				scale = 1.0 - scale;
+				/*scale -= timeLoop - 2.5f;*/
+				newParticleSize = particleSize * scale;
+			}
+                //return;
 
 			float3 velocityDir = normalize(input[i].position.xyz) * randomFactor;
 			velocityDir.x += 0.1 * randomFactor;
@@ -96,14 +104,15 @@ void main(
 			//centrePos.y -= (timeLoop) * (timeLoop) * (timeLoop);
 
 			float particleDist = distance(origin, centrePos);
-			float maxDist = 5.0f;
+			float maxDist = 8.0f;
 			particleColor = lerp(yellowCol, redCol, particleDist / maxDist);
 
 			break;
             }
 		case 1:
             {
-            
+			float maxDist = 15.0f;
+			
             float3 startPos = float3(0.0, 0.0, 0.0);
             float3 velocityDir = (input[i].position - startPos);
             velocityDir.y = 1.0f + velocityDir.y * 0.4f; //abs(velocityDir.y);
@@ -119,21 +128,54 @@ void main(
            // velocityDir.x = 0.1 * velocityDir.x * input[i].id;
 
             float timeLoop = fmod(timePassed, 5.0);
+			timeLoop = timePassed;
 
-            float3 startColor = float3(0.0, 0.0, 0.0);
-            float3 endColor = float3(0.5, 0.5, 0.5);
+			/*if (timeLoop > 2.5f)
+			{
+				newParticleSize = particleSize * (1.0 - ((timeLoop - 2.5f) / 2.5f));
+			}*/
+			
+
+            float3 startColor = float3(1.0f, 1.0f, 1.0f);
+            float3 endColor = float3(0.1f, 0.1f, 0.1f);
 
             float4 origin = float4(0.0, 0.0, 0.0, 1.0);
             centrePos = origin;
+
+			
               
             centrePos.xyz += timeLoop * velocityDir * 2.0f;// * 2.0f;
-            float particleDist = distance(origin, centrePos);
-            centrePos.x += cos(particleDist * 10.0) * 0.02f;
+			centrePos.y = fmod(centrePos.y, 15.0f);
+			centrePos.x = centrePos.y * velocityDir.x;
+			centrePos.z = centrePos.y * velocityDir.z;
+
+			float scale = 1.5 - ( fmod(centrePos.y, 15.0f) / 15.0f );
+			newParticleSize = particleSize * scale;
+			/*if (centrePos.y > 15.0f)
+			{
+				
+				centrePos.z = centrePos.y * velocityDir.z;
+				centrePos.x = centrePos.y * velocityDir.x;
+			}*/
+			
+			//centrePos.z = fmod(centrePos.z, 2.0f);
+			//centrePos.x = fmod(centrePos.x, 2.0f);
+
+			float particleDist = distance(origin, centrePos);
+            centrePos.x += cos(particleDist * 10.0) * 0.02f;			
             centrePos.z += cos(particleDist * 10.0) * 0.02f;
+			
+			
+			
+			if (particleDist > maxDist)
+			{
+
+			}
             //centrePos.z = 0.0f;
 
-          
-            float maxDist = 5.0f;
+			
+            
+			
             particleColor = lerp(startColor, endColor, particleDist / maxDist);
 			break;
             }
@@ -155,34 +197,34 @@ void main(
         centrePos = mul(centrePos, modelMatrix);
         centrePos = mul(centrePos, viewMatrix);
         centrePos = mul(centrePos, projectionMatrix);
-        element.position = centrePos + float4(-particleSize, +particleSize, 0.0, 0.0);
+		element.position = centrePos + float4(-newParticleSize, +newParticleSize, 0.0, 0.0);
         element.uv = float2(1.0, 0.0);
         output.Append(element);
 
         // top right.
-        element.position = centrePos + float4(particleSize, particleSize, 0.0, 0.0);
+		element.position = centrePos + float4(newParticleSize, newParticleSize, 0.0, 0.0);
         element.uv = float2(0.0, 0.0);
         output.Append(element);
 
         // bot right
-        element.position = centrePos + float4(particleSize, -particleSize, 0.0, 0.0);
+		element.position = centrePos + float4(newParticleSize, -newParticleSize, 0.0, 0.0);
         element.uv = float2(0.0, 1.0);
         output.Append(element);
         output.RestartStrip();
 
 
         // bot right
-        element.position = centrePos + float4(particleSize, -particleSize, 0.0, 0.0);
+		element.position = centrePos + float4(newParticleSize, -newParticleSize, 0.0, 0.0);
         element.uv = float2(0.0, 1.0);
         output.Append(element);
 
         // bot left
-        element.position = centrePos + float4(-particleSize, -particleSize, 0.0, 0.0);
+		element.position = centrePos + float4(-newParticleSize, -newParticleSize, 0.0, 0.0);
         element.uv = float2(1.0, 1.0);
         output.Append(element);
 
         // top left.
-        element.position = centrePos + float4(-particleSize, +particleSize, 0.0, 0.0);
+		element.position = centrePos + float4(-newParticleSize, +newParticleSize, 0.0, 0.0);
         element.uv = float2(1.0, 0.0);
         output.Append(element);
 

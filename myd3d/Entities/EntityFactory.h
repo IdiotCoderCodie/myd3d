@@ -96,7 +96,8 @@ namespace EntityFactory
 									const std::string& id);
 
      Entity* CreateGeometryParticleEntity(Scene& scene, D3D& d3d, const std::string& objFilename,
-                                    WCHAR* textureName, std::vector<RenderTarget*>& shadowMaps,
+                                    WCHAR* textureName, float particleSize, int effectId,
+									std::vector<RenderTarget*>& shadowMaps,
                                     const glm::vec3& position, const glm::vec3& scale,
                                     const std::string& id);
 

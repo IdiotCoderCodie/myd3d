@@ -48,11 +48,29 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
     // ellipsoidEnt->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(120.0f, 0.0f, 0.0f)));
 
 
-    Entity* particles = EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 
-         GetShadowMaps(), glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.0f), "Geom");
+    EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 1,
+         GetShadowMaps(), glm::vec3(5.0f, 0.2f, 5.0f), glm::vec3(0.1f), "SmokeParticles");
 
-    EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 
-         GetShadowMaps(), glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(1.0f), "GeomSmoke");
+    EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 0, 
+         GetShadowMaps(), glm::vec3(5.0f, 0.2f, 5.0f), glm::vec3(0.1f), "ExplosionParticles");
+
+	EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 1,
+		GetShadowMaps(), glm::vec3(5.0f, 0.2f, -5.0f), glm::vec3(0.1f), "SmokeParticles");
+
+	EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 0,
+		GetShadowMaps(), glm::vec3(5.0f, 0.2f, -5.0f), glm::vec3(0.1f), "ExplosionParticles");
+
+	EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 1,
+		GetShadowMaps(), glm::vec3(-5.0f, 0.2f, 5.0f), glm::vec3(0.1f), "SmokeParticles");
+
+	EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 0,
+		GetShadowMaps(), glm::vec3(-5.0f, 0.2f, 5.0f), glm::vec3(0.1f), "ExplosionParticles");
+
+	EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 1,
+		GetShadowMaps(), glm::vec3(-5.0f, 0.2f, -5.0f), glm::vec3(0.1f), "SmokeParticles");
+
+	EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 0,
+		GetShadowMaps(), glm::vec3(-5.0f, 0.2f, -5.0f), glm::vec3(0.1f), "ExplosionParticles");
 
 	EntityFactory::CreateBezierPatchEntity(*this, d3d, L"bullshit.dds", GetShadowMaps(), glm::vec3(0.0f), glm::vec3(1.0f),
 		"BezierPatch");

@@ -427,7 +427,8 @@ Entity* EntityFactory::CreateTessellatedEllipsoidEntity(Scene& scene, D3D& d3d, 
 
 
 Entity* EntityFactory::CreateGeometryParticleEntity(Scene& scene, D3D& d3d, const std::string& objFilename,
-                                    WCHAR* textureName, std::vector<RenderTarget*>& shadowMaps,
+                                    WCHAR* textureName, float particleSize, int effectId,
+									std::vector<RenderTarget*>& shadowMaps,
                                     const glm::vec3& position, const glm::vec3& scale,
                                     const std::string& id)
 {
@@ -445,7 +446,7 @@ Entity* EntityFactory::CreateGeometryParticleEntity(Scene& scene, D3D& d3d, cons
 	}
 
     VisualGeomParticlesComponent* visCom = 
-        new VisualGeomParticlesComponent(d3d, objFilename, *tex, shadowMaps);
+        new VisualGeomParticlesComponent(d3d, objFilename, *tex, shadowMaps, particleSize, effectId);
 
     visCom->EnableCastShadows();
     visCom->EnableRecieveShadows();

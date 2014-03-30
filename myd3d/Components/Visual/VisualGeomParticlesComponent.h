@@ -10,7 +10,8 @@ class VisualGeomParticlesComponent : public VisualComponent
 
 public:
 	VisualGeomParticlesComponent(D3D& d3d, const std::string& filename, Texture& texture,
-                        std::vector<RenderTarget*>& shadowMaps);
+                        std::vector<RenderTarget*>& shadowMaps, float particleSize, 
+						int effectId);
     /*VisualTessellatedPlanetComponent(D3D& d3d, const std::string& meshFilename, Texture& texture, Texture& heightMap,
                         std::vector<RenderTarget*>& shadowMaps);*/
 	~VisualGeomParticlesComponent(void);
@@ -59,10 +60,6 @@ private:
     bool                        m_castShadows;
     bool                        m_recieveShadows;
 	bool						m_tweakBarInitialized;
-	float						m_tessFactor;
-	int							m_tessPartitioning;
-	float						m_terrainMagnitude;
-	float						m_texelSize;
     int                         m_distanceBased;
     int                         m_particleCount;
     float                       m_particleSize;

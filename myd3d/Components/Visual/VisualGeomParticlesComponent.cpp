@@ -13,22 +13,17 @@
 static float   m_totalTime = 0.0f;
 
 VisualGeomParticlesComponent::VisualGeomParticlesComponent(D3D& d3d, const std::string& filename,
-	Texture& texture, std::vector<RenderTarget*>& shadowMaps)
+	Texture& texture, std::vector<RenderTarget*>& shadowMaps, float particleSize, int effectId)
     : VisualComponent(),
       m_mesh(filename, d3d, false), 
 	  m_texture(texture),
       m_shadowMaps(shadowMaps),
       m_castShadows(false),
       m_recieveShadows(false),
-	  m_tessFactor(48.0f),
 	  m_tweakBarInitialized(false),
-	  m_tessPartitioning(1),
-	  m_terrainMagnitude(0.4f),
-	  m_texelSize(0.05f),
-      m_distanceBased(0),
       m_particleCount(-1),
-      m_particleSize(0.1f),
-	  m_effectId(0),
+      m_particleSize(particleSize),
+	  m_effectId(effectId),
       m_totalTime(0.0f)
 {
     if(!G_ShaderManager().IsLoaded())
@@ -72,11 +67,6 @@ void VisualGeomParticlesComponent::InitTweakBar()
 	TwBar* bar = GetParent().GetTweakBar();
 	std::string tweakId = GetParent().GetID();
 
-	TwAddVarRW(bar, "TessFactor", TW_TYPE_FLOAT, &m_tessFactor, "step=0.01");
-	TwAddVarRW(bar, "TessPartitioning", TW_TYPE_INT32, &m_tessPartitioning, "max=3 min=0");
-	//TwAddVarRW(bar, "TerrainMagnitude", TW_TYPE_FLOAT, &m_terrainMagnitude, "step=0.01");
-	//TwAddVarRW(bar, "TerrainTexelSize", TW_TYPE_FLOAT, &m_texelSize, "step=0.0001");
-    TwAddVarRW(bar, "DistanceBased", TW_TYPE_INT32, &m_distanceBased, "min=0 max=1");
     TwAddVarRW(bar, "particleCount", TW_TYPE_INT32, &m_particleCount, "step=1");
     TwAddVarRW(bar, "particleSize", TW_TYPE_FLOAT, &m_particleSize, "step=0.01");
 	TwAddVarRW(bar, "effectId", TW_TYPE_INT32, &m_effectId, "");
