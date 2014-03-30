@@ -593,6 +593,10 @@ bool ShaderManager::LoadEllipsoidTessellationShaders(D3D& d3d)
 		sizeof(ConstantBuffers::CameraPosBuffer),
 		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
+	m_shaders[name].AddBuffer(d3d, "MaterialBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::MaterialBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
 	m_shaders[name].AddStructuredBuffer(d3d, "LightBuffer", sizeof(ConstantBuffers::Light), 1);
 
 	m_shaders[name].AddSamplerState(d3d, "SampleTypeWrap", SamplerDesc::DEFAULT_WRAP);
@@ -633,6 +637,10 @@ bool ShaderManager::LoadEllipsoidTessellationShaders(D3D& d3d)
 
 	m_shaders[name].AddBuffer(d3d, "CameraPosBuffer", D3D11_USAGE_DYNAMIC,
 		sizeof(ConstantBuffers::CameraPosBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "MaterialBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::MaterialBuffer),
 		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
 	m_shaders[name].AddStructuredBuffer(d3d, "LightBuffer", sizeof(ConstantBuffers::Light), 1);
@@ -676,6 +684,10 @@ bool ShaderManager::LoadEllipsoidTessellationShaders(D3D& d3d)
 		sizeof(ConstantBuffers::CameraPosBuffer),
 		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
+	m_shaders[name].AddBuffer(d3d, "MaterialBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::MaterialBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
 	m_shaders[name].AddStructuredBuffer(d3d, "LightBuffer", sizeof(ConstantBuffers::Light), 1);
 
 	m_shaders[name].AddSamplerState(d3d, "SampleTypeWrap", SamplerDesc::DEFAULT_WRAP);
@@ -715,6 +727,10 @@ bool ShaderManager::LoadEllipsoidTessellationShaders(D3D& d3d)
 
 	m_shaders[name].AddBuffer(d3d, "CameraPosBuffer", D3D11_USAGE_DYNAMIC,
 		sizeof(ConstantBuffers::CameraPosBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
+	m_shaders[name].AddBuffer(d3d, "MaterialBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::MaterialBuffer),
 		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 	
 	m_shaders[name].AddStructuredBuffer(d3d, "LightBuffer", sizeof(ConstantBuffers::Light), 1);

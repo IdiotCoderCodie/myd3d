@@ -88,12 +88,13 @@ DomainOutputType main(HullConstantOutputType input, float2 UV : SV_DomainLocatio
 	float3 Normal = normalize(cross(Tangent, BiTangent));
 
 	DomainOutputType output;
-	output.position = mul(float4(WorldPos, 1), modelMatrix);
+	output.position = mul(float4(WorldPos, 1.0), modelMatrix);
+	output.lightPos = lightPosition - output.position;
 	output.position = mul(output.position, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);
 	output.normal = Normal;
 	output.uv = float2(0.0, 0.0);
-	output.lightPos = lightPosition - float4(WorldPos, 1);
+	
 	// TODO: Pass worldPos instead of lightPos to the pixel shader. Can calculate lightPos there.
 
 	return output;

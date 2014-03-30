@@ -8,6 +8,7 @@ struct light
 {
 	int   enabled;
 	int    shadows;
+	float2 padding;
 	float4 position;
 	float4 ambient;
 	float4 diffuse;
@@ -16,7 +17,6 @@ struct light
 	float3 spotDirection;
 	float  spotExponent;
 	float3 attenuation;
-	float2 padding;
 };
 StructuredBuffer<light> LightBuffer : register(t2);
 

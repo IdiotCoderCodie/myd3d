@@ -4,9 +4,9 @@ cbuffer TessellationBuffer
 {
     int distanceBased;
 	float tessellationAmount;
+	float2 padding;
     float4 eyePos;
     matrix modelMatrix;
-    float2 padding;
 };
 
 

@@ -28,7 +28,7 @@ VisualTessellatedPlanetComponent::VisualTessellatedPlanetComponent(D3D& d3d, con
 	  m_tweakBarInitialized(false),
 	  m_tessPartitioning(1),
 	  m_terrainMagnitude(0.4f),
-	  m_texelSize(0.05f),
+	  m_texelSize(0.012f),
       m_distanceBased(0)
 {
     if(!G_ShaderManager().IsLoaded())

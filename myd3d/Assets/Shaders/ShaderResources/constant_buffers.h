@@ -129,6 +129,7 @@ namespace ConstantBuffers
     {
         int enabled;
 		int shadows;
+		glm::vec2 padding;
         glm::vec4 position;
         glm::vec4 ambient;
         glm::vec4 diffuse;
@@ -136,8 +137,7 @@ namespace ConstantBuffers
         float     spotCutoff;
         glm::vec3 spotDirection;
         float     spotExponent;
-        glm::vec3 attenuation;
-        glm::vec2 padding;
+        glm::vec3 attenuation;       
     };
 
 
@@ -215,5 +215,11 @@ namespace ConstantBuffers
 	struct RayMarchBackgroundColorBuffer
 	{
 		float4 backgroundColor;
+	};
+
+	struct MaterialBuffer
+	{
+		float3 color;
+		float  shininess;
 	};
 };

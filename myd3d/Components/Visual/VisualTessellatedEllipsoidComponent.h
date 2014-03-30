@@ -68,5 +68,7 @@ private:
     float                       m_a;
     float                       m_b;
     float                       m_c;
+	glm::vec3					m_color;
+	float						m_shininess;
 };
 

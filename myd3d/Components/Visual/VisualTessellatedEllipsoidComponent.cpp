@@ -29,7 +29,9 @@ VisualTessellatedEllipsoidComponent::VisualTessellatedEllipsoidComponent(D3D& d3
       m_distanceBased(0),
       m_a(1.0f),
       m_b(1.0f),
-      m_c(1.0f)
+      m_c(1.0f),
+	  m_color(1.0f, 1.0f, 1.0f),
+	  m_shininess(128.0f)
 {
     if(!G_ShaderManager().IsLoaded())
     {
@@ -80,6 +82,8 @@ void VisualTessellatedEllipsoidComponent::InitTweakBar()
     TwAddVarRW(bar, "a", TW_TYPE_FLOAT, &m_a, "step=0.01");
     TwAddVarRW(bar, "b", TW_TYPE_FLOAT, &m_b, "step=0.01");
     TwAddVarRW(bar, "c", TW_TYPE_FLOAT, &m_c, "step=0.01");
+	TwAddVarRW(bar, "MatColor", TW_TYPE_COLOR3F, &m_color, "");
+	TwAddVarRW(bar, "MatShininess", TW_TYPE_FLOAT, &m_shininess, "min=1.0 max=128.0 step=0.1");
 	m_tweakBarInitialized = true;
 }
 
@@ -356,7 +360,13 @@ void VisualTessellatedEllipsoidComponent::DrawWithShadows(D3D& d3d)
 	ConstantBuffers::CameraPosBuffer cameraPosBuffer;
 	cameraPosBuffer.cameraPos = GetParent().GetParent().GetActiveCamera()->GetParent().GetPos();
 	GetShader().PSSetConstBufferData(d3d, std::string("CameraPosBuffer"),
-									(void*)&cameraPosBuffer, sizeof(cameraPosBuffer), 0);
+									(void*)&cameraPosBuffer, sizeof(cameraPosBuffer), 1);
+
+	ConstantBuffers::MaterialBuffer matBuffer;
+	matBuffer.color = m_color;
+	matBuffer.shininess = m_shininess;
+	GetShader().PSSetConstBufferData(d3d, std::string("MaterialBuffer"),
+		(void*)&matBuffer, sizeof(matBuffer), 0);
 
 	ID3D11ShaderResourceView* heightMap = m_heightMap.GetTexture();
 	d3d.GetDeviceContext().DSSetShaderResources(0, 1, &heightMap);

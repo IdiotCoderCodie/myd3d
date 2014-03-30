@@ -51,11 +51,11 @@ HullConstantOutputType CalcHSPatchConstants(InputPatch<HullInputType, NUM_CONTRO
         float d1 = 25.0f;
 
 		float3 edge0 = (ip[1].position.xyz + ip[2].position.xyz) / 2.0f;
-		edge0 = mul(float4(edge0, 0.0), modelMatrix).xyz;
+		edge0 = mul(float4(edge0, 1.0), modelMatrix).xyz;
 		float3 edge1 = (ip[0].position.xyz + ip[2].position.xyz) / 2.0f;
-		edge1 = mul(float4(edge1, 0.0), modelMatrix).xyz;
+		edge1 = mul(float4(edge1, 1.0), modelMatrix).xyz;
 		float3 edge2 = (ip[0].position.xyz + ip[1].position.xyz) / 2.0f;
-		edge2 = mul(float4(edge2, 0.0), modelMatrix).xyz;
+		edge2 = mul(float4(edge2, 1.0), modelMatrix).xyz;
 
 
 		float dist0 = distance(edge0, -eyePos.xyz);

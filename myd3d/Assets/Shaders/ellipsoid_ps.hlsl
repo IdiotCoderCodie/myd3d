@@ -1,13 +1,21 @@
+cbuffer MaterialBuffer
+{
+	float3 matColor;
+	float  matShininess;
+};
+
 cbuffer CameraBuffer
 {
 	float3 cameraPosition;
 	float  padding;
 };
 
+
 struct light
 {
 	int   enabled;
 	int    shadows;
+	float2 padding;
 	float4 position;
 	float4 ambient;
 	float4 diffuse;
@@ -16,7 +24,7 @@ struct light
 	float3 spotDirection;
 	float  spotExponent;
 	float3 attenuation;
-	float2 padding;
+	
 };
 StructuredBuffer<light> LightBuffer : register(t2);
 
@@ -69,17 +77,9 @@ float4 main(PixelInputType input) : SV_TARGET
 
 	float4 ambient = float4(0.0, 0.0, 0.0, 1.0);
 	float4 diffuse = float4(0.0, 0.0, 0.0, 1.0);
-	float4 specular = float4(0.0, 0.0, 0.0, 1.0);
+	float4 specular = float4(0.0, 0.0, 0.0, 1.0);    
 
-	static float4 grassColor = float4(0.2, 0.6, 0.2, 1.0f);
-	static float4 snowColor = float4(0.95, 0.95, 0.95, 1.0f);
-
-	float terrainBlend = smoothstep(0.0, 1.0, input.terrainHeight);
-	float4 terrainColor = lerp(grassColor, snowColor, terrainBlend);
-
-    
-
-	accumulateLights(LightBuffer, input.position, input.normal, cameraPosition, 64.0,
+	accumulateLights(LightBuffer, input.position, input.normal, cameraPosition, matShininess,
 						ambient, diffuse, specular, input);
 
 	float4 lightColor = ambient;
@@ -87,9 +87,9 @@ float4 main(PixelInputType input) : SV_TARGET
 	//lightColor += specular;
 
 
-	float4 finalColor = terrainColor * lightColor;
+	float4 finalColor = lightColor * float4(matColor, 1.0);
 
-		finalColor = saturate(finalColor);
+	finalColor = saturate(finalColor);
 
 	return finalColor;
 	
