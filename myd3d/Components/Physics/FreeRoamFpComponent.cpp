@@ -109,7 +109,7 @@ void FreeRoamFpComponent::Update(float time)
     //----------------------------------------------------------------------------------------------
 
      // Handle right key press.
-    if(G_InputManager().IsKeyPressed(DIK_RIGHTARROW) && G_InputManager().IsKeyPressed(DIK_LCONTROL) 
+    if(G_InputManager().IsKeyPressed(DIK_LEFTARROW) && G_InputManager().IsKeyPressed(DIK_LCONTROL) 
         && !m_goingLeft)
     {
         // Set x acceleration.
@@ -133,7 +133,7 @@ void FreeRoamFpComponent::Update(float time)
 
 
     // Handle left keypress.
-    if(G_InputManager().IsKeyPressed(DIK_LEFTARROW) && G_InputManager().IsKeyPressed(DIK_LCONTROL) 
+	if (G_InputManager().IsKeyPressed(DIK_RIGHTARROW) && G_InputManager().IsKeyPressed(DIK_LCONTROL)
         && !m_goingRight)
     {
         // Set x acceleration.

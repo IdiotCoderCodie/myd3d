@@ -63,7 +63,7 @@ void Frame::MoveUp(float delta)
 void Frame::MoveRight(float delta)
 {
 	glm::vec3 cross	 = glm::cross(m_Forward, m_Up); //calculate x axis
-	m_Position		+= cross * delta;
+	m_Position		-= cross * delta;
 }
 
 

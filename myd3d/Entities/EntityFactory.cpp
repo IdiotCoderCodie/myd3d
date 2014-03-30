@@ -372,7 +372,7 @@ Entity* EntityFactory::CreateTessellatedTorusEntity(Scene& scene, D3D& d3d, cons
 }
 
 Entity* EntityFactory::CreateTessellatedEllipsoidEntity(Scene& scene, D3D& d3d, const std::string& objFilename,
-	WCHAR* textureName, WCHAR* heightMapTexture, std::vector<RenderTarget*>& shadowMaps,
+	WCHAR* textureName, WCHAR* heightMapTexture, std::vector<RenderTarget*>& shadowMaps, float a, float b, float c,
 	const glm::vec3& position, const glm::vec3& scale,
 	const std::string& id)
 {
@@ -402,7 +402,8 @@ Entity* EntityFactory::CreateTessellatedEllipsoidEntity(Scene& scene, D3D& d3d, 
 
 	// Create the mesh component, enable shadows (both cast and recieve).
 	VisualTessellatedEllipsoidComponent* mesh = 
-		new VisualTessellatedEllipsoidComponent(d3d, objFilename, *tex, *heightMap, shadowMaps);
+		new VisualTessellatedEllipsoidComponent(d3d, objFilename, *tex, *heightMap, shadowMaps, 
+												a, b, c);
 
 
 	mesh->EnableCastShadows();

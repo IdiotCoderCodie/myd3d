@@ -91,7 +91,8 @@ namespace EntityFactory
 
      Entity* CreateTessellatedEllipsoidEntity(Scene& scene, D3D& d3d, const std::string& objFilename,
 									WCHAR* textureName, WCHAR* heightMapTexture, 
-									std::vector<RenderTarget*>& shadowMaps,
+									std::vector<RenderTarget*>& shadowMaps, 
+									float a, float b, float c,
 									const glm::vec3& position, const glm::vec3& scale,
 									const std::string& id);
 

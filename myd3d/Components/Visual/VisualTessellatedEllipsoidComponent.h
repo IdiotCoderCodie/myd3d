@@ -10,7 +10,7 @@ class VisualTessellatedEllipsoidComponent : public VisualComponent
 
 public:
 	VisualTessellatedEllipsoidComponent(D3D& d3d, const std::string& filename, Texture& texture, Texture& heightMap,
-                        std::vector<RenderTarget*>& shadowMaps);
+                        std::vector<RenderTarget*>& shadowMaps, float a, float b, float c);
     /*VisualTessellatedPlanetComponent(D3D& d3d, const std::string& meshFilename, Texture& texture, Texture& heightMap,
                         std::vector<RenderTarget*>& shadowMaps);*/
 	~VisualTessellatedEllipsoidComponent(void);

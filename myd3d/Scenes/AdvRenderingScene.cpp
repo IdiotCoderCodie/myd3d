@@ -16,14 +16,14 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 	int screenHeight = GetParent().GetD3DInstance().GetScreenHeight();
 	float aspect = screenWidth / (float)screenHeight;
 
-	EntityFactory::CreatePerspectiveFpCameraEntity(*this, 60.0f, aspect, 0.1f, 500.0f, "mmainCam");
+	EntityFactory::CreatePerspectiveFpCameraEntity(*this, 60.0f, aspect, 0.1f, 500.0f, "Camera");
 
 	EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\teapot.obj", L"cement.dds",
-		GetShadowMaps(), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.005f),
-		"testCube");
+		GetShadowMaps(), glm::vec3(2.8f, 1.6f, -2.6f), glm::vec3(0.01f),
+		"Allen");
 
 	EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad4.obj", L"cement.dds",
-		L"heightmap3.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation");
+		L"heightmap3.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 1.0f, 5.0f), "Terrain");
 
 	//EntityFactory::CreateRaymarchEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"cement.dds",
 	//	GetShadowMaps(), glm::vec3(0.0f), glm::vec3(1.0f), "Raymarch");
@@ -43,7 +43,7 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
     torusJesus->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(120.0f, 60.0f, 15.0f)));
 
      Entity* ellipsoidEnt = EntityFactory::CreateTessellatedEllipsoidEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
-		L"noisyHeightmap.dds", GetShadowMaps(), glm::vec3(-5.0f, 0.0f, 0.0f), glm::vec3(1.0f), "Ellipsoid");
+		L"noisyHeightmap.dds", GetShadowMaps(), 1.0, 0.65, 0.8, glm::vec3(3.4f, 0.5f, -3.0f), glm::vec3(1.0f), "Ellipsoid");
 
     // ellipsoidEnt->SetComponent(new PhysicsComponent(1.0f, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(120.0f, 0.0f, 0.0f)));
 
@@ -55,22 +55,22 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
          GetShadowMaps(), glm::vec3(5.0f, 0.2f, 5.0f), glm::vec3(0.1f), "ExplosionParticles");
 
 	EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 1,
-		GetShadowMaps(), glm::vec3(5.0f, 0.2f, -5.0f), glm::vec3(0.1f), "SmokeParticles");
+		GetShadowMaps(), glm::vec3(5.0f, 0.2f, -5.0f), glm::vec3(0.1f), "SmokeParticles2");
 
 	EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 0,
-		GetShadowMaps(), glm::vec3(5.0f, 0.2f, -5.0f), glm::vec3(0.1f), "ExplosionParticles");
+		GetShadowMaps(), glm::vec3(5.0f, 0.2f, -5.0f), glm::vec3(0.1f), "ExplosionParticles2");
 
 	EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 1,
-		GetShadowMaps(), glm::vec3(-5.0f, 0.2f, 5.0f), glm::vec3(0.1f), "SmokeParticles");
+		GetShadowMaps(), glm::vec3(-5.0f, 0.2f, 5.0f), glm::vec3(0.1f), "SmokeParticles3");
 
 	EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 0,
-		GetShadowMaps(), glm::vec3(-5.0f, 0.2f, 5.0f), glm::vec3(0.1f), "ExplosionParticles");
+		GetShadowMaps(), glm::vec3(-5.0f, 0.2f, 5.0f), glm::vec3(0.1f), "ExplosionParticles3");
 
 	EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 1,
-		GetShadowMaps(), glm::vec3(-5.0f, 0.2f, -5.0f), glm::vec3(0.1f), "SmokeParticles");
+		GetShadowMaps(), glm::vec3(-5.0f, 0.2f, -5.0f), glm::vec3(0.1f), "SmokeParticles4");
 
 	EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 0,
-		GetShadowMaps(), glm::vec3(-5.0f, 0.2f, -5.0f), glm::vec3(0.1f), "ExplosionParticles");
+		GetShadowMaps(), glm::vec3(-5.0f, 0.2f, -5.0f), glm::vec3(0.1f), "ExplosionParticles4");
 
 	EntityFactory::CreateBezierPatchEntity(*this, d3d, L"bullshit.dds", GetShadowMaps(), glm::vec3(0.0f), glm::vec3(1.0f),
 		"BezierPatch");

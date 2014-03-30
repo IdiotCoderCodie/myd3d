@@ -13,7 +13,7 @@
 static float   m_totalTime = 0.0f;
 
 VisualTessellatedEllipsoidComponent::VisualTessellatedEllipsoidComponent(D3D& d3d, const std::string& filename,
-	Texture& texture, Texture& heightMap, std::vector<RenderTarget*>& shadowMaps)
+	Texture& texture, Texture& heightMap, std::vector<RenderTarget*>& shadowMaps, float a, float b, float c)
     : VisualComponent(),
       m_mesh(filename, d3d, false), 
 	  m_texture(texture),
@@ -27,9 +27,9 @@ VisualTessellatedEllipsoidComponent::VisualTessellatedEllipsoidComponent(D3D& d3
 	  m_terrainMagnitude(0.4f),
 	  m_texelSize(0.05f),
       m_distanceBased(0),
-      m_a(1.0f),
-      m_b(1.0f),
-      m_c(1.0f),
+      m_a(a),
+      m_b(b),
+      m_c(c),
 	  m_color(1.0f, 1.0f, 1.0f),
 	  m_shininess(128.0f)
 {

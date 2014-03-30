@@ -75,35 +75,30 @@ float4 main(PixelInputType input) : SV_TARGET
 	float4 diffuse = float4(0.0, 0.0, 0.0, 1.0);
 	float4 specular = float4(0.0, 0.0, 0.0, 1.0);
 
-	//static float4 grassColor = float4(0.2, 0.6, 0.2, 1.0f);
-	//static float4 snowColor = float4(0.95, 0.95, 0.95, 1.0f);
 	float4 grassColor = grassTexture.Sample(SampleTypeWrap, input.uv);
-	float4 rockColor = rockTexture.Sample(SampleTypeWrap, input.uv);
-	float4 snowColor = snowTexture.Sample(SampleTypeWrap, input.uv);
+	float4 rockColor = rockTexture.Sample(SampleTypeWrap, input.uv * 5.0);
+	float4 snowColor = snowTexture.Sample(SampleTypeWrap, input.uv * 5.0);
 
 	float blendGrassRock = smoothstep(0.2, 0.65, input.terrainHeight);
 	float blendRockSnow = smoothstep(0.7, 0.85, input.terrainHeight);
 
+	//float4 terrainColor = (float4)0.0;
+	//if (input.terrainHeight > 0.7)
+	//{
+	//	terrainColor = lerp(rockColor, snowColor, blendRockSnow);
+	//}
+	//else
+	//{
+	//	terrainColor = lerp(grassColor, rockColor, blendGrassRock);
+	//}
+
 	float4 terrainColor = (float4)0.0;
-	if (input.terrainHeight > 0.7)
-	{
-		terrainColor = lerp(rockColor, snowColor, blendRockSnow);
-	}
-	else
-	{
-		terrainColor = lerp(grassColor, rockColor, blendGrassRock);
-	}
 
+	terrainColor = lerp(grassColor, rockColor, blendGrassRock);
+	float flatness = dot(normalize(input.normal), float3(0.0, 0.2, 0.0)); // 1.0 = not steep
+	terrainColor = lerp(terrainColor, grassColor, flatness);
 
-	//float4 
-		
-
-	/*float terrainBlend = smoothstep(0.0, 1.0, input.terrainHeight);
-	float4 terrainColor = lerp(grassColor, snowColor, terrainBlend);
-*/
-	
-	
-    
+	terrainColor = lerp(terrainColor, snowColor, blendRockSnow);   
 
 	accumulateLights(LightBuffer, input.position, input.normal, cameraPosition, 64.0,
 						ambient, diffuse, specular, input);
@@ -111,19 +106,10 @@ float4 main(PixelInputType input) : SV_TARGET
 	float4 lightColor = ambient;
 	lightColor += diffuse;
 	//lightColor += specular;
-
-
+	
 	float4 finalColor = terrainColor * lightColor;
 
 		finalColor = saturate(finalColor);
 
 	return finalColor;
-	
-	//finalColor += specular;
-
-
-
-    //return float4(input.normal, 1.0f);
-	//return input.color;
-	//return float4(0.0f, 0.0f, 0.0f, 1.0f);
 }
