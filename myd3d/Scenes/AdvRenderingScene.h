@@ -16,6 +16,8 @@ private:
 	// HACK: Using render target to render raymarch to, then using Texture to hold the
 	// shader resource view which is passed through to the model.
 	RenderTarget* m_renderTarget;
-	Texture m_meshTexture1;
+	RenderTarget* m_renderTarget2;
+	Texture m_rayMarchTexture1;
+	Texture m_rayMarchTexture2;
 };
 

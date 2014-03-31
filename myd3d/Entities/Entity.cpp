@@ -72,6 +72,8 @@ Entity::~Entity(void)
         // Exception thrown trying to clear components.
         assert(false);
     }
+
+	TwDeleteBar(m_tweakBar);
 }
 
  Entity& Entity::operator=(const Entity& other)

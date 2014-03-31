@@ -16,7 +16,7 @@
 static float   m_totalTime = 0.0f;
 
 VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, Texture& texture,
-                                         std::vector<RenderTarget*>& shadowMaps)
+	std::vector<RenderTarget*>& shadowMaps, const std::string& shaderID)
     : VisualComponent(),
       m_mesh(filename, d3d, false), 
 	  m_texture(texture),
@@ -29,7 +29,7 @@ VisualMeshComponent::VisualMeshComponent(D3D& d3d, const std::string& filename, 
     {
         G_ShaderManager().LoadShaders(d3d, "configFile");
     }
-   SetShader(G_ShaderManager().GetShader("Normal_Shadows_Test"));
+	SetShader(G_ShaderManager().GetShader(shaderID));
 }
 
 
@@ -219,14 +219,14 @@ void VisualMeshComponent::DrawNoShadows(D3D& d3d)
 
 void VisualMeshComponent::DrawWithShadows(D3D& d3d)
 {
-    if(m_mesh.DoesContainTanBin())
+    /*if(m_mesh.DoesContainTanBin())
     {
         SetShader(G_ShaderManager().GetShader("Mesh_Bump_Shadows"));
     }
     else
     {
         SetShader(G_ShaderManager().GetShader("Mesh_Shadows"));
-    }
+    }*/
 
 
     const std::vector<Component*>& lights = GetParent().GetParent().GetLights();

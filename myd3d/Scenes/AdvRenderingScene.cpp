@@ -12,7 +12,9 @@
 AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* sceneMgr)
 :	Scene(name, sceneMgr),
 	m_renderTarget(0),
-	m_meshTexture1()
+	m_renderTarget2(0),
+	m_rayMarchTexture1(),
+	m_rayMarchTexture2()
 {
 	D3D& d3d = GetParent().GetD3DInstance();
 
@@ -22,24 +24,12 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 
 	EntityFactory::CreatePerspectiveFpCameraEntity(*this, 60.0f, aspect, 0.1f, 500.0f, "Camera");
 
-	/*EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\teapot.obj", L"cement.dds",
+	EntityFactory::CreateAlienMeshEntity(*this, d3d, "Assets\\Models\\teapot.obj", L"cement.dds",
 		GetShadowMaps(), glm::vec3(2.8f, 1.6f, -2.6f), glm::vec3(0.01f),
-		"Allen");*/
+		"Allen");
 
 	EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad4.obj", L"cement.dds",
 		L"heightmap3.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 1.0f, 5.0f), "Terrain");
-
-	//EntityFactory::CreateRaymarchEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"cement.dds",
-	//	GetShadowMaps(), glm::vec3(0.0f), glm::vec3(1.0f), "Raymarch");
-
-   /* EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad4.obj", L"cement.dds",
-		L"heightmap3.dds", GetShadowMaps(), glm::vec3(10.0f, 0.0f, 0.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation1");
-
-    EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad4.obj", L"cement.dds",
-		L"heightmap3.dds", GetShadowMaps(), glm::vec3(10.0f, 0.0f, 10.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation2");
-
-    EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad4.obj", L"cement.dds",
-		L"heightmap3.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(5.0f, 1.0f, 5.0f), "testTessellation3");*/
 
     Entity* torusJesus = EntityFactory::CreateTessellatedTorusEntity(*this, d3d, "Assets\\Models\\quad.obj", L"cement.dds",
 		L"noisyHeightmap.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), "TorusJesus");
@@ -58,11 +48,11 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
     EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 0, 
          GetShadowMaps(), glm::vec3(5.0f, 0.2f, 5.0f), glm::vec3(0.1f), "ExplosionParticles");
 
-	EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 1,
+	/*EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 1,
 		GetShadowMaps(), glm::vec3(5.0f, 0.2f, -5.0f), glm::vec3(0.1f), "SmokeParticles2");
 
 	EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 0,
-		GetShadowMaps(), glm::vec3(5.0f, 0.2f, -5.0f), glm::vec3(0.1f), "ExplosionParticles2");
+		GetShadowMaps(), glm::vec3(5.0f, 0.2f, -5.0f), glm::vec3(0.1f), "ExplosionParticles2");*/
 
 	EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 1,
 		GetShadowMaps(), glm::vec3(-5.0f, 0.2f, 5.0f), glm::vec3(0.1f), "SmokeParticles3");
@@ -98,6 +88,7 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 
 	light->RotateGlobalY(180.0f);
 
+	// Create RayMarch 1.
 	Entity* rayMarchEntity = new Entity(*this, "raymarch1");
 	rayMarchEntity->SetComponent(new VisualRaymarchComponent(d3d, "Assets\\Models\\sphere.obj"));
 
@@ -110,13 +101,34 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 	rayMarchEntity->Draw(d3d);
 
 	
-	m_meshTexture1.SetTexture(m_renderTarget->GetShaderResourceView());
+	m_rayMarchTexture1.SetTexture(m_renderTarget->GetShaderResourceView());
 
+	Entity* rayMesh1 = EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\quad.obj", m_rayMarchTexture1,
+		GetShadowMaps(), glm::vec3(5.0f, 2.0f, -3.0f), glm::vec3(2.0f),
+		"Raymarch1");
 
-	EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\quad.obj", m_meshTexture1,
-		GetShadowMaps(), glm::vec3(2.8f, 1.6f, -2.6f), glm::vec3(1.0f),
-		"Allen");
+	rayMesh1->RotateGlobalZ(90.0f);
+	rayMesh1->RotateGlobalX(90.0f);
 
+	// Create RayMarch 2
+	Entity* rayMarchEntity2 = new Entity(*this, "gfdjtdigj");
+	rayMarchEntity2->SetComponent(new VisualRaymarchComponent(d3d, "Assets\\Models\\sphere.obj"));
+
+	m_renderTarget2 = new RenderTarget(&d3d.GetDevice(), d3d.GetScreenWidth(), d3d.GetScreenHeight());
+
+	m_renderTarget2->ClearRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView(), 0.0f, 0.0f, 0.0f, 0.0f);
+
+	m_renderTarget2->SetRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView());
+
+	rayMarchEntity2->Draw(d3d);
+
+	m_rayMarchTexture2.SetTexture(m_renderTarget->GetShaderResourceView());
+
+	Entity* rayMesh2 = EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\quad.obj", m_rayMarchTexture2,
+		GetShadowMaps(), glm::vec3(3.0f, 2.0f, -5.0f), glm::vec3(2.0f),
+		"Raymarch2");
+
+	rayMesh2->RotateGlobalX(90.0f);
 }
 
 
@@ -151,7 +163,7 @@ void AdvRenderingScene::Draw(D3D& d3d)
 		}
 	}
 
-	d3d.BeginScene(0.6f, 0.6f, 0.6f, 1.0f);
+	d3d.BeginScene(0.3f, 0.3f, 0.3f, 1.0f);
 
 	d3d.SetBackBufferRenderTarget();
 

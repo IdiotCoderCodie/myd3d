@@ -68,7 +68,8 @@ float4 Phong(float3 norm, float3 Ldir, float3 Vdir, float shininess, float4 diff
 float4 Shade(float3 hitPos, float3 normal, float3 viewDir, int hitobj, float lightIntensity)
 {
 	//return float4(0.0, 1.0, 0.0, 1.0);
-   float3 lightDir = normalize(lightPosition - hitPos);
+	//float3 lightDir = normalize(lightPosition - hitPos);
+		float3 lightDir = normalize(float3(1.0, 1.0, -1.0));
    float4 diff = object[hitobj].color * object[hitobj].Kd;
    float4 spec = object[hitobj].color * object[hitobj].Ks;
    
@@ -200,6 +201,7 @@ float Function(float3 Position)
    float Y = Position.y;
    float Z = Position.z;
    
+  // return sdSphere(Position, float3(0.0, 0.0, 0.0), 10.0);
    return impInstancePenis(Position, float3(50.0, 70.0, 50.0));
    return penis(Position);   
 
@@ -316,7 +318,7 @@ struct PixelInput
 float4 main(PixelInput input) : SV_Target
 {   
    Ray eyeray;
-   eyeray.o = eyePos.xyz;
+   eyeray.o = float3(100.0, 100.00, -10.0);//eyePos.xyz;
    float3 dir;
    // scale the image shape such that it has the same aspect ratio as the viewport
    dir.xy = input.Tex * float2(1.0, viewportH/viewportW);

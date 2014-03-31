@@ -10,7 +10,7 @@ class VisualMeshComponent : public VisualComponent
 
 public:
     VisualMeshComponent(D3D& d3d, const std::string& filename, Texture& texture, 
-                        std::vector<RenderTarget*>& shadowMaps);
+                        std::vector<RenderTarget*>& shadowMaps, const std::string& shaderID);
     VisualMeshComponent(D3D& d3d, const std::string& meshFilename, Texture& texture,
                         Texture& bmpMap, std::vector<RenderTarget*>& shadowMaps);
     ~VisualMeshComponent(void);
