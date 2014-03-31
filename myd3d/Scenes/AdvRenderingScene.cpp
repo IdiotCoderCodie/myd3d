@@ -4,11 +4,15 @@
 #include "../Components/Visual/VisualMeshComponent.h"
 #include "../Components/Visual/VisualTessellatedPlanetComponent.h"
 #include "../Components/Physics/PhysicsComponent.h"
+#include "../Components/Visual/VisualRaymarchComponent.h"
+#include "../Assets/Textures/Texture.h"
 
 #include "SceneManager.h"
 
 AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* sceneMgr)
-: Scene(name, sceneMgr)
+:	Scene(name, sceneMgr),
+	m_renderTarget(0),
+	m_meshTexture1()
 {
 	D3D& d3d = GetParent().GetD3DInstance();
 
@@ -18,9 +22,9 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 
 	EntityFactory::CreatePerspectiveFpCameraEntity(*this, 60.0f, aspect, 0.1f, 500.0f, "Camera");
 
-	EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\teapot.obj", L"cement.dds",
+	/*EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\teapot.obj", L"cement.dds",
 		GetShadowMaps(), glm::vec3(2.8f, 1.6f, -2.6f), glm::vec3(0.01f),
-		"Allen");
+		"Allen");*/
 
 	EntityFactory::CreateTessellatedTerrainEntity(*this, d3d, "Assets\\Models\\quad4.obj", L"cement.dds",
 		L"heightmap3.dds", GetShadowMaps(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 1.0f, 5.0f), "Terrain");
@@ -92,6 +96,26 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 		"mainLight2");*/
 
 	light->RotateGlobalY(180.0f);
+
+	Entity* rayMarchEntity = new Entity(*this, "raymarch1");
+	rayMarchEntity->SetComponent(new VisualRaymarchComponent(d3d, "Assets\\Models\\sphere.obj"));
+
+	m_renderTarget = new RenderTarget(&d3d.GetDevice(), d3d.GetScreenWidth(), d3d.GetScreenHeight());
+
+	m_renderTarget->ClearRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView(), 0.0f, 0.0f, 0.0f, 0.0f);
+
+	m_renderTarget->SetRenderTarget(&d3d.GetDeviceContext(), d3d.GetDepthStencilView());
+
+	rayMarchEntity->Draw(d3d);
+
+	
+	m_meshTexture1.SetTexture(m_renderTarget->GetShaderResourceView());
+
+
+	EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\quad.obj", m_meshTexture1,
+		GetShadowMaps(), glm::vec3(2.8f, 1.6f, -2.6f), glm::vec3(1.0f),
+		"Allen");
+
 }
 
 

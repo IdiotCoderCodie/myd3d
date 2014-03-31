@@ -9,23 +9,13 @@ class VisualRaymarchComponent : public VisualComponent
 {
 
 public:
-    VisualRaymarchComponent(D3D& d3d, const std::string& filename, Texture& texture, 
-                        std::vector<RenderTarget*>& shadowMaps);
-    VisualRaymarchComponent(D3D& d3d, const std::string& meshFilename, Texture& texture,
-                        Texture& bmpMap, std::vector<RenderTarget*>& shadowMaps);
+    VisualRaymarchComponent(D3D& d3d, const std::string& filename);
+
     ~VisualRaymarchComponent(void);
 
     VisualRaymarchComponent& operator=(const VisualRaymarchComponent& other);
 
     virtual void ComponentID(componentId_t& out) const;
-
-    bool DoesCastShadows() const    { return m_castShadows; }
-    void EnableCastShadows()        { m_castShadows = true; }
-    void DisableCastShadows()       { m_castShadows = false; }
-
-    bool DoesRecieveShadows() const { return m_recieveShadows; }
-    void EnableRecieveShadows()     { m_recieveShadows = true; }
-    void DisableRecieveShadows()    { m_recieveShadows = false; }
 
     virtual void Update(float timeElapsed);
 
@@ -51,11 +41,6 @@ private:
     void DrawWithShadows(D3D& d3d);
 
 private:
-    StaticMesh                  m_mesh;
-	Texture&                    m_texture;
-    Texture&                    m_bumpTexture;
-    std::vector<RenderTarget*>& m_shadowMaps;
-    bool                        m_castShadows;
-    bool                        m_recieveShadows;
+	StaticMesh m_mesh;
 };
 

@@ -46,3 +46,13 @@ bool Texture::Load(D3D& d3d, WCHAR* filename)
 
     return true;
 }
+
+
+void Texture::SetTexture(ID3D11ShaderResourceView* srv)
+{
+	if (m_texture)
+	{
+		d3d_safe_release(m_texture);
+	}
+	m_texture = &(*srv);
+}

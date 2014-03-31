@@ -225,7 +225,7 @@ void VisualMeshComponent::DrawWithShadows(D3D& d3d)
     }
     else
     {
-        SetShader(G_ShaderManager().GetShader("Allen_Like"));
+        SetShader(G_ShaderManager().GetShader("Mesh_Shadows"));
     }
 
 
