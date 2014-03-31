@@ -826,6 +826,10 @@ bool ShaderManager::LoadBezierPatchShaders(D3D& d3d)
 		sizeof(ConstantBuffers::LightPositionBuffer),
 		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
 
+	m_shaders["BezierPatch"].AddBuffer(d3d, "MaterialBuffer", D3D11_USAGE_DYNAMIC,
+		sizeof(ConstantBuffers::MaterialBuffer),
+		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+
 	m_shaders["BezierPatch"].AddBuffer(d3d, "CameraBuffer", D3D11_USAGE_DYNAMIC,
 		sizeof(ConstantBuffers::CameraPosBuffer),
 		D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);

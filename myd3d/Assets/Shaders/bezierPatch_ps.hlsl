@@ -1,3 +1,9 @@
+cbuffer MaterialBuffer
+{
+	float3 matColor;
+	float  matShininess;
+};
+
 cbuffer CameraBuffer
 {
 	float3 cameraPosition;
@@ -77,15 +83,15 @@ float4 main(PixelInputType input) : SV_TARGET
 
     
 
-	accumulateLights(LightBuffer, input.position, -input.normal, cameraPosition, 1.0,
+	accumulateLights(LightBuffer, input.position, -input.normal, cameraPosition, matShininess,
 						ambient, diffuse, specular, input);
 
 	float4 lightColor = ambient;
 	lightColor += diffuse;
 	lightColor += specular;
 
-	float4 finalColor = lightColor;
-	return finalColor;
+	float4 finalColor = lightColor * float4(matColor, 1.0);
+	return saturate(finalColor);
 	//float4 finalColor = terrainColor * lightColor;
 
 	//	finalColor = saturate(finalColor);

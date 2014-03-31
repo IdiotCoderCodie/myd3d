@@ -72,5 +72,7 @@ private:
 	float						m_texelSize;
     int                         m_distanceBased;
 	float						m_timeElapsed;
+	glm::vec3					m_matColor;
+	float						m_matShininess;
 };
 

@@ -29,7 +29,9 @@ VisualBezierPatchComponent::VisualBezierPatchComponent(D3D& d3d,
 	  m_terrainMagnitude(0.4f),
 	  m_texelSize(0.05f),
       m_distanceBased(0),
-	  m_timeElapsed(0.0f)
+	  m_timeElapsed(0.0f),
+	  m_matColor(1.0f, 1.0f, 1.0f),
+	  m_matShininess(1.0f)
 {
     if(!G_ShaderManager().IsLoaded())
     {
@@ -76,9 +78,9 @@ void VisualBezierPatchComponent::InitTweakBar()
 
 	TwAddVarRW(bar, "TessFactor", TW_TYPE_FLOAT, &m_tessFactor, "step=0.01");
 	TwAddVarRW(bar, "TessPartitioning", TW_TYPE_INT32, &m_tessPartitioning, "max=3 min=0");
-	//TwAddVarRW(bar, "TerrainMagnitude", TW_TYPE_FLOAT, &m_terrainMagnitude, "step=0.01");
-	//TwAddVarRW(bar, "TerrainTexelSize", TW_TYPE_FLOAT, &m_texelSize, "step=0.0001");
     TwAddVarRW(bar, "DistanceBased", TW_TYPE_INT32, &m_distanceBased, "min=0 max=1");
+	TwAddVarRW(bar, "MatColor", TW_TYPE_COLOR3F, &m_matColor, "");
+	TwAddVarRW(bar, "MatShininess", TW_TYPE_FLOAT, &m_matShininess, "min=1.0 max=128.0 step=0.1");
 
 	for (int i = 0; i < 16; i++)
 	{
@@ -114,22 +116,22 @@ bool VisualBezierPatchComponent::InitBuffers(D3D& d3d)
 
 	memset(m_controlPoints, 0, sizeof(glm::vec3) * 16);
 
-	m_controlPoints[0] = glm::vec3(-1.0f, 0.0f, -1.0f);
-	m_controlPoints[1] = glm::vec3(-0.33f, 0.0f, -1.0f);
-	m_controlPoints[2] = glm::vec3(0.33f, 0.0f, -1.0f);
-	m_controlPoints[3] = glm::vec3(1.0f, 0.0f, -1.0f);
-	m_controlPoints[4] = glm::vec3(-1.0f, 0.0f, -0.33f);
-	m_controlPoints[5] = glm::vec3(-0.33f, 0.0f, -0.33f);
-	m_controlPoints[6] = glm::vec3(0.33f, 0.0f, -0.33f);
-	m_controlPoints[7] = glm::vec3(1.0f, 0.0f, -0.33f);
-	m_controlPoints[8] = glm::vec3(-1.0f, 0.0f, 0.33f);
-	m_controlPoints[9] = glm::vec3(-0.33f, 0.0f, 0.33f);
-	m_controlPoints[10] = glm::vec3(0.33f, 0.0f, 0.33f);
-	m_controlPoints[11] = glm::vec3(1.0f, 0.0f, 0.33f);
-	m_controlPoints[12] = glm::vec3(-1.0f, 0.0f, 1.0f);
-	m_controlPoints[13] = glm::vec3(-0.33f, 0.0f, 1.0f);
-	m_controlPoints[14] = glm::vec3(0.33f, 0.0f, 1.0f);
-	m_controlPoints[15] = glm::vec3(1.0f, 0.0f, 1.0f);
+	m_controlPoints[0] = glm::vec3(-2.0f, 0.0f, -0.5f);
+	m_controlPoints[1] = glm::vec3(-0.66f, 0.0f, -0.5f);
+	m_controlPoints[2] = glm::vec3(0.66f, 0.0f, -0.5f);
+	m_controlPoints[3] = glm::vec3(2.0f, 0.0f, -0.5f);
+	m_controlPoints[4] = glm::vec3(-2.0f, 0.0f, -0.16667f);
+	m_controlPoints[5] = glm::vec3(-0.66f, 0.0f, -0.16667f);
+	m_controlPoints[6] = glm::vec3(0.66f, 0.0f, -0.16667f);
+	m_controlPoints[7] = glm::vec3(2.0f, 0.0f, -0.16667f);
+	m_controlPoints[8] = glm::vec3(-2.0f, 0.0f, 0.16667f);
+	m_controlPoints[9] = glm::vec3(-0.66f, 0.0f, 0.16667f);
+	m_controlPoints[10] = glm::vec3(0.66f, 0.0f, 0.16667f);
+	m_controlPoints[11] = glm::vec3(2.0f, 0.0f, 0.16667f);
+	m_controlPoints[12] = glm::vec3(-2.0f, 0.0f, 0.5f);
+	m_controlPoints[13] = glm::vec3(-0.66f, 0.0f, 0.5f);
+	m_controlPoints[14] = glm::vec3(0.66f, 0.0f, 0.5f);
+	m_controlPoints[15] = glm::vec3(2.0f, 0.0f, 0.5f);
 
 	for (int i = 0; i < 16; i++)
 	{
@@ -219,8 +221,40 @@ void VisualBezierPatchComponent::Update(float timeElapsed)
 	if(!m_tweakBarInitialized)
 		InitTweakBar();
     m_totalTime += timeElapsed;
-	//m_controlPoints[0].y = 0.0f + glm::cos(m_totalTime);
-	//m_controlPoints[15].y = 0.0f + glm::cos(m_totalTime);
+
+
+	float cosTime_2 = glm::cos(m_totalTime * 5.0f) / 2.0f;
+	float sinTime_2 = glm::sin(m_totalTime * 5.0f) / 2.0f;
+
+
+	m_controlPoints[0].y = cosTime_2;
+	m_controlPoints[4].y = cosTime_2;
+	m_controlPoints[8].y = cosTime_2;
+	m_controlPoints[12].y = cosTime_2;
+
+	float cosm45 = glm::cos(m_totalTime * 5.0 - 45.0f) / 2.0f;
+	m_controlPoints[1].y = cosm45;
+	m_controlPoints[5].y = cosm45;
+	m_controlPoints[9].y = cosm45;
+	m_controlPoints[13].y = cosm45;
+
+	float cosm90 = glm::cos(m_totalTime * 5.0 - 90.0f) / 2.0f;
+
+	m_controlPoints[0 + 2].y = cosm90;
+	m_controlPoints[4 + 2].y = cosm90;
+	m_controlPoints[8 + 2].y = cosm90;
+	m_controlPoints[12 + 2].y = cosm90;
+
+	float cosm135 = glm::cos(m_totalTime * 5.0 - 135.0f) / 2.0f;
+	
+	m_controlPoints[1 + 2].y = cosm135;
+	m_controlPoints[5 + 2].y = cosm135;
+	m_controlPoints[9 + 2].y = cosm135;
+	m_controlPoints[13 + 2].y = cosm135;
+
+	m_matColor.r = cosTime_2;
+	m_matColor.g = 1.0 - cosTime_2;
+
 	UpdateBuffers(GetParent().GetParent().GetParent().GetD3DInstance());
 }
 
@@ -452,11 +486,17 @@ void VisualBezierPatchComponent::DrawWithShadows(D3D& d3d)
 	ID3D11ShaderResourceView* lightBufferSRV = GetShader().GetBufferSRV(std::string("LightBuffer"));
 	d3d.GetDeviceContext().PSSetShaderResources(2, 1, &lightBufferSRV);
 
+	ConstantBuffers::MaterialBuffer matBuffer;
+	matBuffer.color = m_matColor;
+	matBuffer.shininess = m_matShininess;
+	GetShader().PSSetConstBufferData(d3d, std::string("MaterialBuffer"), (void*)&matBuffer,
+									sizeof(matBuffer), 0);
+
 	// Camera Buffer
 	ConstantBuffers::CameraPosBuffer cameraPosBuffer;
 	cameraPosBuffer.cameraPos = GetParent().GetParent().GetActiveCamera()->GetParent().GetPos();
 	GetShader().PSSetConstBufferData(d3d, std::string("CameraPosBuffer"),
-									(void*)&cameraPosBuffer, sizeof(cameraPosBuffer), 0);
+									(void*)&cameraPosBuffer, sizeof(cameraPosBuffer), 1);
 
 	//ID3D11ShaderResourceView* heightMap = m_heightMap.GetTexture();
 	//d3d.GetDeviceContext().DSSetShaderResources(0, 1, &heightMap);

@@ -76,8 +76,9 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 	EntityFactory::CreateGeometryParticleEntity(*this, d3d, "Assets\\Models\\sphere.obj", L"Jan2.dds", 0.05, 0,
 		GetShadowMaps(), glm::vec3(-5.0f, 0.2f, -5.0f), glm::vec3(0.1f), "ExplosionParticles4");
 
-	EntityFactory::CreateBezierPatchEntity(*this, d3d, L"bullshit.dds", GetShadowMaps(), glm::vec3(0.0f), glm::vec3(1.0f),
-		"BezierPatch");
+	EntityFactory::CreateBezierPatchEntity(*this, d3d, L"nothing.dds", GetShadowMaps(),
+										   glm::vec3(4.3f, 2.0f, -3.0f), glm::vec3(1.0f),
+		"Warm-Like");
 
 	Entity* light = EntityFactory::CreateSpotlightEntity(*this, glm::vec4(0.05f, 0.05f, 0.05f, 1.0f),
 		glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
