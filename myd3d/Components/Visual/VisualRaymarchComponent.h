@@ -9,7 +9,7 @@ class VisualRaymarchComponent : public VisualComponent
 {
 
 public:
-    VisualRaymarchComponent(D3D& d3d, const std::string& filename);
+    VisualRaymarchComponent(D3D& d3d, const std::string& filename, int raymarchId);
 
     ~VisualRaymarchComponent(void);
 
@@ -42,5 +42,6 @@ private:
 
 private:
 	StaticMesh m_mesh;
+    int        m_raymarchId;
 };
 

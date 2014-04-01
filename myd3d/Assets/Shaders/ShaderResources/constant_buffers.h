@@ -201,7 +201,7 @@ namespace ConstantBuffers
 		float	farPlane;
 		float	viewportW;
 		float	viewportH;
-		float padding;
+		int raymarchId;
 		glm::mat4	viewInverse;		
 	};
 

@@ -15,9 +15,10 @@
 
 static float   m_totalTime = 0.0f;
 
-VisualRaymarchComponent::VisualRaymarchComponent(D3D& d3d, const std::string& filename)
+VisualRaymarchComponent::VisualRaymarchComponent(D3D& d3d, const std::string& filename, int raymarchId)
     : VisualComponent(),
-      m_mesh(filename, d3d, false)
+      m_mesh(filename, d3d, false),
+      m_raymarchId(raymarchId)
 {
 
 }
@@ -118,6 +119,7 @@ void VisualRaymarchComponent::DrawWithShadows(D3D& d3d)
 		inverse  ;
 	cameraBuffer.viewportH = d3d.GetScreenHeight();
 	cameraBuffer.viewportW = d3d.GetScreenWidth();
+    cameraBuffer.raymarchId = m_raymarchId;
 
 	GetShader().PSSetConstBufferData(d3d, std::string("RaymarchCameraBuffer"), (void*)&cameraBuffer,
 		sizeof(cameraBuffer), 0);

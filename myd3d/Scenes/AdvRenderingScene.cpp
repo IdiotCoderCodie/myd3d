@@ -86,11 +86,15 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 		12.0f,
 		"mainLight2");*/
 
+    //Entity* testRaymarch = new Entity(*this, "testRaymarch");
+    //testRaymarch->SetComponent(new VisualRaymarchComponent(d3d, "Assets\\Models\\sphere.obj", 1));
+    //this->AddEntity(testRaymarch);
+
 	light->RotateGlobalY(180.0f);
 
 	// Create RayMarch 1.
 	Entity* rayMarchEntity = new Entity(*this, "raymarch1");
-	rayMarchEntity->SetComponent(new VisualRaymarchComponent(d3d, "Assets\\Models\\sphere.obj"));
+	rayMarchEntity->SetComponent(new VisualRaymarchComponent(d3d, "Assets\\Models\\sphere.obj", 1));
 
 	m_renderTarget = new RenderTarget(&d3d.GetDevice(), d3d.GetScreenWidth(), d3d.GetScreenHeight());
 
@@ -112,7 +116,7 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 
 	// Create RayMarch 2
 	Entity* rayMarchEntity2 = new Entity(*this, "gfdjtdigj");
-	rayMarchEntity2->SetComponent(new VisualRaymarchComponent(d3d, "Assets\\Models\\sphere.obj"));
+	rayMarchEntity2->SetComponent(new VisualRaymarchComponent(d3d, "Assets\\Models\\sphere.obj", 0));
 
 	m_renderTarget2 = new RenderTarget(&d3d.GetDevice(), d3d.GetScreenWidth(), d3d.GetScreenHeight());
 
@@ -122,7 +126,7 @@ AdvRenderingScene::AdvRenderingScene(const std::string& name, SceneManager* scen
 
 	rayMarchEntity2->Draw(d3d);
 
-	m_rayMarchTexture2.SetTexture(m_renderTarget->GetShaderResourceView());
+	m_rayMarchTexture2.SetTexture(m_renderTarget2->GetShaderResourceView());
 
 	Entity* rayMesh2 = EntityFactory::CreateMeshEntity(*this, d3d, "Assets\\Models\\quad.obj", m_rayMarchTexture2,
 		GetShadowMaps(), glm::vec3(3.0f, 2.0f, -5.0f), glm::vec3(2.0f),

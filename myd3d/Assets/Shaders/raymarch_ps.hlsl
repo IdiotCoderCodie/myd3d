@@ -5,7 +5,7 @@ cbuffer CameraBuffer
     float farPlane;
     float viewportW;
     float viewportH;
-	float padding;
+	int raymarchId;
     matrix viewInverse;
 	
 };
@@ -208,12 +208,17 @@ float Function(float3 Position)
    float Y = Position.y;
    float Z = Position.z;
    
-   return blendedSpheres(Position, float3(100.0, 100.0, 50.0), 
+   int test = raymarchId;
+   if(test == 0)
+   {
+       return blendedSpheres(Position, float3(100.0, 100.0, 50.0), 
 						float3(115.0, 100.0, 50.0), 
 						8.0, 13.0, 4.0);
-   return sdSphere(Position, float3(100.0, 100.0, 50.0), 10.0);
+   }
    return impInstancePenis(Position, float3(50.0, 70.0, 50.0));
-   return penis(Position);   
+   
+   return sdSphere(Position, float3(100.0, 100.0, 50.0), 10.0);
+    
 
    return length(Position) - 5.0;
    float T = PI / 2.0;
