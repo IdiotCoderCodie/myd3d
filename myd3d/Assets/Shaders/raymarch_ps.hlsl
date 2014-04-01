@@ -137,6 +137,12 @@ float softMax(float x, float y, float a)
    return log(exp(a*x) + exp(a*y))/a;
 }
 
+float smin(float a, float b, float k)
+{
+	float h = clamp(0.5 + 0.5*(b - a) / k, 0.0, 1.0);
+	return lerp(b, a, h) - k*h*(1.0 - h);
+}
+
 float sdSphere(float3 p, float3 c, float r)
 {
    return length(p - c) - r;
@@ -169,12 +175,13 @@ float impInstanceSphere(float3 p, float3 c)
 }
 
 
-
-float smin(float a, float b, float k)
+float blendedSpheres(float3 p, float3 c1, float3 c2, float r1, float r2, float smoothAmount)
 {
-   float h = clamp(0.5 + 0.5*(b-a)/k, 0.0, 1.0);
-   return lerp(b, a, h) - k*h*(1.0-h);
+	float sphere1 = sdSphere(p, c1, r1);
+	float sphere2 = sdSphere(p, c2, r2);
+	return smin(sphere1, sphere2, smoothAmount);
 }
+
 
 float penis(float3 Position)
 {
@@ -201,7 +208,10 @@ float Function(float3 Position)
    float Y = Position.y;
    float Z = Position.z;
    
-  // return sdSphere(Position, float3(0.0, 0.0, 0.0), 10.0);
+   return blendedSpheres(Position, float3(100.0, 100.0, 50.0), 
+						float3(115.0, 100.0, 50.0), 
+						8.0, 13.0, 4.0);
+   return sdSphere(Position, float3(100.0, 100.0, 50.0), 10.0);
    return impInstancePenis(Position, float3(50.0, 70.0, 50.0));
    return penis(Position);   
 
