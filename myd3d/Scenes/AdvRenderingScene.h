@@ -17,7 +17,11 @@ private:
 	// shader resource view which is passed through to the model.
 	RenderTarget* m_renderTarget;
 	RenderTarget* m_renderTarget2;
+    RenderTarget* m_renderTarget3;
+    RenderTarget* m_renderTarget4;
 	Texture m_rayMarchTexture1;
 	Texture m_rayMarchTexture2;
+    Texture m_rayMarchTexture3;
+    Texture m_rayMarchTexture4;
 };
 

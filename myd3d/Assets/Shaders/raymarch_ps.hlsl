@@ -160,6 +160,13 @@ float sdTorus(float3 p, float2 t)
    return length(q)-t.y;
 }
 
+
+float instanceTorus(float3 p, float3 c)
+{
+    float3 q = fmod(p, c) - 0.5*c;
+    return sdTorus(q, float2(10, 2.0));
+}
+
 float sdCapsule(float3 p, float3 a, float3 b, float r)
 {
    float3 pa = p - a;
@@ -202,28 +209,60 @@ float impInstancePenis(float3 p, float3 c)
    return penis(q);
 }
 
+float intersectionUnionTest(float3 p)
+{
+    float3 capsule1 = sdCapsule(p, float3(0.0, -25.0, 0.0), float3(0.0, +25.0, 0.0), 10.0);
+    float3 capsule2 = sdCapsule(p, float3(-25.0, 0.0, 0.0), float3(+25.0, 0.0, 0.0), 10.0);
+    float3 capsule3 = sdCapsule(p, float3(0.0, 0.0, -25.0), float3(0.0, 0.0, +25.0), 10.0);
+    //float3 sphere1 = sdSphere(p, float3(0.0, 0.0, 0.0), 20.0);
+    //return sphere1;
+    float caps = min(capsule3, min(capsule1, capsule2));
+    //return cap1cap2;
+    //return max(-caps, sphere1);
+
+    //return max(capsule1, capsule2);
+    return smin(capsule3, smin(capsule1, capsule2, 8.0), 8.0);
+    //return min(-sphere1, min(capsule3, min(capsule1, capsule2)));
+}
+
 float Function(float3 Position)
 {
-   float X = Position.x;
-   float Y = Position.y;
-   float Z = Position.z;
+   float X = Position.x - 100.0;
+   float Y = Position.y - 100.0;
+   float Z = Position.z - 500.0;
    
    int test = raymarchId;
-   if(test == 0)
+   switch(test)
    {
+   case 0:
        return blendedSpheres(Position, float3(100.0, 100.0, 50.0), 
 						float3(115.0, 100.0, 50.0), 
 						8.0, 13.0, 4.0);
+       break;
+   case 1:
+       float T = PI / 2.0;
+       float Fun = 2.0 - cos(X + T * Y) - cos(X - T * Y) - cos(Y + T * Z) 
+                  - cos(Y - T * Z) - cos(Z - T * X) - cos(Z + T * X);
+       //float Fun = X * X + Y * Y - (1 - Z) * Z * Z;
+       //float Fun = X * X * X + Y * Y * Y + Z * Z * Z - (X + Y + Z);
+       return Fun;// - 1.0;
+       break;
+   case 2:
+       return intersectionUnionTest(Position - float3(90.0, 100.0, 50.0));
+       return impInstancePenis(Position, float3(50.0, 70.0, 50.0));
+       break;
+   case 3:
+       return instanceTorus(Position - float3(30.0, 30.0, 50.0), float3(30.0, 20.0, 50.0));
+       break;
    }
-   return impInstancePenis(Position, float3(50.0, 70.0, 50.0));
+   
    
    return sdSphere(Position, float3(100.0, 100.0, 50.0), 10.0);
     
 
    return length(Position) - 5.0;
-   float T = PI / 2.0;
-   //float Fun = 2.0 - cos(X + T * Y) - cos(X - T * Y) - cos(Y + T * Z) 
-   //               - cos(Y - T * Z) - cos(Z - T * X) - cos(Z + T * X);
+  
+   //
 }
 
 bool IntersectSurface(in Ray ray, in float start, in float final, out float val)
@@ -273,6 +312,7 @@ float4 Raytrace(Ray ray)
    float4 result = (float4)0.0;
    float start, final;
    float t;
+
    if(IntersectBox(ray, BOXMIN, BOXMAX, start, final))
    {
       if(IntersectSurface(ray, start, final, t))

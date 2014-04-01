@@ -95,8 +95,8 @@ PixelInputType vp_main( VertexInputType input )
    // newPos.x += smoothstep(newPos.y, 10.0, 15.0) * -10.0f;
     //newPos =  newPos + float4(input.normal, 1.0) * smoothstep(abs(newPos.x), 10.0, 15.0) * 10.0f; 
 
-    newPos.x += sin(time * 5.0f) * 10.0f;
-    newPos.y += cos(time * 5.0f) * 10.0f;
+    newPos.x += sin(time) * 10.0f;
+    newPos.y += cos(time) * 10.0f;
     float4 worldPosition = mul(newPos, newModelMatrix);  
     output.position = mul(worldPosition, viewMatrix);
     output.position = mul(output.position, projectionMatrix);
