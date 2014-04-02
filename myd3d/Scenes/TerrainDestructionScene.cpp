@@ -22,7 +22,15 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 	testSphere2->MoveUp(200.0f);
     testSphere2->MoveRight(40.0f);
 
-	m_physicsSystem.AddCircle(testSphere2, 50.0f, glm::vec2(0.0f, 0.0f));
+	m_physicsSystem.AddCircle(testSphere2, 50.0f, glm::vec2(0.0f, -50.0f));
+
+    Entity* testSphere3 = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 150, 150, m_screenWidth, m_screenHeight,
+		"testBitmap");
+
+    testSphere3->MoveRight(-50.0f);
+    testSphere3->MoveUp(50.0f);
+
+	m_physicsSystem.AddCircle(testSphere3, 75.0f, glm::vec2(50.0f, 0.0f));
 
 	EntityFactory::CreateOrthoFpCameraEntity(*this, -m_screenWidth / 2.0f, m_screenWidth / 2.0f,
 		-m_screenHeight / 2.0f, m_screenHeight / 2.0f, "testCam");
