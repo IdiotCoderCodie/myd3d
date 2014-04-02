@@ -125,6 +125,10 @@ namespace EntityFactory
 		int width, int height, int screenWidth, int screenHeight,
 		const std::string& id);
 
+    Entity* CreateBmpEntity(Scene& scene, D3D& d3d, WCHAR* textureName, WCHAR* stencilTexName,
+		int width, int height, int screenWidth, int screenHeight,
+		const std::string& id);
+
     Entity* CreateBmpEntity(Scene& scene, D3D& d3d, ID3D11ShaderResourceView* srcTexture,
                                        int width, int height, int screenWidth, int screenHeight,
                                        int xPos, int yPos, const std::string& id);

@@ -44,6 +44,17 @@ bool ShaderManager::LoadShaders(D3D& d3d, const std::string& configFilename)
                                   sizeof(ConstantBuffers::MVPBuffer), D3D11_BIND_CONSTANT_BUFFER, 
                                   D3D11_CPU_ACCESS_WRITE, 0, 0);
     m_shaders["Bitmap"].AddSamplerState(d3d, "BitmapTextureSampler", SamplerDesc::DEFAULT_WRAP);
+
+    m_shaders["Bitmap_Stencil"] = Shader();
+    m_shaders["Bitmap_Stencil"].SetVertexShader(d3d, 0, L"Assets\\Shaders\\bitmap_vs.hlsl", "vp_main", 
+                                        "vs_5_0", &PolyLayouts::POS3_TEX2[0], 2);
+    m_shaders["Bitmap_Stencil"].SetPixelShader (d3d, 0, L"Assets\\Shaders\\bitmapStencil_ps.hlsl", "ps_main", 
+                                        "ps_5_0");
+
+    m_shaders["Bitmap_Stencil"].AddBuffer(d3d, "MatrixBuffer", D3D11_USAGE_DYNAMIC, 
+                                  sizeof(ConstantBuffers::MVPBuffer), D3D11_BIND_CONSTANT_BUFFER, 
+                                  D3D11_CPU_ACCESS_WRITE, 0, 0);
+    m_shaders["Bitmap_Stencil"].AddSamplerState(d3d, "BitmapTextureSampler", SamplerDesc::DEFAULT_WRAP);
     //----------------------------------------------------------------------------------------------
 
 

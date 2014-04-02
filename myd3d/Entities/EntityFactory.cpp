@@ -638,6 +638,41 @@ Entity* EntityFactory::CreateBmpEntity(Scene& scene, D3D& d3d, WCHAR* textureNam
 }
 
 
+Entity* EntityFactory::CreateBmpEntity(Scene& scene, D3D& d3d, WCHAR* textureName, WCHAR* stencilTexName,
+	int width, int height, int screenWidth, int screenHeight,
+	const std::string& id)
+{
+	Entity* newEntity = new Entity(scene, id);
+
+	// Get the standard string from WCHAR*.
+	std::wstring ws(textureName);
+	std::string  ssTexName(ws.begin(), ws.end());
+
+	// Check if texture is already loaded.
+	Texture* tex = G_TextureManager().GetTexture(ssTexName);
+	if (!tex)
+	{
+		// It's not, so load it.
+		tex = G_TextureManager().LoadTexture(d3d, textureName, ssTexName);
+	}
+
+    std::wstring ws2(stencilTexName);
+    std::string ssTexName2(ws2.begin(), ws2.end());
+    Texture* stencil = G_TextureManager().GetTexture(ssTexName2);
+    if(!stencil)
+    {
+        stencil = G_TextureManager().LoadTexture(d3d, stencilTexName, ssTexName2);
+    }
+    newEntity->SetComponent(new VisualBitmapComponent(d3d, tex->GetTexture(), stencil->GetTexture(), 
+                                                      width, height, screenWidth, screenHeight));
+
+	scene.AddEntity(newEntity);
+
+	return newEntity;
+}
+
+
+
 Entity* EntityFactory::CreateParticleSystemEntity(Scene& scene, D3D& d3d, const std::string& id)
 {
     Entity* newEntity = new Entity(scene, id);

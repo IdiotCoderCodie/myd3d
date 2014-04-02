@@ -11,15 +11,16 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 	m_screenWidth	= d3d.GetScreenWidth();
 	m_screenHeight	= d3d.GetScreenHeight();
 
-	Entity* testSphere = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", 100, 100, m_screenWidth, m_screenHeight,
+	Entity* testSphere = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
 		"testBitmap");
 
-	m_physicsSystem.AddCircle(testSphere, 50.0f, glm::vec2(0.0f, 100.0f));
+	m_physicsSystem.AddCircle(testSphere, 50.0f, glm::vec2(00.0f, 100.0f));
 
 
-	Entity* testSphere2 = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", 100, 100, m_screenWidth, m_screenHeight,
+	Entity* testSphere2 = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
 		"testBitmap");
 	testSphere2->MoveUp(200.0f);
+    testSphere2->MoveRight(40.0f);
 
 	m_physicsSystem.AddCircle(testSphere2, 50.0f, glm::vec2(0.0f, 0.0f));
 

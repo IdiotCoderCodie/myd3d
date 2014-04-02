@@ -10,7 +10,8 @@ VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView*
                                              int width, int height, 
                                              int screenWidth, int screenHeight)
     :	VisualComponent(),
-        m_bitmap(d3d, &(*srcTexture), width, height, screenWidth, screenHeight)
+        m_bitmap(d3d, &(*srcTexture), width, height, screenWidth, screenHeight),
+        m_stencilTexture(0)
 {
     if(!G_ShaderManager().IsLoaded())
     {
@@ -20,6 +21,21 @@ VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView*
     SetShader(G_ShaderManager().GetShader("Bitmap"));
 }
 
+VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView* srcTexture, 
+                                             ID3D11ShaderResourceView* stencilTexture,
+                                             int width, int height, 
+                                             int screenWidth, int screenHeight)
+    :	VisualComponent(),
+        m_bitmap(d3d, &(*srcTexture), width, height, screenWidth, screenHeight),
+        m_stencilTexture(&(*stencilTexture))
+{
+    if(!G_ShaderManager().IsLoaded())
+    {
+        G_ShaderManager().LoadShaders(d3d, "placeholder");
+    }
+
+    SetShader(G_ShaderManager().GetShader("Bitmap"));
+}
 
 VisualBitmapComponent::~VisualBitmapComponent(void)
 {
@@ -48,6 +64,15 @@ void VisualBitmapComponent::Draw(D3D& d3d)
 	// TODO: Get the actual view matrix from the active camera.
 	// TODO: Create an orthogonal camera component.
 
+    if(!m_stencilTexture)
+    {
+        SetShader(G_ShaderManager().GetShader("Bitmap"));
+    }
+    else
+    {
+        SetShader(G_ShaderManager().GetShader("Bitmap_Stencil"));
+    }
+
 	ConstantBuffers::MVPBuffer matrixBuffer;
 	matrixBuffer.modelMatrix = glm::transpose(GetParent().GetTransform().GetMatrix());
 	matrixBuffer.viewMatrix	 = glm::transpose(glm::mat4(1.0f));
@@ -75,6 +100,10 @@ void VisualBitmapComponent::Draw(D3D& d3d)
 
     ID3D11ShaderResourceView* tex = m_bitmap.GetTextureShaderResourceView();
     d3d.GetDeviceContext().PSSetShaderResources(0, 1, &tex);
+    if(m_stencilTexture)
+    {
+        d3d.GetDeviceContext().PSSetShaderResources(1, 1, &m_stencilTexture);
+    }
 
     GetShader().RenderShader(d3d, 6);
     d3d.TurnZBufferOn();

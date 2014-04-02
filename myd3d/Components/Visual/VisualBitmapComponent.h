@@ -15,6 +15,10 @@ private:
 public:
     VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView* srcTexture, int width, int height,
                           int screenWidth, int screenHeight);
+     VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView* srcTexture, 
+                           ID3D11ShaderResourceView* stencilTexture, int width, int height, 
+                           int screenWidth, int screenHeight);
+
     ~VisualBitmapComponent(void);
 
     virtual void ComponentID(componentId_t& out) const;
@@ -25,5 +29,6 @@ public:
 
 private:
     Bitmap m_bitmap;
+    ID3D11ShaderResourceView* m_stencilTexture;
 };
 
