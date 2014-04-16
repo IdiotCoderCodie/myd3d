@@ -50,6 +50,8 @@ public:
     void EnableWireframe();
     void DisableWireframe();
 
+    void Resize(int width, int height);
+
 private:
     bool                        m_initialized;
     bool                        m_vsyncEnabled;

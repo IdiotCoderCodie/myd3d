@@ -16,6 +16,8 @@ public:
 
 	bool Frame();
 
+    D3D& GetD3DInstance() { return m_d3d; }
+
 // Private Functions
 private:
     Graphics(const Graphics& other);

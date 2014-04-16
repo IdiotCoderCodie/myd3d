@@ -544,3 +544,63 @@ void D3D::DisableWireframe()
     m_deviceContext->RSSetState(m_rasterState);
 }
 
+void D3D::Resize(int width, int height)
+{
+    ID3D11RenderTargetView* nullRTV = NULL;
+    m_deviceContext->OMSetRenderTargets(1, &nullRTV, NULL);
+    
+    d3d_safe_release(m_renderTargetView);
+
+    d3d_safe_release(m_depthStencilView);
+    
+    if(m_swapChain)
+    {
+        // Resize swap chain.
+        DXGI_SWAP_CHAIN_DESC swapChainDesc;
+        m_swapChain->GetDesc(&swapChainDesc);
+
+        swapChainDesc.BufferDesc.Width  = width;
+        swapChainDesc.BufferDesc.Height = height;
+        HRESULT hr = m_swapChain->ResizeBuffers(swapChainDesc.BufferCount, swapChainDesc.BufferDesc.Width,
+                                   swapChainDesc.BufferDesc.Height, swapChainDesc.BufferDesc.Format,
+                                   swapChainDesc.Flags);
+        if(FAILED(hr))
+        {
+            int test = 0;
+        }
+        // Re-create render target and depth-stencil view.
+        ID3D11Texture2D* backBuffer         = NULL;
+        ID3D11Texture2D* depthStencilBuffer = NULL;
+        m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
+        hr = m_device->CreateRenderTargetView(backBuffer, NULL, &m_renderTargetView);
+        if(FAILED(hr))
+        {
+            int test = 0;
+        }
+        backBuffer->Release();
+        // depth-stencil...
+        D3D11_TEXTURE2D_DESC depthStencilDesc;
+        m_depthStencilBuffer->GetDesc(&depthStencilDesc);
+        depthStencilDesc.Width  = swapChainDesc.BufferDesc.Width;
+        depthStencilDesc.Height = swapChainDesc.BufferDesc.Height;
+        m_device->CreateTexture2D(&depthStencilDesc, NULL, &depthStencilBuffer);
+        hr = m_device->CreateDepthStencilView(depthStencilBuffer, NULL, &m_depthStencilView);
+        if(FAILED(hr))
+        {
+            int test = 0;
+        }
+        depthStencilBuffer->Release();
+        m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
+
+        // Setup viewport.
+        D3D11_VIEWPORT vp;
+        vp.Width    = (float)swapChainDesc.BufferDesc.Width;
+        vp.Height   = (float)swapChainDesc.BufferDesc.Height;
+        vp.MinDepth = 0.0f;
+        vp.MaxDepth = 1.0f;
+        vp.TopLeftX = 0;
+        vp.TopLeftY = 0;
+        m_deviceContext->RSSetViewports(1, &vp);
+
+    }
+}

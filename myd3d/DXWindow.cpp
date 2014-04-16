@@ -124,6 +124,22 @@ LRESULT CALLBACK DXWindow::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, L
     if(TwEventWin(hwnd, umsg, wparam, lparam))
         return 0;
 
+    switch(umsg)
+    {
+        case WM_SIZE:
+        {
+            if(m_Graphics)
+            {
+                D3D& d3d = m_Graphics->GetD3DInstance();
+                d3d.Resize(LOWORD(lparam), HIWORD(lparam));
+            }
+            return 0;
+            break;
+        }
+    }
+
+    
+
     // Send all messages to default message handler.
     return DefWindowProc(hwnd, umsg, wparam, lparam);
 }
@@ -229,9 +245,15 @@ bool DXWindow::InitializeWindow(int& screenWidth, int& screenHeight, bool& fulls
         posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
     }
 
+    RECT rc = { 0, 0, 640, 480 };
+    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
+   /* m_hwnd = CreateWindow(L"TwDX11", L"AntTweakBar simple example using DirectX11", 
+                            WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 
+                            rc.right-rc.left, rc.bottom-rc.top, NULL, NULL, m_hinstance, NULL);*/
+
     // Create the window with the settings generated.
     m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_applicationName,
-        WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
+        WS_OVERLAPPEDWINDOW,
         posX, posY, screenWidth, screenHeight, NULL, NULL, m_hinstance, NULL);
 
     // Bring the window up on screen and set to main focus.
@@ -266,6 +288,11 @@ void DXWindow::ShutdownWindow()
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
 {
+    /*if(TwEventWin(hwnd, umsg, wparam, lparam))
+    {
+        return 0;
+    }*/
+
     switch (umsg)
     {
     case WM_DESTROY:
