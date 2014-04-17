@@ -245,17 +245,12 @@ bool DXWindow::InitializeWindow(int& screenWidth, int& screenHeight, bool& fulls
         posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
     }
 
-    RECT rc = { 0, 0, 640, 480 };
-    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-   /* m_hwnd = CreateWindow(L"TwDX11", L"AntTweakBar simple example using DirectX11", 
-                            WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 
-                            rc.right-rc.left, rc.bottom-rc.top, NULL, NULL, m_hinstance, NULL);*/
-
     // Create the window with the settings generated.
     m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_applicationName,
         WS_OVERLAPPEDWINDOW,
         posX, posY, screenWidth, screenHeight, NULL, NULL, m_hinstance, NULL);
 
+    
     // Bring the window up on screen and set to main focus.
     ShowWindow(m_hwnd, SW_SHOW);
     SetForegroundWindow(m_hwnd);

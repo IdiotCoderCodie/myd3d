@@ -7,6 +7,18 @@ class Circle;
 
 class RigidBody
 {
+    struct State
+    {
+        glm::vec2 x; // Position
+        glm::vec2 v; // Velocity
+    };
+
+    struct Derivative
+    {
+        glm::vec2 dx; // Derivate of Position: Velocity
+        glm::vec2 dv; // Derivative of Velocity: Acceleration
+    };
+
 public:
     RigidBody(void);
     virtual ~RigidBody(void);
@@ -35,6 +47,11 @@ public:
     void ResetPos()                     { m_newPosition = m_position; }
 
 	void SetParent(Entity* entity)		{ m_parentEntity = entity; }
+
+    // RK4 stuff.
+    Derivative Evaluate(const State& initial, float dt, const Derivative& d);
+    glm::vec2 Acceleration(const State& state, float t);
+    void Integrate(State& state,float dt);
 
 private:
     float m_mass;
