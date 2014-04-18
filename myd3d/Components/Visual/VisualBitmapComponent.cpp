@@ -11,7 +11,8 @@ VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView*
                                              int screenWidth, int screenHeight)
     :	VisualComponent(),
         m_bitmap(d3d, &(*srcTexture), width, height, screenWidth, screenHeight),
-        m_stencilTexture(0)
+        m_stencilTexture(0),
+        m_materialColor(1.0f, 1.0f, 1.0f)
 {
     if(!G_ShaderManager().IsLoaded())
     {
@@ -27,7 +28,8 @@ VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView*
                                              int screenWidth, int screenHeight)
     :	VisualComponent(),
         m_bitmap(d3d, &(*srcTexture), width, height, screenWidth, screenHeight),
-        m_stencilTexture(&(*stencilTexture))
+        m_stencilTexture(&(*stencilTexture)),
+        m_materialColor(1.0f, 1.0f, 1.0f)
 {
     if(!G_ShaderManager().IsLoaded())
     {
@@ -97,6 +99,13 @@ void VisualBitmapComponent::Draw(D3D& d3d)
 
     GetShader().VSSetConstBufferData(d3d, std::string("MatrixBuffer"), 
                                   (void*)&matrixBuffer, sizeof(matrixBuffer), 0);
+
+
+    ConstantBuffers::MaterialBuffer materialBuffer;
+    materialBuffer.color = m_materialColor;
+    
+    GetShader().PSSetConstBufferData(d3d, std::string("MaterialBuffer"), (void*)&materialBuffer,
+                                     sizeof(materialBuffer), 0);
 
     ID3D11ShaderResourceView* tex = m_bitmap.GetTextureShaderResourceView();
     d3d.GetDeviceContext().PSSetShaderResources(0, 1, &tex);

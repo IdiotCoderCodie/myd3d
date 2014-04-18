@@ -1,4 +1,7 @@
 #pragma once
+#define WIN32_LEAN_AND_MEAN
+#define _WINSOCKAPI_
+#include <WinSock2.h>
 #include <windows.h>
 
 class HiResTimer

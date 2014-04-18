@@ -1,4 +1,5 @@
 #pragma once
+#define _WINSOCKAPI_
 #include <AntTweakBar.h>
 
 #include "D3D.h"
