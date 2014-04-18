@@ -43,10 +43,10 @@ private:
     void PackAndSendData();
 
 private:
-    BroadcastReceiver m_receiver;
-    SocketStream m_peers[5];
-    SocketStream m_opponent;
-    int m_numPeers;
-    int m_playerNum;
-    TerrainDestructionScene* m_scene;
+    BroadcastReceiver           m_receiver;
+    SocketStream                m_peers[5];
+    SocketStream                m_opponent;
+    int                         m_numPeers;
+    int                         m_playerNum;
+    TerrainDestructionScene*    m_scene;
 };

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 
 #include "NetworkManager.h"
 #include "SocketListener.h"
@@ -189,25 +190,21 @@ void NetworkManager::PackAndSendData()
     char sendBuffer[1000];
     memset(sendBuffer, 0, 1000);
 
+    std::string sendBufferStr;
+    std::ostringstream ssSendBuffer;
+
     unsigned int byteN = 0;
     for(auto ent : circleEnts)
     {
-        memcpy(&sendBuffer[byteN], "CIRC", 4);
-        byteN += 4;
-        memcpy(&sendBuffer[byteN], " X:", 3);
-        byteN += 3;
-
         const glm::vec3& pos = ent->GetPos();
-
-        memcpy(&sendBuffer[byteN], (char*)&pos.x, 4);
-        byteN += 4;
-        memcpy(&sendBuffer[byteN], (char*)&pos.y, 4);
-        byteN += 4;             
+        ssSendBuffer << "CIRC X:" << pos.x << " " << pos.y << endl;  
     }
-
+    
+    ssSendBuffer.seekp(0, ios::end);
+    int bufSize = ssSendBuffer.tellp();
     int timeo = 100;
     setsockopt(m_opponent.GetHandle(), SOL_SOCKET, SO_SNDTIMEO, (char*)timeo, sizeof(timeo));
-    m_opponent.Send(sendBuffer, byteN, 0);
+    m_opponent.Send(ssSendBuffer.str().c_str(), bufSize, 0);
 }
 
 
