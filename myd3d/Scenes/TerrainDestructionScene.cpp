@@ -5,7 +5,10 @@
 
 #include <fstream>
 
+#define _NETWORK_DEBUGOUT
+#ifndef _NETWORK_DEBUGOUT
 std::ofstream debugOut("TerrainDestructionNetworkingLog.txt");
+#endif 
 
 TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneManager* sceneMgr)
     : Scene(name, sceneMgr)
@@ -45,7 +48,7 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 		-m_screenHeight / 2.0f, m_screenHeight / 2.0f, "testCam");
 	
     // It's a sqwerrr!!1-!
-    Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, L"bollocks.dds", 100, 100, m_screenWidth, m_screenHeight, "sqwer");
+    Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, L"jan2.dds", 100, 100, m_screenWidth, m_screenHeight, "sqwer");
 
 
     cerr << "test" << endl;

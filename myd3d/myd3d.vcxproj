@@ -139,6 +139,7 @@
     <ClCompile Include="Assets\Textures\Texture.cpp" />
     <ClCompile Include="Components\Visual\VisualBitmapComponent.cpp" />
     <ClCompile Include="Assets\Shaders\ShaderManager.cpp" />
+    <ClCompile Include="Scenes\TerrainDestructionOffworldScene.cpp" />
     <ClCompile Include="Scenes\TerrainDestructionScene.cpp" />
     <ClCompile Include="Thread\Thread.cpp" />
   </ItemGroup>
@@ -198,6 +199,7 @@
     <ClInclude Include="Assets\Textures\Texture.h" />
     <ClInclude Include="Components\Visual\VisualBitmapComponent.h" />
     <ClInclude Include="Assets\Shaders\ShaderManager.h" />
+    <ClInclude Include="Scenes\TerrainDestructionOffworldScene.h" />
     <ClInclude Include="Scenes\TerrainDestructionScene.h" />
     <ClInclude Include="Thread\Thread.h" />
   </ItemGroup>

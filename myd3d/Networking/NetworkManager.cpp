@@ -14,7 +14,7 @@ using namespace std;
 NetworkManager::NetworkManager(void)
     : m_receiver(),
     m_numPeers(0),
-    m_playerNum(0)
+    m_playerNum(1)
 {
 }
 
@@ -182,6 +182,11 @@ void NetworkManager::CheckForNewPeer()
 
 void NetworkManager::PackAndSendData()
 {
+    if(m_numPeers < 1)
+    {
+        return;
+    }
+
     // Get data from the scene.
     std::vector<NetCircle> m_netCircles;
     
@@ -193,6 +198,7 @@ void NetworkManager::PackAndSendData()
     std::string sendBufferStr;
     std::ostringstream ssSendBuffer;
 
+    // Pack data into string.
     unsigned int byteN = 0;
     for(auto ent : circleEnts)
     {
@@ -204,7 +210,15 @@ void NetworkManager::PackAndSendData()
     int bufSize = ssSendBuffer.tellp();
     int timeo = 100;
     setsockopt(m_opponent.GetHandle(), SOL_SOCKET, SO_SNDTIMEO, (char*)timeo, sizeof(timeo));
-    m_opponent.Send(ssSendBuffer.str().c_str(), bufSize, 0);
+    for(int i = 0; i < m_numPeers; i++)
+    {
+        if(m_peers[i].IsOk())
+        {
+            m_peers[i].Send(ssSendBuffer.str().c_str(), bufSize, 0);
+        }
+    }
+
+    //m_opponent.Send(ssSendBuffer.str().c_str(), bufSize, 0);
 }
 
 
@@ -245,7 +259,7 @@ int NetworkManager::run()
             return 0;
 
         CheckForNewPeer();
-       // Sleep(500); // TODO: Remove.
+        Sleep(20); // TODO: Remove.
 
         PackAndSendData();
 

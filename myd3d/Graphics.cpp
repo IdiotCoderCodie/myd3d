@@ -7,6 +7,7 @@
 #include "Scenes\Example2DScene.h"
 #include "Scenes\AdvRenderingScene.h"
 #include "Scenes\TerrainDestructionScene.h"
+#include "Scenes\TerrainDestructionOffworldScene.h"
 
 #include <AntTweakBar.h>
 
