@@ -164,6 +164,10 @@ void NetworkManager::CheckForNewPeer()
                     // Can now send data to this.
                     // Doesn't need to know whether it is a camera or not, can just send data and
                     // have other side decide if it needs this data.
+
+                    // TODO: INITIALIZATION!!
+                    // TODO: Send all current data from the scene to other, so it can construct it all ready for updates!
+                    //SendInitData(newStream);
                     
                     m_numPeers++;                  
                 }
@@ -219,6 +223,50 @@ void NetworkManager::PackAndSendData()
     }
 
     //m_opponent.Send(ssSendBuffer.str().c_str(), bufSize, 0);
+}
+
+
+void NetworkManager::SendInitData(SocketStream& peer)
+{
+    std::ostringstream ssBuffer;
+
+    ssBuffer << "INIT" << endl;
+    auto circleEnts = m_scene->GetCircles();
+   
+    for(auto ent : circleEnts)
+    {
+        ssBuffer << "ENT " << ent->GetID() << " "
+                 << "CIRC " << "X: " << ent->GetPos().x << " " << ent->GetPos().y << endl;
+        // TODO: Get radius...
+        // TODO: Get rotation vectors...
+    }
+
+    ssBuffer << "ENDINIT" << endl;
+
+    // Get the size of the string.
+    ssBuffer.seekp(0, ios::end);
+    int bufSize = ssBuffer.tellp();
+    int timeo = 1000;
+    setsockopt(peer.GetHandle(), SOL_SOCKET, SO_SNDTIMEO, (char*)&timeo, sizeof(timeo));
+
+    if(peer.IsOk())
+    {
+        peer.Send(ssBuffer.str().c_str(), bufSize, 0);
+    }
+
+    // Wait for response to confirm initialization.
+
+    char response[100];
+    memset(response, 0, 100);
+    int bytesRead = peer.Recv(response, 100, 0);
+    timeo = 2000;
+    setsockopt(peer.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeo, sizeof(timeo));
+    if(bytesRead < 1)
+    {
+        // Failed to read anything.
+        // try again?
+        // 
+    }
 }
 
 

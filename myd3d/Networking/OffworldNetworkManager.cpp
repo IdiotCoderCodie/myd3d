@@ -20,6 +20,7 @@ void OffworldNetworkManager::EstablishPeerConnection()
     broadcast.SetMessage(to_string(CONNECT_MAGIC_NUM) + (m_playerNum == 1 ? "-PLAY1" : "-PLAY2"));
     broadcast.SetBroadcastPort(m_playerNum == 1 ? BROADCAST_PORT_P1 : BROADCAST_PORT_P2);
     
+    // TODO: REFACTOR THIS SHIT!
     broadcast.start();
     while(true) // Not needed? Just call broadcast.waitForFinish()???
     {
@@ -47,12 +48,79 @@ void OffworldNetworkManager::EstablishPeerConnection()
                 cout << "Connection to peer [" << m_peer.GetPeerAddr().ToString() << "]" 
                      << endl;
 
-                // TODO: Something like send OK message?
+                // TODO: Connected to player. Now read initialization!
 
+                char recvBuffer[2000];
+                memset(recvBuffer, 0, 2000);
+                if(m_peer.Recv(recvBuffer, 2000, 0) > 0)
+                {
+                    std::stringstream ssBuffer(recvBuffer);
+                    std::string head;
+                    ssBuffer >> head;
+                    if(!head.compare("INIT"))
+                    {
+                        // Now read in entities.
+                        while(!ssBuffer.eof())
+                        {
+                            std::string entityId;
+                            ssBuffer >> head;
+                            if(!head.compare("ENT"))
+                            {                                
+                                // Load in entity data.
+                                ssBuffer >> entityId;
+                                 
+                                // What is it? Circle, Square?
+                                std::string entityType;
+                                ssBuffer >> entityType;
+                                if(!entityType.compare("CIRC"))
+                                {
+                                    // LoadCircle(istream& stream)
+
+                                }
+                                else if(!entityType.compare("SQR"))
+                                {
+                                    // LoadSqare(istream& stream)
+                                }
+                                
+                            }
+                        }                       
+                    }
+                }
                 break;
             }
         }
     }
+}
+
+
+void LoadCircle(istream& in)
+{
+    float x, y;
+
+    char attr;
+    in >> attr;
+    if(attr == 'X')
+    {
+        in.ignore(1); // ignore the ':' character.
+        in >> x >> y;
+    }
+
+    // TODO: Call m_scene->AddCircle(position, radius)
+}
+
+
+void LoadSquare(istream& in)
+{
+    float x, y;
+    char attr;
+    in >> attr;
+    if(attr == 'X')
+    {
+        in.ignore(1);
+        in >> x >> y;
+    }
+
+    // TODO: Call m_scene->AddSquare(position, radius)
 }
 
 

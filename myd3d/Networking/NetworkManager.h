@@ -42,6 +42,8 @@ private:
 
     void PackAndSendData();
 
+    void SendInitData(SocketStream& peer);
+
 private:
     BroadcastReceiver           m_receiver;
     SocketStream                m_peers[5];
