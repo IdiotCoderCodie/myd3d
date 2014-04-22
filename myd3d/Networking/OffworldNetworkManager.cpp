@@ -2,6 +2,8 @@
 #include "NET_CONSTS.h"
 #include "UDPBroadcast.h"
 
+#include "../Scenes/TerrainDestructionOffworldScene.h"
+
 #include <sstream>
 
 OffworldNetworkManager::OffworldNetworkManager(void)
@@ -74,7 +76,7 @@ void OffworldNetworkManager::EstablishPeerConnection()
                                 ssBuffer >> entityType;
                                 if(!entityType.compare("CIRC"))
                                 {
-                                    // LoadCircle(istream& stream)
+                                    LoadCircle(ssBuffer, entityId);
 
                                 }
                                 else if(!entityType.compare("SQR"))
@@ -93,7 +95,7 @@ void OffworldNetworkManager::EstablishPeerConnection()
 }
 
 
-void LoadCircle(istream& in)
+void OffworldNetworkManager::LoadCircle(istream& in, std::string& id)
 {
     float x, y;
 
@@ -105,11 +107,13 @@ void LoadCircle(istream& in)
         in >> x >> y;
     }
 
+    m_scene->AddCircle(x, y, 50.0f, id);
+    
     // TODO: Call m_scene->AddCircle(position, radius)
 }
 
 
-void LoadSquare(istream& in)
+void OffworldNetworkManager::LoadSquare(istream& in, std::string& id)
 {
     float x, y;
     char attr;

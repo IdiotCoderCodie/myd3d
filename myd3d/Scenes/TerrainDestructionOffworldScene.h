@@ -18,6 +18,9 @@ public:
     std::vector<Entity*>& GetCircles() { return m_circles; }
     std::vector<Entity*>& GetSquares() { return m_squares; }
     std::vector<Entity*>& GetLines()   { return m_lines; }
+
+    void AddCircle(float x, float y, float radius, std::string& id);
+    void AddSquare(float x, float y, float dimension, std::string& id);
     
 private:
     int                     m_screenWidth;

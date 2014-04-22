@@ -167,7 +167,7 @@ void NetworkManager::CheckForNewPeer()
 
                     // TODO: INITIALIZATION!!
                     // TODO: Send all current data from the scene to other, so it can construct it all ready for updates!
-                    //SendInitData(newStream);
+                    SendInitData(newStream);
                     
                     m_numPeers++;                  
                 }
@@ -309,7 +309,7 @@ int NetworkManager::run()
         CheckForNewPeer();
         Sleep(20); // TODO: Remove.
 
-        PackAndSendData();
+        //PackAndSendData();
 
         //// Send a float for testing.
         //int timeoMs = 100;

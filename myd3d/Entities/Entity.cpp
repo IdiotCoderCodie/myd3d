@@ -22,7 +22,7 @@ Entity::Entity(Scene& parent, const entityId_t& id)
     TwAddVarRO(m_tweakBar, "PosZ", TW_TYPE_FLOAT, &m_Transform.GetPosition().z, 
         " label='Z' group='Position' readonly='false' step=0.1");
     // Put the "Position" group into the Transform group.
-    std::string extraStr = "/Position group='Transform'";
+   /* std::string extraStr = "/Position group='Transform'";
     TwDefine((id + extraStr).c_str());
 
     TwAddVarRO(m_tweakBar, "Forward", TW_TYPE_DIR3F, &m_Transform.GetForward(),
@@ -32,7 +32,7 @@ Entity::Entity(Scene& parent, const entityId_t& id)
 
     TwAddVarRO(m_tweakBar, "Scale", TW_TYPE_DIR3F, &m_Transform.GetScale(), 
         "group='Transform' readonly='false' step=0.1");
-
+*/
     // Iconify the tweak bar.
     TwDefine((id + " iconified=true ").c_str());
 }

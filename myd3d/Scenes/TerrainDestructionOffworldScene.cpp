@@ -88,3 +88,14 @@ void TerrainDestructionOffworldScene::Draw(D3D& d3d)
         m_circleEnt->Draw(d3d);
     }
 }
+
+
+void TerrainDestructionOffworldScene::AddCircle(float x, float y, float radius, std::string& id)
+{
+    Entity* newEnt = 
+        EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), L"cement.dds", 
+                                       L"circleStencil.dds", radius*2.0f, radius*2.0f, 
+                                       m_screenWidth, m_screenHeight, id);
+
+    newEnt->SetPos(glm::vec3(x, y, 0.0f));
+}

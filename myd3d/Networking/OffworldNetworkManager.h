@@ -40,6 +40,10 @@ public:
     std::vector<NetCircle>& GetCircleData() { return m_circles; }
 
 private:
+    void LoadCircle(istream& in, std::string& id);
+    void LoadSquare(istream& in, std::string& id);
+
+private:
     int m_playerNum;
     SocketStream m_peer; 
     TerrainDestructionOffworldScene* m_scene;
