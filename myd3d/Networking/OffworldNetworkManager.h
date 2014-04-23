@@ -43,6 +43,8 @@ private:
     void LoadCircle(istream& in, std::string& id);
     void LoadSquare(istream& in, std::string& id);
 
+    void GetPeerUpdates();
+
 private:
     int m_playerNum;
     SocketStream m_peer; 

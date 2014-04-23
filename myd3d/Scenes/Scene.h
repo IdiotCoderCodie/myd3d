@@ -30,6 +30,8 @@ public:
     const std::vector<Entity*>& GetEntities() const { return m_Entities; }
     std::vector<Entity*>& GetEntities() { return m_Entities; }
 
+    Entity* GetEntity(const std::string& entityId);
+
     const std::vector<RenderTarget*>& GetShadowMaps() const { return m_shadowMaps; }
     std::vector<RenderTarget*>& GetShadowMaps() { return m_shadowMaps; }
 

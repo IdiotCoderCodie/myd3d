@@ -42,6 +42,8 @@ private:
 
     void PackAndSendData();
 
+    void SendUpdateData();
+
     void SendInitData(SocketStream& peer);
 
 private:

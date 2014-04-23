@@ -2,6 +2,7 @@
 #include "../Components/Camera/CameraComponent.h"
 #include "../Components/Light/LightComponent.h"
 #include "SceneManager.h"
+#include <algorithm>
 
 Scene::Scene(const std::string& name, SceneManager* sceneMgr)
     :   m_Name(name),
@@ -60,6 +61,22 @@ void Scene::AddEntity(Entity* ent)
 			m_ActiveCamera = static_cast<CameraComponent*>(camCheck);
 		}
 	}
+}
+
+Entity* Scene::GetEntity(const std::string& entityId)
+{
+    auto it = std::find_if(m_Entities.begin(), m_Entities.end(),
+                [&](Entity* ent){ // Find the first element with ID matching "entityId".
+                    return (!ent->GetID().compare(entityId));
+                });
+
+    if(it != m_Entities.end())
+    {
+        // Found a matching entity.
+        return &(*(*it)); // Maybe not necessary? Derefernce itr, derefence ptr, and get address.
+    }
+
+    return nullptr;
 }
 
 

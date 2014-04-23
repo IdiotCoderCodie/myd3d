@@ -128,71 +128,75 @@ void OffworldNetworkManager::LoadSquare(istream& in, std::string& id)
 }
 
 
+void OffworldNetworkManager::GetPeerUpdates()
+{
+    int timeoMs = 500;
+    setsockopt(m_peer.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoMs, sizeof(timeoMs));
+    char buffer[1000];
+    memset(buffer, 0, 1000);
+
+    if(m_peer.Recv(buffer, 1000, 0) < 1)
+    {
+        // Nothing received... keep calm and carry on.
+        return;
+    }
+
+    std::string strBuffer(buffer);
+    std::stringstream bufferStream(strBuffer);
+
+    std::string head;
+    bufferStream >> head;
+    // int circleNum = 0;
+    while(!bufferStream.eof())
+    {
+        if(!head.compare("UPD"))
+        {
+            // ReadUpdateMessage
+            std::string entID;
+            bufferStream >> entID;
+        
+            std::string type;
+            bufferStream >> type;
+            if(!type.compare("CIRC"))
+            {
+                // Update "entID" circle.
+                float x, y;
+                char attr;
+                bufferStream >> attr;
+                if(attr == 'X')
+                { 
+                    // Update position.
+                    bufferStream.ignore(1); // Ignore ":"
+                    bufferStream >> x >> y;
+
+                    Entity* ent = m_scene->GetEntity(entID);
+                    if(ent)
+                    {
+                        ent->SetPos(glm::vec3(x, y, 0.0f));
+                    }
+                }
+            }
+            else if(!type.compare("SQR"))
+            {
+                // TODO: Square stuff.
+                // Same as circle I think?
+            }
+
+            bufferStream >> head; // Get next entID, (if there is one...)
+        }
+    }
+}
+
+
 int OffworldNetworkManager::run()
 {
     // TODO: 1. Search for connection via broadcaster.
     EstablishPeerConnection(); // DONE ^^
 
-    // TODO: 2. Receive data from peer. COPY FROM OTHER PROJECT.
+    
     while(true)
     {
-        int timeoMs = 1000;
-        setsockopt(m_peer.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoMs, sizeof(timeoMs));
-        char buffer[1000];
-        memset(buffer, 0, 1000);
-
-        if(m_peer.Recv(buffer, 1000, 0) < 1)
-        {
-            // Nothing received... keep calm and carry on.
-            continue;
-        }
-
-        std::string strBuffer(buffer);
-        std::stringstream bufferStream(strBuffer);
-
-        std::string type;
-        bufferStream >> type;
-        int circleNum = 0;
-        while(!bufferStream.eof())
-        {
-            if(!type.compare("CIRC"))
-            {
-                // Tis a circle.
-                // Ignore next char...
-                bufferStream.ignore(1);
-
-                std::string attr;
-                char attrCh[20];
-                bufferStream.get(attrCh, 4, ':');
-                attr = std::string(attrCh);
-                if(!attr.compare("X"))
-                {
-                    // position...
-                    // Ignore next character ':'
-                    bufferStream.ignore(1);
-                    float x, y;
-                    bufferStream >> x >> y;
-
-                    // TODO: Add this data to vector or some shit.
-                    if(m_circles.size() > circleNum)
-                    {
-                        m_circles[circleNum].position = glm::vec2(x, y);
-                    }
-                    else
-                    {
-                        m_circles.push_back(NetCircle());
-                        m_circles[circleNum].position = glm::vec2(x, y);
-                    }
-                    circleNum++;
-                }
-            }
-            else if(!type.compare("SQRE"))
-            {
-                // Tis a square.
-            }
-
-            bufferStream >> type;
-        }
+        GetPeerUpdates();
     }
     // TODO: 3. If receive fails, send check... maybe attempt to reconnect? 
 

@@ -226,6 +226,38 @@ void NetworkManager::PackAndSendData()
 }
 
 
+void NetworkManager::SendUpdateData()
+{
+    if(m_numPeers < 1)
+    {
+        return;
+    }
+
+    std::ostringstream ssBuffer;
+
+ 
+    for(auto ent : m_scene->GetCircles())
+    {
+        ssBuffer << "UPD " << ent->GetID() << " "
+                 << "CIRC " << "X: " << ent->GetPos().x << " " << ent->GetPos().y << endl;
+        // TODO: get rotation vectors.
+    }
+
+    ssBuffer.seekp(0, ios::end);
+    int bufSize = ssBuffer.tellp();
+    int timeo = 1000;
+    for(int i = 0; i < m_numPeers; i++)
+    {
+        if(m_peers[i].IsOk())
+        {
+            setsockopt(m_peers[i].GetHandle(), SOL_SOCKET, SO_SNDTIMEO, (char*)&timeo, sizeof(timeo));
+            m_peers[i].Send(ssBuffer.str().c_str(), bufSize, 0);
+        }
+    }
+    // TODO: Send squares.
+}
+
+
 void NetworkManager::SendInitData(SocketStream& peer)
 {
     std::ostringstream ssBuffer;
@@ -307,8 +339,9 @@ int NetworkManager::run()
             return 0;
 
         CheckForNewPeer();
-        Sleep(20); // TODO: Remove.
+        Sleep(100); // TODO: Remove.
 
+        SendUpdateData();
         //PackAndSendData();
 
         //// Send a float for testing.
