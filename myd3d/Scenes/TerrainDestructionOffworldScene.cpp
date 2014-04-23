@@ -12,7 +12,8 @@
 std::ofstream debugOut("TerrainDestructionNetworkingLog.txt");
 #endif 
 
-TerrainDestructionOffworldScene::TerrainDestructionOffworldScene(const std::string& name, SceneManager* sceneMgr)
+TerrainDestructionOffworldScene::TerrainDestructionOffworldScene(const std::string& name, SceneManager* sceneMgr,
+                                                                 int playerNum)
     : Scene(name, sceneMgr)
 {
     D3D& d3d = GetParent().GetD3DInstance();
@@ -52,7 +53,7 @@ TerrainDestructionOffworldScene::TerrainDestructionOffworldScene(const std::stri
     else
     {
         m_networkManager.SetTerrainDestructionOffworldScene(*this);
-        m_networkManager.SetPlayerNum(1);
+        m_networkManager.SetPlayerNum(playerNum);
         m_networkManager.start();
     }
 }

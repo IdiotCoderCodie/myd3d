@@ -192,17 +192,13 @@ int OffworldNetworkManager::run()
 {
     // TODO: 1. Search for connection via broadcaster.
     EstablishPeerConnection(); // DONE ^^
-
     
     while(true)
     {
+        if(isFinishing())
+            break;
         GetPeerUpdates();
     }
     // TODO: 3. If receive fails, send check... maybe attempt to reconnect? 
-
-    while(true)
-    { // Stop thread from exiting for now....
-        Sleep(10000);
-    }
     return 1;
 }

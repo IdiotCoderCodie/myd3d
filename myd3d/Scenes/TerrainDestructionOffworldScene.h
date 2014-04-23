@@ -9,7 +9,7 @@
 class TerrainDestructionOffworldScene : public Scene
 {
 public:
-    TerrainDestructionOffworldScene(const std::string& name, SceneManager* sceneMgr);
+    TerrainDestructionOffworldScene(const std::string& name, SceneManager* sceneMgr, int playerNum);
     ~TerrainDestructionOffworldScene(void);
 
     void Update(double time);

@@ -11,6 +11,8 @@
 
 #include <AntTweakBar.h>
 
+extern unsigned int exeCode;
+
 Graphics::Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen) 
     :   m_d3d(screenWidth, screenHeight, true, hwnd, fullscreen),
         m_sceneMgr(m_d3d),
@@ -19,7 +21,24 @@ Graphics::Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen
         m_fps(0.0f),
         m_wireframe(false)
 {
-    m_sceneMgr.AddScene(new TerrainDestructionOffworldScene("Genesis", &m_sceneMgr));
+    switch(exeCode)
+    {
+    case 1:
+        m_sceneMgr.AddScene(new TerrainDestructionScene("Player1", &m_sceneMgr));
+        break;
+    case 2:
+        m_sceneMgr.AddScene(new TerrainDestructionOffworldScene("Genesis", &m_sceneMgr, 1));
+        break;
+    case 3:
+        m_sceneMgr.AddScene(new TerrainDestructionOffworldScene("Genesis", &m_sceneMgr, 2));
+        break;
+    case 4:
+        m_sceneMgr.AddScene(new TerrainDestructionOffworldScene("Genesis", &m_sceneMgr, 1));
+        break;
+    case 5:
+        m_sceneMgr.AddScene(new TerrainDestructionOffworldScene("Genesis", &m_sceneMgr, 2));
+        break;
+    }
     m_timer.Start();
 
     m_statsTweakBar = TwNewBar("Performance Stats");
