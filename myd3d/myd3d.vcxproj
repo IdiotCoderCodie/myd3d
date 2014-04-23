@@ -94,8 +94,8 @@
     <ClCompile Include="Components\Visual\VisualTessellatedEllipsoidComponent.cpp" />
     <ClCompile Include="Components\Visual\VisualTessellatedPlanetComponent.cpp" />
     <ClCompile Include="Components\Visual\VisualTessellatedTorusComponent.cpp" />
-    <ClCompile Include="Networking\BallViewerNetworkManager.cpp" />
     <ClCompile Include="Networking\BroadcastReceiver.cpp" />
+    <ClCompile Include="Networking\CannBallNetworkManager.cpp" />
     <ClCompile Include="Networking\NetworkManager.cpp" />
     <ClCompile Include="Networking\OffworldNetworkManager.cpp" />
     <ClCompile Include="Networking\UDPBroadcast.cpp" />
@@ -139,6 +139,7 @@
     <ClCompile Include="Assets\Textures\Texture.cpp" />
     <ClCompile Include="Components\Visual\VisualBitmapComponent.cpp" />
     <ClCompile Include="Assets\Shaders\ShaderManager.cpp" />
+    <ClCompile Include="Scenes\TerrainDestructionCannBallScene.cpp" />
     <ClCompile Include="Scenes\TerrainDestructionOffworldScene.cpp" />
     <ClCompile Include="Scenes\TerrainDestructionScene.cpp" />
     <ClCompile Include="Thread\Thread.cpp" />
@@ -150,8 +151,8 @@
     <ClInclude Include="Components\Visual\VisualTessellatedEllipsoidComponent.h" />
     <ClInclude Include="Components\Visual\VisualTessellatedPlanetComponent.h" />
     <ClInclude Include="Components\Visual\VisualTessellatedTorusComponent.h" />
-    <ClInclude Include="Networking\BallViewerNetworkManager.h" />
     <ClInclude Include="Networking\BroadcastReceiver.h" />
+    <ClInclude Include="Networking\CannBallNetworkManager.h" />
     <ClInclude Include="Networking\NetworkManager.h" />
     <ClInclude Include="Networking\NET_CONSTS.h" />
     <ClInclude Include="Networking\OffworldNetworkManager.h" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Assets\Textures\Texture.h" />
     <ClInclude Include="Components\Visual\VisualBitmapComponent.h" />
     <ClInclude Include="Assets\Shaders\ShaderManager.h" />
+    <ClInclude Include="Scenes\TerrainDestructionCannBallScene.h" />
     <ClInclude Include="Scenes\TerrainDestructionOffworldScene.h" />
     <ClInclude Include="Scenes\TerrainDestructionScene.h" />
     <ClInclude Include="Thread\Thread.h" />

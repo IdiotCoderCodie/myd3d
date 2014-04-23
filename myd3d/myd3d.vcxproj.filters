@@ -156,9 +156,6 @@
     <ClCompile Include="Components\Visual\VisualRaymarchComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Networking\BallViewerNetworkManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Networking\BroadcastReceiver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -175,6 +172,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Scenes\TerrainDestructionOffworldScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\TerrainDestructionCannBallScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Networking\CannBallNetworkManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -329,9 +332,6 @@
     <ClInclude Include="Components\Visual\VisualRaymarchComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Networking\BallViewerNetworkManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Networking\BroadcastReceiver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -351,6 +351,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\TerrainDestructionOffworldScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\TerrainDestructionCannBallScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Networking\CannBallNetworkManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -8,6 +8,7 @@
 #include "Scenes\AdvRenderingScene.h"
 #include "Scenes\TerrainDestructionScene.h"
 #include "Scenes\TerrainDestructionOffworldScene.h"
+#include "Scenes\TerrainDestructionCannBallScene.h"
 
 #include <AntTweakBar.h>
 
@@ -24,19 +25,19 @@ Graphics::Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen
     switch(exeCode)
     {
     case 1:
-        m_sceneMgr.AddScene(new TerrainDestructionScene("Player1", &m_sceneMgr));
+        m_sceneMgr.AddScene(new TerrainDestructionScene("MainScene", &m_sceneMgr));
         break;
     case 2:
-        m_sceneMgr.AddScene(new TerrainDestructionOffworldScene("Genesis", &m_sceneMgr, 1));
+        m_sceneMgr.AddScene(new TerrainDestructionOffworldScene("MainScene", &m_sceneMgr, 1));
         break;
     case 3:
-        m_sceneMgr.AddScene(new TerrainDestructionOffworldScene("Genesis", &m_sceneMgr, 2));
+        m_sceneMgr.AddScene(new TerrainDestructionOffworldScene("MainScene", &m_sceneMgr, 2));
         break;
     case 4:
-        m_sceneMgr.AddScene(new TerrainDestructionOffworldScene("Genesis", &m_sceneMgr, 1));
+        m_sceneMgr.AddScene(new TerrainDestructionCannBallScene("MainScene", &m_sceneMgr, 1));
         break;
     case 5:
-        m_sceneMgr.AddScene(new TerrainDestructionOffworldScene("Genesis", &m_sceneMgr, 2));
+        m_sceneMgr.AddScene(new TerrainDestructionCannBallScene("MainScene", &m_sceneMgr, 2));
         break;
     }
     m_timer.Start();
