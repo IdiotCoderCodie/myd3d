@@ -43,7 +43,7 @@ private:
     void LoadCircle(istream& in, std::string& id);
     void LoadSquare(istream& in, std::string& id);
 
-    void GetPeerUpdates(SocketStream& peer);
+    void GetPeerUpdates(int playerNum);
 
 private:
     int m_playerNum;
@@ -51,4 +51,5 @@ private:
     SocketStream m_player2;
     TerrainDestructionCannBallScene* m_scene;
     std::vector<NetCircle> m_circles;
+
 };

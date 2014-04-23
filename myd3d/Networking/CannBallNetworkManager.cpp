@@ -72,6 +72,7 @@ void CannBallNetworkManager::EstablishPeerConnection(int playerNum)
                                 // Load in entity data.
                                 ssBuffer >> entityId;
                                  
+                                entityId = "P" + to_string(playerNum) + entityId;
                                 // What is it? Circle, Square?
                                 std::string entityType;
                                 ssBuffer >> entityType;
@@ -129,13 +130,15 @@ void CannBallNetworkManager::LoadSquare(istream& in, std::string& id)
 }
 
 
-void CannBallNetworkManager::GetPeerUpdates(SocketStream& peer)
+void CannBallNetworkManager::GetPeerUpdates(int playerNum)
 {
+    SocketStream& peer = (playerNum == 1 ? m_player1 : m_player2);
+
     int timeoMs = 500;
     setsockopt(peer.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoMs, sizeof(timeoMs));
     char buffer[1000];
     memset(buffer, 0, 1000);
-
+    
     if(peer.Recv(buffer, 1000, 0) < 1)
     {
         // Nothing received... keep calm and carry on.
@@ -169,7 +172,7 @@ void CannBallNetworkManager::GetPeerUpdates(SocketStream& peer)
                     // Update position.
                     bufferStream.ignore(1); // Ignore ":"
                     bufferStream >> x >> y;
-
+                    entID = "P" + to_string(playerNum) + entID;
                     Entity* ent = m_scene->GetEntity(entID);
                     if(ent)
                     {
@@ -199,8 +202,8 @@ int CannBallNetworkManager::run()
     {
         if(isFinishing())
             break;
-        GetPeerUpdates(m_player1);
-        GetPeerUpdates(m_player2);
+        GetPeerUpdates(1);
+        GetPeerUpdates(2);
     }
     // TODO: 3. If receive fails, send check... maybe attempt to reconnect? 
     return 1;
