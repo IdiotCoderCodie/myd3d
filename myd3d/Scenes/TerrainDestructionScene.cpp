@@ -25,16 +25,16 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 
     m_circles.push_back(&(*testSphere));
 
-	Entity* testSphere2 = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
+	/*Entity* testSphere2 = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
 		"sphere2");
 	testSphere2->MoveUp(200.0f);
     testSphere2->MoveRight(40.0f);
 
 	m_physicsSystem.AddCircle(testSphere2, 50.0f, glm::vec2(0.0f, -50.0f));
 
-    m_circles.push_back(&(*testSphere2));
+    m_circles.push_back(&(*testSphere2));*/
 
-    Entity* testSphere3 = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 150, 150, m_screenWidth, m_screenHeight,
+    /*Entity* testSphere3 = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 150, 150, m_screenWidth, m_screenHeight,
 		"sphere3");
 
     testSphere3->MoveRight(-50.0f);
@@ -42,13 +42,13 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 
 	m_physicsSystem.AddCircle(testSphere3, 75.0f, glm::vec2(50.0f, 0.0f));
 
-    m_circles.push_back(&(*testSphere3));
+    m_circles.push_back(&(*testSphere3));*/
 
 	EntityFactory::CreateOrthoFpCameraEntity(*this, -m_screenWidth / 2.0f, m_screenWidth / 2.0f,
 		-m_screenHeight / 2.0f, m_screenHeight / 2.0f, "testCam");
 	
     // It's a sqwerrr!!1-!
-    Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, L"jan2.dds", 100, 100, m_screenWidth, m_screenHeight, "sqwer");
+    //Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, L"jan2.dds", 100, 100, m_screenWidth, m_screenHeight, "sqwer");
 
 
     cerr << "test" << endl;

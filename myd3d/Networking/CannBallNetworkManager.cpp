@@ -3,10 +3,14 @@
 #include "UDPBroadcast.h"
 
 #include "../Scenes/TerrainDestructionCannBallScene.h"
+#include "../Components/Camera/CameraComponent.h"
 
 #include <sstream>
 
 CannBallNetworkManager::CannBallNetworkManager(void)
+    : m_followCam(0),
+    m_followBall(0)
+    // TODO: Initialization list.
 {
 }
 
@@ -80,12 +84,14 @@ void CannBallNetworkManager::EstablishPeerConnection(int playerNum)
                                 {
                                     LoadCircle(ssBuffer, entityId);
 
+                                    // Update circle to follow if it matches the player we're following.
+                                    if(playerNum == m_playerNum)
+                                        m_followBall = m_scene->GetEntity(entityId);
                                 }
                                 else if(!entityType.compare("SQR"))
                                 {
                                     // LoadSqare(istream& stream)
-                                }
-                                
+                                }                                
                             }
                         }                       
                     }
@@ -110,8 +116,6 @@ void CannBallNetworkManager::LoadCircle(istream& in, std::string& id)
     }
 
     m_scene->AddCircle(x, y, 50.0f, id);
-    
-    // TODO: Call m_scene->AddCircle(position, radius)
 }
 
 
@@ -189,12 +193,18 @@ void CannBallNetworkManager::GetPeerUpdates(int playerNum)
             bufferStream >> head; // Get next entID, (if there is one...)
         }
     }
+
+    if(m_followCam && m_followBall)
+    {
+        m_followCam->SetPos(-m_followBall->GetPos());
+    }
 }
 
 
 int CannBallNetworkManager::run()
 {
-    // TODO: 1. Search for connection via broadcaster.
+    m_followCam = &m_scene->GetActiveCamera()->GetParent();
+
     EstablishPeerConnection(1); // DONE ^^
     EstablishPeerConnection(2);
     

@@ -23,9 +23,9 @@ TerrainDestructionCannBallScene::TerrainDestructionCannBallScene(const std::stri
 
     // Camera.
     EntityFactory::CreateOrthoFpCameraEntity(*this, -m_screenWidth / 2.0f, m_screenWidth / 2.0f,
-		-m_screenHeight / 2.0f, m_screenHeight / 2.0f, "testCam");
+		-m_screenHeight / 2.0f, m_screenHeight / 2.0f, "mainCamera");
 
-    Texture* mainCircTex = G_TextureManager().GetTexture("cement.dds");
+   /* Texture* mainCircTex = G_TextureManager().GetTexture("cement.dds");
     if(!mainCircTex)
     {
         mainCircTex = G_TextureManager().LoadTexture(d3d, L"cement.dds", "cement.dds");
@@ -35,15 +35,7 @@ TerrainDestructionCannBallScene::TerrainDestructionCannBallScene(const std::stri
     if(!circStencil)
     {
         circStencil = G_TextureManager().LoadTexture(d3d, L"circleStencil.dds", "circleStencil.dds");
-    }
-   
-    m_circleBmp = new VisualBitmapComponent(d3d, mainCircTex->GetTexture(), circStencil->GetTexture(),
-                                            100, 100, m_screenWidth, m_screenHeight);
-
-    m_circleEnt = new Entity(*this, "tehCircle");
-
-    m_circleEnt->SetComponent(m_circleBmp);
-
+    }*/
 
     cerr << "test" << endl;
     if(!m_wsa.isOk())
@@ -77,17 +69,6 @@ void TerrainDestructionCannBallScene::Update(double time)
 void TerrainDestructionCannBallScene::Draw(D3D& d3d)
 {
     Scene::Draw(d3d);
-
-    auto circleData = m_networkManager.GetCircleData();
-
-    for(int i = 0; i < circleData.size(); i++)
-    {
-        // TODO: circle data size can be bigger than number of circles. Need a number storing how
-        // many circles there currently are.
-        // DIRTY AS FUCK.
-        m_circleEnt->SetPos(glm::vec3(circleData[i].position.x, circleData[i].position.y, 0.0f));
-        m_circleEnt->Draw(d3d);
-    }
 }
 
 

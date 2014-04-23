@@ -9,6 +9,7 @@
 #include "../glm/glm.hpp"
 
 class TerrainDestructionCannBallScene;
+class Entity;
 
 class CannBallNetworkManager : public Thread
 {
@@ -37,8 +38,6 @@ public:
     void SetPlayerNum(int num) { m_playerNum = num; }
     void SetTerrainDestructionCannBallScene(TerrainDestructionCannBallScene& scene) { m_scene = &scene; }
 
-    std::vector<NetCircle>& GetCircleData() { return m_circles; }
-
 private:
     void LoadCircle(istream& in, std::string& id);
     void LoadSquare(istream& in, std::string& id);
@@ -50,6 +49,6 @@ private:
     SocketStream m_player1;
     SocketStream m_player2;
     TerrainDestructionCannBallScene* m_scene;
-    std::vector<NetCircle> m_circles;
-
+    Entity* m_followBall;
+    Entity* m_followCam;
 };
