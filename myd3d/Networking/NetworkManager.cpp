@@ -256,17 +256,17 @@ void NetworkManager::SendInitData(SocketStream& peer)
 
     // Wait for response to confirm initialization.
 
-    char response[100];
-    memset(response, 0, 100);
-    int bytesRead = peer.Recv(response, 100, 0);
-    timeo = 2000;
-    setsockopt(peer.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeo, sizeof(timeo));
-    if(bytesRead < 1)
-    {
-        // Failed to read anything.
-        // try again?
-        // 
-    }
+    //char response[100];
+    //memset(response, 0, 100);
+    //int bytesRead = peer.Recv(response, 100, 0);
+    //timeo = 2000;
+    //setsockopt(peer.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeo, sizeof(timeo));
+    //if(bytesRead < 1)
+    //{
+    //    // Failed to read anything.
+    //    // try again?
+    //    // 
+    //}
 }
 
 
