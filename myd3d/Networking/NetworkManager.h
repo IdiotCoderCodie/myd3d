@@ -10,6 +10,8 @@
 
 class TerrainDestructionScene;
 
+#define NM_MAX_PEERS 5
+
 class NetworkManager : public Thread
 {
     struct NetBody
@@ -48,7 +50,8 @@ private:
 
 private:
     BroadcastReceiver           m_receiver;
-    SocketStream                m_peers[5];
+    SocketStream                m_peers[NM_MAX_PEERS];
+    bool                        m_peerIsInit[NM_MAX_PEERS];
     SocketStream                m_opponent;
     int                         m_numPeers;
     int                         m_playerNum;

@@ -93,7 +93,15 @@ void CannBallNetworkManager::EstablishPeerConnection(int playerNum)
                                     // LoadSqare(istream& stream)
                                 }                                
                             }
-                        }                       
+                        }  
+                        
+                        int sentBytes = 0;
+                        //while(sentBytes < 3)
+                        //{ // Keep trying until sent all the data. Should send straight away without issues though.
+                            // NOTE: Probably best to put something like this within the Send buffer.
+                            sentBytes = peer.Send("ACK", 3, 0);
+                        //}
+
                     }
                 }
                 break;
