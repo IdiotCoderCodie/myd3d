@@ -198,8 +198,9 @@ void CannBallNetworkManager::GetPeerUpdates(int playerNum)
                 // Same as circle I think?
             }
 
-            bufferStream >> head; // Get next entID, (if there is one...)
+            //bufferStream >> head; // Get next entID, (if there is one...)
         }
+        bufferStream >> head;
     }
 
     if(m_followCam && m_followBall)

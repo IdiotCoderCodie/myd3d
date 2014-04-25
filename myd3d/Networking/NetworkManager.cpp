@@ -351,7 +351,7 @@ int NetworkManager::run()
             return 0;
 
         CheckForNewPeer();
-        Sleep(100); // TODO: Remove.
+        Sleep(33); // TODO: Remove.
 
         SendUpdateData();
         //PackAndSendData();

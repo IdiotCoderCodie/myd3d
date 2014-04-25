@@ -32,6 +32,19 @@ void RigidBody::Update()
     m_velocity = m_newVelocity;
     m_position = m_newPosition;
 	m_parentEntity->SetPos(glm::vec3(m_newPosition, 0.0f));
+
+    if(m_position.y < -200.0f)
+    {
+        m_velocity.y = abs(m_velocity.y);
+    }
+    if(m_position.x < -300.0f)
+    {
+        m_velocity.x = abs(m_velocity.x);
+    }
+    else if(m_position.x > 300.0f)
+    {
+        m_velocity.x = -abs(m_velocity.x);
+    }
 }
 
 

@@ -21,6 +21,8 @@ TerrainDestructionCannBallScene::TerrainDestructionCannBallScene(const std::stri
 	m_screenWidth	= d3d.GetScreenWidth();
 	m_screenHeight	= d3d.GetScreenHeight();
 
+    Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, L"jan2.dds", 1000, 1000, m_screenWidth, m_screenHeight, "sqwer");
+
     // Camera.
     EntityFactory::CreateOrthoFpCameraEntity(*this, -m_screenWidth / 2.0f, m_screenWidth / 2.0f,
 		-m_screenHeight / 2.0f, m_screenHeight / 2.0f, "mainCamera");

@@ -18,39 +18,39 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 	m_screenWidth	= d3d.GetScreenWidth();
 	m_screenHeight	= d3d.GetScreenHeight();
 
-	Entity* testSphere = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
-		"sphere1");
+    Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, L"jan2.dds", 1000, 1000, m_screenWidth, m_screenHeight, "sqwer");
+
+	Entity* noPhysSphere = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
+		"noPhysSphere");
 
 	//m_physicsSystem.AddCircle(testSphere, 50.0f, glm::vec2(00.0f, 100.0f));
 
+    m_circles.push_back(&(*noPhysSphere));
+
+	Entity* testSphere = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
+		"sphere1");
+	testSphere->MoveUp(200.0f);
+    testSphere->MoveRight(40.0f);
+
+	m_physicsSystem.AddCircle(testSphere, 50.0f, glm::vec2(0.0f, -50.0f));
+
     m_circles.push_back(&(*testSphere));
 
-	/*Entity* testSphere2 = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
+    testSphere = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
 		"sphere2");
-	testSphere2->MoveUp(200.0f);
-    testSphere2->MoveRight(40.0f);
 
-	m_physicsSystem.AddCircle(testSphere2, 50.0f, glm::vec2(0.0f, -50.0f));
+    testSphere->MoveRight(-50.0f);
+    testSphere->MoveUp(50.0f);
 
-    m_circles.push_back(&(*testSphere2));*/
+	m_physicsSystem.AddCircle(testSphere, 50.0f, glm::vec2(50.0f, 0.0f));
 
-    /*Entity* testSphere3 = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 150, 150, m_screenWidth, m_screenHeight,
-		"sphere3");
-
-    testSphere3->MoveRight(-50.0f);
-    testSphere3->MoveUp(50.0f);
-
-	m_physicsSystem.AddCircle(testSphere3, 75.0f, glm::vec2(50.0f, 0.0f));
-
-    m_circles.push_back(&(*testSphere3));*/
+    m_circles.push_back(&(*testSphere));
 
 	EntityFactory::CreateOrthoFpCameraEntity(*this, -m_screenWidth / 2.0f, m_screenWidth / 2.0f,
 		-m_screenHeight / 2.0f, m_screenHeight / 2.0f, "testCam");
 	
     // It's a sqwerrr!!1-!
-    //Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, L"jan2.dds", 100, 100, m_screenWidth, m_screenHeight, "sqwer");
-
-
+    
     cerr << "test" << endl;
     if(!m_wsa.isOk())
     {
