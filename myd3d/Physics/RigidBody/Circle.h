@@ -12,10 +12,10 @@ public:
     float GetRadius()               { return m_radius; }
 
     void CollisionWithCircle(Circle* circle, ContactManifold* contactManifold);
-    void CollisionWithSquare(RigidBody* circle, ContactManifold* contactManifold);
+    void CollisionWithPolygon(RBPolygon* polygon, ContactManifold* contactManifold);
 
     void CollisionResponseWithCircle(ManifoldPoint& point);
-    void CollisionResponseWithSquare(ManifoldPoint& point);
+    void CollisionResponseWithPolygon(ManifoldPoint& point);
 
 private:
     float m_radius;

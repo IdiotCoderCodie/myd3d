@@ -26,7 +26,7 @@ void Circle::CollisionWithCircle(Circle* circle, ContactManifold* contactManifol
     }
 }
 
-void Circle::CollisionWithSquare(RigidBody* circle, ContactManifold* contactManifold)
+void Circle::CollisionWithPolygon(RBPolygon* polygon, ContactManifold* contactManifold)
 {
     // TODO: complete.
 }
@@ -59,7 +59,7 @@ void Circle::CollisionResponseWithCircle(ManifoldPoint& point)
 	point.responded = true;
 }
 
-void Circle::CollisionResponseWithSquare(ManifoldPoint& point)
+void Circle::CollisionResponseWithPolygon(ManifoldPoint& point)
 {
     // TODO: complete.
 }

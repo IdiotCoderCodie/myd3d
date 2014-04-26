@@ -55,8 +55,6 @@ void CannBallNetworkManager::EstablishPeerConnection(int playerNum)
                 cout << "Connection to peer [" << peer.GetPeerAddr().ToString() << "]" 
                      << endl;
 
-                // TODO: Connected to player. Now read initialization!
-
                 char recvBuffer[2000];
                 memset(recvBuffer, 0, 2000);
                 if(peer.Recv(recvBuffer, 2000, 0) > 0)
@@ -148,8 +146,8 @@ void CannBallNetworkManager::GetPeerUpdates(int playerNum)
 
     int timeoMs = 500;
     setsockopt(peer.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoMs, sizeof(timeoMs));
-    char buffer[1000];
-    memset(buffer, 0, 1000);
+    char buffer[100000];
+    memset(buffer, 0, 100000);
     
     if(peer.Recv(buffer, 1000, 0) < 1)
     {

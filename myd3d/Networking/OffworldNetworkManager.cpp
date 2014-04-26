@@ -50,8 +50,6 @@ void OffworldNetworkManager::EstablishPeerConnection()
                 cout << "Connection to peer [" << m_peer.GetPeerAddr().ToString() << "]" 
                      << endl;
 
-                // TODO: Connected to player. Now read initialization!
-
                 char recvBuffer[2000];
                 memset(recvBuffer, 0, 2000);
                 if(m_peer.Recv(recvBuffer, 2000, 0) > 0)
@@ -71,6 +69,7 @@ void OffworldNetworkManager::EstablishPeerConnection()
                                 // Load in entity data.
                                 ssBuffer >> entityId;
                                  
+                                entityId = "P" + to_string(m_playerNum) + entityId;
                                 // What is it? Circle, Square?
                                 std::string entityType;
                                 ssBuffer >> entityType;
@@ -86,6 +85,7 @@ void OffworldNetworkManager::EstablishPeerConnection()
                                 
                             }
                         }                       
+                        m_peer.Send("ACK", 3, 0);
                     }
                 }
                 break;
@@ -132,8 +132,8 @@ void OffworldNetworkManager::GetPeerUpdates()
 {
     int timeoMs = 500;
     setsockopt(m_peer.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoMs, sizeof(timeoMs));
-    char buffer[1000];
-    memset(buffer, 0, 1000);
+    char buffer[100000];
+    memset(buffer, 0, 100000);
 
     if(m_peer.Recv(buffer, 1000, 0) < 1)
     {
@@ -168,7 +168,7 @@ void OffworldNetworkManager::GetPeerUpdates()
                     // Update position.
                     bufferStream.ignore(1); // Ignore ":"
                     bufferStream >> x >> y;
-
+                    entID = "P" + to_string(m_playerNum) + entID;
                     Entity* ent = m_scene->GetEntity(entID);
                     if(ent)
                     {
@@ -180,10 +180,9 @@ void OffworldNetworkManager::GetPeerUpdates()
             {
                 // TODO: Square stuff.
                 // Same as circle I think?
-            }
-
-            bufferStream >> head; // Get next entID, (if there is one...)
+            }         
         }
+        bufferStream >> head; // Get next entID, (if there is one...)
     }
 }
 

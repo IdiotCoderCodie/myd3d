@@ -4,6 +4,7 @@
 class Entity;
 
 class Circle;
+class RBPolygon;
 
 class RigidBody
 {
@@ -25,10 +26,12 @@ public:
 
     virtual void CalculatePhysics(float dt);
     virtual void CollisionWithCircle(Circle* circle, ContactManifold* contactManifold) = 0;
-    virtual void CollisionWithSquare(RigidBody* square, ContactManifold* contactManifold) = 0;
+    virtual void CollisionWithPolygon(RBPolygon* polygon, ContactManifold* contactManifold) = 0;
+
     void Update();
+
     virtual void CollisionResponseWithCircle(ManifoldPoint& point) = 0;
-    virtual void CollisionResponseWithSquare(ManifoldPoint& point) = 0;
+    virtual void CollisionResponseWithPolygon(ManifoldPoint& point) = 0;
 
 
     void SetPos(float x, float y)       { m_position = glm::vec2(x, y); }
@@ -54,14 +57,14 @@ public:
     void Integrate(State& state,float dt);
 
 private:
-    float m_mass;
-    float m_elasticity;
-    glm::vec2 m_position;
-    glm::vec2 m_newPosition;
-    glm::vec2 m_velocity;
-    glm::vec2 m_newVelocity;
-    int m_objectID;
-	Entity* m_parentEntity;
+    float       m_mass;
+    float       m_elasticity;
+    glm::vec2   m_position;
+    glm::vec2   m_newPosition;
+    glm::vec2   m_velocity;
+    glm::vec2   m_newVelocity;
+    int         m_objectID;
+	Entity*     m_parentEntity;
 
     static int countId;
 };
