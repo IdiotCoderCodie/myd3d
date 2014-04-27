@@ -61,5 +61,35 @@ bool RBPolygon::Intersect(RBPolygon& A, RBPolygon& B)
 
 bool RBPolygon::AxisSeparatePolygons(const glm::vec2& axis, const RBPolygon& A, const RBPolygon& B)
 {
+    float mina, maxa;
+    float minb, maxb;
+
+    CalculateInterval(axis, A, mina, maxa);
+    CalculateInterval(axis, B, minb, maxb);
+
+    if(mina > maxb || minb > maxa)
+        return true;
+
     return false;
+}
+
+
+void RBPolygon::CalculateInterval(const glm::vec2& axis, const RBPolygon& P, float& min, float& max)
+{
+    // Projects the polygon onto the axis, getting minimum and maximum of the interval.
+
+    float d = glm::dot(axis, P[0]);
+    min = max = d;
+    for(int i = 0; i < P.GetNumVertices(); i++)
+    {
+        float d2 = glm::dot(P[i], axis);
+        if(d2 < min)
+        {
+            min = d2;
+        }
+        else if(d2 > max)
+        {
+            max = d2;
+        }
+    }
 }
