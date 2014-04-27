@@ -406,5 +406,6 @@
     <FxCompile Include="Assets\Shaders\bezierPatch_vs.hlsl" />
     <FxCompile Include="Assets\Shaders\raymarch_vs.hlsl" />
     <FxCompile Include="Assets\Shaders\raymarch_ps.hlsl" />
+    <FxCompile Include="Assets\Shaders\bitmapStencil_ps.hlsl" />
   </ItemGroup>
 </Project>
