@@ -37,6 +37,7 @@ public:
     void SetPos(float x, float y)       { m_position = glm::vec2(x, y); }
     void SetVel(float x, float y)       { m_velocity = glm::vec2(x, y); }
     void SetNewVel(float x, float y)    { m_newVelocity = glm::vec2(x, y); }
+    void SetNewVel(glm::vec2& vel)      { m_newVelocity = vel; }
     void SetMass(float mass)            { m_mass = mass; }
     void SetElasticity(float elasticity){ m_elasticity = elasticity; }
 

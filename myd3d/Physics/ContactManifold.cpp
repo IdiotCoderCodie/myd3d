@@ -19,19 +19,20 @@ void ContactManifold::Add(ManifoldPoint point)
     float dist = 0.0f;
     for(int collision = 0; collision < m_numOfPoints; ++collision)
     {
+        RigidBody& A = *m_points[collision].contactID1;
 		// Check this point is not already in the manifold 
 		// (by checking if it's position is really close to any others).
 		glm::vec2 colNormal = normalize( (m_points[collision].contactID2->GetNewPos() 
 										- m_points[collision].contactID1->GetNewPos()));
 
-		glm::vec2 colPos = m_points[collision].contactID1->GetNewPos()
-							+ colNormal * m_points[collision].contactID1->GetRadius();
+		/*glm::vec2 colPos = m_points[collision].contactID1->GetNewPos()
+							+ colNormal * m_points[collision].contactID1->GetRadius();*/
 
-		dist = distance(colPos, point.contactPoint);
+		/*dist = distance(colPos, point.contactPoint);
 		if (dist < 0.01f)
 		{
 			return;
-		}
+		}*/
     }
 
 	m_points[m_numOfPoints] = point;
@@ -48,6 +49,13 @@ void ContactManifold::Assess()
 		loop = false;
 		for (int collision = 0; collision < m_numOfPoints; collision++)
 		{
+            RigidBody& A = *m_points[collision].contactID1;
+            RigidBody& B = *m_points[collision].contactID2;
+
+            // TODO: Change it so sotre circles... AABB... Polygons all separately.
+            //       Makes it easier to call appropriate functions for collision detection and response.
+            
+
 			Circle* circle1 = m_points[collision].contactID1;
 			Circle* circle2 = m_points[collision].contactID2;
 

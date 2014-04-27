@@ -2,12 +2,13 @@
 #include "../glm/glm.hpp"
 
 class Circle;
+class RigidBody;
 
 struct ManifoldPoint 
 {
-    glm::vec2 contactPoint;
-    Circle* contactID1;
-    Circle* contactID2;
+    RigidBody* contactID1;
+    RigidBody* contactID2;
+    float penetration;
     glm::vec2 contactNormal;
     bool responded;
 };

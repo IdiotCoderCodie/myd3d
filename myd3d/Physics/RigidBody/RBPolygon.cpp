@@ -111,4 +111,5 @@ glm::vec2 RBPolygon::FindMTD(std::vector<glm::vec2>& vectors)
     {
        // float dist2 = glm::cross(vectors[i], vectors[i]);
     }
+    return glm::vec2(0.0f);
 }
