@@ -28,8 +28,11 @@ void RBPolygon::CollisionWithPolygon(RBPolygon* polygon, ContactManifold* Contac
 }
 
 
-bool RBPolygon::Intersect(RBPolygon& A, RBPolygon& B)
+bool RBPolygon::Intersect(RBPolygon& A, RBPolygon& B, glm::vec2& MTD)
 {
+    // Potential separation axes. 
+    std::vector<glm::vec2> Axes;
+
     int j, i;
 
     // Check all axis from A edges.
@@ -38,6 +41,7 @@ bool RBPolygon::Intersect(RBPolygon& A, RBPolygon& B)
     {
         glm::vec2 E = A[i] - A[j];
         glm::vec2 N(-E.y, E.x);
+        Axes.push_back(N);
 
         if(RBPolygon::AxisSeparatePolygons(N, A, B))
         {
@@ -50,12 +54,16 @@ bool RBPolygon::Intersect(RBPolygon& A, RBPolygon& B)
     {
         glm::vec2 E = B[i] - B[j];
         glm::vec2 N(-E.y, E.x);
+        Axes.push_back(N);
 
         if(RBPolygon::AxisSeparatePolygons(N, A, B))
         {
             return false;
         }
     }
+
+    // Now find the MTD among the separation vecs.
+    MTD = FindMTD(Axes);
 }
 
 
@@ -91,5 +99,16 @@ void RBPolygon::CalculateInterval(const glm::vec2& axis, const RBPolygon& P, flo
         {
             max = d2;
         }
+    }
+}
+
+glm::vec2 RBPolygon::FindMTD(std::vector<glm::vec2>& vectors)
+{
+    glm::vec2 MTD = vectors[0];
+    float minDist2 = glm::dot(vectors[0], vectors[0]);
+
+    for (int i = 1; i < vectors.size(); i++)
+    {
+       // float dist2 = glm::cross(vectors[i], vectors[i]);
     }
 }

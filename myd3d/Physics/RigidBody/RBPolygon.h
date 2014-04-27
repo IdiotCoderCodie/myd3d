@@ -18,9 +18,10 @@ public:
     void CollisionWithCircle(Circle* circle, ContactManifold* ContactManifold);
     void CollisionWithPolygon(RBPolygon* polygon, ContactManifold* ContactManifold);
 
-    static bool Intersect(RBPolygon& A, RBPolygon& B);  
+    static bool Intersect(RBPolygon& A, RBPolygon& B, glm::vec2& MTD);  
     static bool AxisSeparatePolygons(const glm::vec2& axis, const RBPolygon& A, const RBPolygon& B);
     static void CalculateInterval(const glm::vec2& axis, const RBPolygon& P, float& min, float& max);
+    static glm::vec2 FindMTD(std::vector<glm::vec2>& Axes);
 
 private:
     std::vector<glm::vec2> m_vertices;
