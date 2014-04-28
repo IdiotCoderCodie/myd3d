@@ -183,6 +183,9 @@
     <ClCompile Include="Physics\RigidBody\RBPolygon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Physics\RigidBody\AABB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D.h">
@@ -363,6 +366,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Physics\RigidBody\RBPolygon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\RigidBody\AABB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

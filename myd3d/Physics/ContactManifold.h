@@ -10,6 +10,7 @@ struct ManifoldPoint
     RigidBody* contactID2;
     float penetration;
     glm::vec2 contactNormal;
+    glm::vec2 contactPos;
     bool responded;
 };
 
@@ -23,6 +24,8 @@ public:
     void Assess();
 	int GetNumPoints() const			{ return m_numOfPoints; }
 	ManifoldPoint& GetPoint(int index)	{ return m_points[index]; }
+
+    void Reset() { m_numOfPoints = 0; }
 
 private:
     ManifoldPoint m_points[1000];

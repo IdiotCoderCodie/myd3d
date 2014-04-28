@@ -15,8 +15,9 @@ public:
     std::vector<glm::vec2> const& GetVertices() { return m_vertices; }
     int GetNumVertices() const { return m_vertices.size(); }
 
-    void CollisionWithCircle(Circle* circle, ContactManifold* ContactManifold);
-    void CollisionWithPolygon(RBPolygon* polygon, ContactManifold* ContactManifold);
+    void CollisionWithCircle(Circle& circle, ContactManifold& manifold);
+    void CollisionWithAABB(AABB& aabb, ContactManifold& contactManifold);
+    void CollisionWithPolygon(RBPolygon& polygon, ContactManifold& manifold);
 
     static bool Intersect(RBPolygon& A, RBPolygon& B, glm::vec2& MTD);  
     static bool AxisSeparatePolygons(const glm::vec2& axis, const RBPolygon& A, const RBPolygon& B);

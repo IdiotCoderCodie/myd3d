@@ -5,6 +5,11 @@ class Entity;
 
 class Circle;
 class RBPolygon;
+class AABB;
+
+#define RB_TYPE_CIRC 0
+#define RB_TYPE_AABB 1
+#define RB_TYPE_POLY 2
 
 class RigidBody
 {
@@ -25,14 +30,18 @@ public:
     virtual ~RigidBody(void);
 
     virtual void CalculatePhysics(float dt);
-    virtual void CollisionWithCircle(Circle* circle, ContactManifold* contactManifold) = 0;
-    virtual void CollisionWithPolygon(RBPolygon* polygon, ContactManifold* contactManifold) = 0;
+    virtual void CollisionWithCircle(Circle& circle, ContactManifold& contactManifold) = 0;
+    virtual void CollisionWithAABB(AABB& aabb, ContactManifold& contactManifold) = 0;
+    virtual void CollisionWithPolygon(RBPolygon& polygon, ContactManifold& contactManifold) = 0;
 
     void Update();
 
-    virtual void CollisionResponseWithCircle(ManifoldPoint& point) = 0;
-    virtual void CollisionResponseWithPolygon(ManifoldPoint& point) = 0;
+    virtual void CollisionResponse(ManifoldPoint& point) = 0;
+   /* virtual void CollisionResponseWithCircle(ManifoldPoint& point) = 0;
+    virtual void CollisionResponseWithAABB(ManifoldPoint& point) = 0;
+    virtual void CollisionResponseWithPolygon(ManifoldPoint& point) = 0;*/
 
+    //virtual int GetType() = 0;
 
     void SetPos(float x, float y)       { m_position = glm::vec2(x, y); }
     void SetVel(float x, float y)       { m_velocity = glm::vec2(x, y); }
@@ -46,6 +55,7 @@ public:
     glm::vec2 GetVel() const            { return m_velocity; }
     glm::vec2 GetNewVel() const         { return m_newVelocity; }
     float GetMass() const               { return m_mass; }
+    float GetInvMass() const            { return (m_mass == 0.0f ? 0.0f : 1.0f / m_mass); }
     float GetElasticity() const         { return m_elasticity; }
 
     void ResetPos()                     { m_newPosition = m_position; }
@@ -64,6 +74,7 @@ private:
     glm::vec2   m_newPosition;
     glm::vec2   m_velocity;
     glm::vec2   m_newVelocity;
+    glm::vec2   m_force;
     int         m_objectID;
 	Entity*     m_parentEntity;
 

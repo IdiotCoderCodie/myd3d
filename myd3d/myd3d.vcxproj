@@ -88,6 +88,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Physics\RigidBody\AABB.cpp" />
     <ClCompile Include="Components\Visual\VisualBezierPatchComponent.cpp" />
     <ClCompile Include="Components\Visual\VisualGeomParticlesComponent.cpp" />
     <ClCompile Include="Components\Visual\VisualRaymarchComponent.cpp" />
@@ -146,6 +147,7 @@
     <ClCompile Include="Thread\Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Physics\RigidBody\AABB.h" />
     <ClInclude Include="Components\Visual\VisualBezierPatchComponent.h" />
     <ClInclude Include="Components\Visual\VisualGeomParticlesComponent.h" />
     <ClInclude Include="Components\Visual\VisualRaymarchComponent.h" />

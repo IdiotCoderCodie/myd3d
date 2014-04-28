@@ -16,15 +16,21 @@ RBPolygon::~RBPolygon(void)
 }
 
 
-void RBPolygon::CollisionWithCircle(Circle* circle, ContactManifold* ContactManifold)
+void RBPolygon::CollisionWithCircle(Circle& circle, ContactManifold& ContactManifold)
 {
-
+    // TODO: Complete.
 }
 
 
-void RBPolygon::CollisionWithPolygon(RBPolygon* polygon, ContactManifold* ContactManifold)
+void RBPolygon::CollisionWithAABB(AABB& aabb, ContactManifold& contactManifold)
 {
+    // TODO: Complete.
+}
 
+
+void RBPolygon::CollisionWithPolygon(RBPolygon& polygon, ContactManifold& ContactManifold)
+{
+    // TODO: Complete.
 }
 
 
