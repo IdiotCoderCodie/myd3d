@@ -25,13 +25,13 @@ void PhysicsSystem::Update(double time)
 }
 
 
-void PhysicsSystem::AddCircle(Entity* entity, float radius, glm::vec2& velocity)
+void PhysicsSystem::AddCircle(Entity* entity, float radius, glm::vec2& velocity, float mass)
 {
     Circle circle;
 	circle.SetParent(entity);
 	circle.SetRadius(radius);
 	circle.SetVel(velocity.x, velocity.y);
-	circle.SetMass(1.0f);
+	circle.SetMass(mass);
 	circle.SetPos(entity->GetPos().x, entity->GetPos().y);
     circle.SetElasticity(0.95f);
 

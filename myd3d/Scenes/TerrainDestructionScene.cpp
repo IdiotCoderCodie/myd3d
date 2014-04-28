@@ -32,7 +32,7 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 	testSphere->MoveUp(200.0f);
     testSphere->MoveRight(40.0f);
 
-	m_physicsSystem.AddCircle(testSphere, 50.0f, glm::vec2(0.0f, -50.0f));
+	m_physicsSystem.AddCircle(testSphere, 50.0f, glm::vec2(0.0f, -50.0f), 1.0f);
 
     m_circles.push_back(&(*testSphere));
 
@@ -42,7 +42,7 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
     testSphere->MoveRight(-50.0f);
     testSphere->MoveUp(50.0f);
 
-	m_physicsSystem.AddCircle(testSphere, 50.0f, glm::vec2(50.0f, 0.0f));
+	m_physicsSystem.AddCircle(testSphere, 50.0f, glm::vec2(0.0f, 0.0f), 0.0f);
 
     m_circles.push_back(&(*testSphere));
 

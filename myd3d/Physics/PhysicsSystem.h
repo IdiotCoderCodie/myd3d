@@ -14,7 +14,7 @@ public:
 
     void Update(double time);
 
-	void AddCircle(Entity* entity, float radius, glm::vec2& velocity);
+	void AddCircle(Entity* entity, float radius, glm::vec2& velocity, float mass);
 
 private:
 	void SimulationLoop(double time);
