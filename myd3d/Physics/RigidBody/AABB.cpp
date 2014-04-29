@@ -67,7 +67,7 @@ void AABB::CollisionWithCircle(Circle& circle, ContactManifold& manifold)
     float r = B.GetRadius();
 
     // Early escape test, if radius is bigger than dist to closest part, not inside AABB.
-    if(d > r * r && !inside)
+    if(d >= r * r  && !inside)
     {
         return;
     }
@@ -82,8 +82,8 @@ void AABB::CollisionWithCircle(Circle& circle, ContactManifold& manifold)
     }
     m.contactID1 = &A;
     m.contactID2 = &B;
-    m.contactNormal = glm::normalize(n); // Have to normalize n?
-    m.penetration = r + d;
+    m.contactNormal = glm::normalize(normal); // Have to normalize n?
+    m.penetration = r - d;
     m.contactPos = A.GetPos() + d;
     
     m.responded = false;
@@ -197,6 +197,16 @@ void AABB::CollisionResponse(ManifoldPoint& point)
     B.SetNewVel(B.GetVel() + (B.GetInvMass()) * impulse);
 
     point.responded = true;
+
+    // Positional Correction.
+    const float percent = 0.2;
+    const float slop = 0.1f;
+
+    glm::vec2 correction = glm::max(point.penetration - slop, 0.0f) 
+                            / (A.GetInvMass() + B.GetInvMass()) * percent * point.contactNormal;
+
+    A.SetNewPos(A.GetPos() - A.GetInvMass() * correction);
+    B.SetNewPos(B.GetPos() + B.GetInvMass() * correction);
 }
 
 //void AABB::CollisionResponseWithCircle(ManifoldPoint& point)

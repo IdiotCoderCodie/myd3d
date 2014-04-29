@@ -33,7 +33,7 @@ void PhysicsSystem::AddCircle(Entity* entity, float radius, glm::vec2& velocity,
 	circle.SetVel(velocity.x, velocity.y);
 	circle.SetMass(mass);
 	circle.SetPos(entity->GetPos().x, entity->GetPos().y);
-    circle.SetElasticity(0.95f);
+    circle.SetElasticity(0.4f);
 
 	m_circles.push_back(circle);
 }
@@ -48,7 +48,7 @@ void PhysicsSystem::AddAABB(Entity* entity, glm::vec2& min, glm::vec2& max, glm:
     aabb.SetVel(vel.x, vel.y);
     aabb.SetMass(mass);
     aabb.SetPos(entity->GetPos().x, entity->GetPos().y);
-    aabb.SetElasticity(1.0f);
+    aabb.SetElasticity(0.4f);
 
     m_aabbs.push_back(aabb);
 }

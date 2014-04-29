@@ -2,7 +2,14 @@
 #include "../../Entities/Entity.h"
 
 RigidBody::RigidBody(void) 
-: m_parentEntity(0)
+:   m_mass(1.0f),
+    m_elasticity(1.0f),
+    m_position(0.0f),
+    m_newPosition(0.0f),
+    m_velocity(0.0f),
+    m_newVelocity(0.0f),
+    m_force(0.0f),
+    m_parentEntity(0)
 {
 }
 
@@ -21,6 +28,7 @@ void RigidBody::CalculatePhysics(float dt)
     m_newPosition = newState.x;
     m_newVelocity = newState.v;
 
+    m_force = glm::vec2(0.0f); // Reset force for next update.
     /*glm::vec2 force(0.0f, -9.810f * m_mass);
     glm::vec2 accel = force / m_mass;
     m_newVelocity = m_velocity + (accel * dt);
@@ -33,18 +41,18 @@ void RigidBody::Update()
     m_position = m_newPosition;
 	m_parentEntity->SetPos(glm::vec3(m_newPosition, 0.0f));
 
-    if(m_position.y < -200.0f)
-    {
-        m_velocity.y = abs(m_velocity.y);
-    }
-    if(m_position.x < -300.0f)
-    {
-        m_velocity.x = abs(m_velocity.x);
-    }
-    else if(m_position.x > 300.0f)
-    {
-        m_velocity.x = -abs(m_velocity.x);
-    }
+    //if(m_position.y < -200.0f)
+    //{
+    //    m_velocity.y = abs(m_velocity.y);
+    //}
+    //if(m_position.x < -300.0f)
+    //{
+    //    m_velocity.x = abs(m_velocity.x);
+    //}
+    //else if(m_position.x > 300.0f)
+    //{
+    //    m_velocity.x = -abs(m_velocity.x);
+    //}
 }
 
 
@@ -63,8 +71,9 @@ RigidBody::Derivative RigidBody::Evaluate(const State& initial, float dt, const 
 glm::vec2 RigidBody::Acceleration(const State& state, float dt)
 {
     // TODO: Calculate the acceleration from forces acting.
-    glm::vec2 force(0.0f, -98.1f * m_mass);
-    glm::vec2 accel = force * GetInvMass();  // m_mass;
+    /*glm::vec2 force(0.0f, -98.1f * m_mass);*/
+    m_force += glm::vec2(0.0f, -98.10f * m_mass);
+    glm::vec2 accel = m_force * GetInvMass();  // m_mass;
 
     return accel;
 }

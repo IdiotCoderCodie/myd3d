@@ -88,6 +88,16 @@ void Circle::CollisionResponse(ManifoldPoint& point)
     B.SetNewVel(B.GetVel() + (B.GetInvMass()) * impulse);
 
     point.responded = true;
+
+    // Positional Correction.
+    const float percent = 0.3;
+    const float slop = 0.01f;
+
+    glm::vec2 correction = glm::max(point.penetration - slop, 0.0f) 
+                            / (A.GetInvMass() + B.GetInvMass()) * percent * point.contactNormal;
+
+    A.SetNewPos(A.GetPos() - A.GetInvMass() * correction);
+    B.SetNewPos(B.GetPos() + B.GetInvMass() * correction);
 }
 
 //

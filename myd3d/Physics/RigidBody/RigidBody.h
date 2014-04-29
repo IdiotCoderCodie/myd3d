@@ -44,7 +44,10 @@ public:
     //virtual int GetType() = 0;
 
     void SetPos(float x, float y)       { m_position = glm::vec2(x, y); }
+    void SetPos(glm::vec2& pos)         { m_position = pos; }
+    void SetNewPos(glm::vec2& pos)      { m_newPosition = pos; }
     void SetVel(float x, float y)       { m_velocity = glm::vec2(x, y); }
+    void SetVel(glm::vec2& vel)         { m_velocity = vel; }
     void SetNewVel(float x, float y)    { m_newVelocity = glm::vec2(x, y); }
     void SetNewVel(glm::vec2& vel)      { m_newVelocity = vel; }
     void SetMass(float mass)            { m_mass = mass; }
@@ -61,6 +64,8 @@ public:
     void ResetPos()                     { m_newPosition = m_position; }
 
 	void SetParent(Entity* entity)		{ m_parentEntity = entity; }
+
+    void ApplyForce(glm::vec2& force)   { m_force += force; }
 
     // RK4 stuff.
     Derivative Evaluate(const State& initial, float dt, const Derivative& d);
