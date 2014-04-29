@@ -122,7 +122,7 @@ void AABB::CollisionWithAABB(AABB& aabb, ContactManifold& contactManifold)
             m.contactID1 = &A;
             m.contactID2 = &B;
             // Collision, find axis of least penetration.
-            if (xOverlap > yOverlap)
+            if (xOverlap < yOverlap)
             {
                 if (n.x < 0.0f)
                 {

@@ -21,11 +21,14 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
     Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, L"jan2.dds", 1000, 1000, m_screenWidth, m_screenHeight, "sqwer");
 
 
-    AddCircle(40.0f, 200.0f, 50.0f, glm::vec2(0.0f, -50.0f), 1.0f, std::string("circ1"));
-    AddCircle(-50.0f, 50.0f, 50.0f, glm::vec2(0.0f, 0.0f), 1.0f, std::string("circ2"));
+    //AddCircle(40.0f, 200.0f, 50.0f, glm::vec2(0.0f, -50.0f), 1.0f, std::string("circ1"));
+    //AddCircle(-50.0f, 50.0f, 50.0f, glm::vec2(0.0f, 0.0f), 1.0f, std::string("circ2"));
     AddAABB(0.0f, -100.0f, glm::vec2(-50.0f, -50.0f), glm::vec2(50.0f, 50.0f), glm::vec2(0.0f, 0.0f), 1.0f, 
             std::string("square1"));
-    AddAABB(-200.0f, 100.0f, glm::vec2(-50.0f, -50.0f), glm::vec2(50.0f, 50.0f), glm::vec2(0.0f, 0.0f), 1.0f,
+    AddAABB(20.0f, 100.0f, glm::vec2(-50.0f, -50.0f), glm::vec2(50.0f, 50.0f), glm::vec2(0.0f, 0.0f), 1.0f,
+            std::string("square2"));
+
+    AddAABB(150.0f, 0.0f, glm::vec2(-50.0f, -50.0f), glm::vec2(50.0f, 50.0f), glm::vec2(-60.0f, 0.0f), 1.0f,
             std::string("square2"));
 
 	/*Entity* noPhysSphere = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
