@@ -20,14 +20,20 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 
     Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, L"jan2.dds", 1000, 1000, m_screenWidth, m_screenHeight, "sqwer");
 
-	Entity* noPhysSphere = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
-		"noPhysSphere");
 
-	//m_physicsSystem.AddCircle(testSphere, 50.0f, glm::vec2(00.0f, 100.0f));
+    AddCircle(40.0f, 200.0f, 50.0f, glm::vec2(0.0f, -50.0f), 1.0f, std::string("circ1"));
+    AddCircle(-50.0f, 50.0f, 50.0f, glm::vec2(0.0f, 0.0f), 1.0f, std::string("circ2"));
+    AddAABB(0.0f, -100.0f, glm::vec2(-50.0f, -50.0f), glm::vec2(50.0f, 50.0f), glm::vec2(0.0f, 0.0f), 1.0f, 
+            std::string("square1"));
+    AddAABB(-200.0f, 100.0f, glm::vec2(-50.0f, -50.0f), glm::vec2(50.0f, 50.0f), glm::vec2(0.0f, 0.0f), 1.0f,
+            std::string("square2"));
 
-    m_circles.push_back(&(*noPhysSphere));
+	/*Entity* noPhysSphere = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
+		"noPhysSphere");*/
 
-	Entity* testSphere = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
+   /* m_circles.push_back(&(*noPhysSphere));*/
+
+	/*Entity* testSphere = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
 		"sphere1");
 	testSphere->MoveUp(200.0f);
     testSphere->MoveRight(40.0f);
@@ -44,7 +50,7 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 
 	m_physicsSystem.AddCircle(testSphere, 50.0f, glm::vec2(0.0f, 0.0f), 0.0f);
 
-    m_circles.push_back(&(*testSphere));
+    m_circles.push_back(&(*testSphere));*/
 
 	EntityFactory::CreateOrthoFpCameraEntity(*this, -m_screenWidth / 2.0f, m_screenWidth / 2.0f,
 		-m_screenHeight / 2.0f, m_screenHeight / 2.0f, "testCam");
@@ -68,6 +74,36 @@ TerrainDestructionScene::~TerrainDestructionScene(void)
 {
     m_networkManager.finish();
     m_networkManager.waitForFinish();
+}
+
+
+void TerrainDestructionScene::AddCircle(float x, float y, float radius, glm::vec2& vel, float mass, std::string& id)
+{
+    Entity* newEnt = 
+        EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), L"cement.dds", 
+                                       L"circleStencil.dds", radius*2.0f, radius*2.0f, 
+                                       m_screenWidth, m_screenHeight, id);
+
+    newEnt->SetPos(glm::vec3(x, y, 0.0f));
+
+    m_physicsSystem.AddCircle(newEnt, radius, vel, mass);
+
+    m_circles.push_back(&(*newEnt));
+}
+
+
+void TerrainDestructionScene::AddAABB(float x, float y, glm::vec2& min, glm::vec2& max, glm::vec2& vel, 
+                                      float mass, std::string& id)
+{
+    Entity* newEnt = 
+        EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), L"cement.dds",
+                                       max.x - min.x, max.y - min.y, m_screenWidth, m_screenHeight, 
+                                       id);
+
+    newEnt->SetPos(glm::vec3(x, y, 0.0f));
+    m_physicsSystem.AddAABB(newEnt, min, max, vel, mass);
+
+    m_squares.push_back(newEnt);
 }
 
 

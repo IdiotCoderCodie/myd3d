@@ -38,6 +38,22 @@ void PhysicsSystem::AddCircle(Entity* entity, float radius, glm::vec2& velocity,
 	m_circles.push_back(circle);
 }
 
+
+void PhysicsSystem::AddAABB(Entity* entity, glm::vec2& min, glm::vec2& max, glm::vec2& vel, float mass)
+{
+    AABB aabb;
+    aabb.SetParent(entity);
+    aabb.SetMin(min);
+    aabb.SetMax(max);
+    aabb.SetVel(vel.x, vel.y);
+    aabb.SetMass(mass);
+    aabb.SetPos(entity->GetPos().x, entity->GetPos().y);
+    aabb.SetElasticity(1.0f);
+
+    m_aabbs.push_back(aabb);
+}
+
+
 void PhysicsSystem::SimulationLoop(double time)
 {
 	m_dt = time;
@@ -114,6 +130,11 @@ void PhysicsSystem::CalculateObjectPhysics()
 	{
 		circle.CalculatePhysics(m_dt);
 	}
+
+    for(auto& aabb : m_aabbs)
+    {
+        aabb.CalculatePhysics(m_dt);
+    }
 }
 
 
@@ -128,7 +149,21 @@ void PhysicsSystem::DynamicCollisionDetection()
 			m_circles[circle1].CollisionWithCircle(m_circles[circle2], *m_manifold);
 		}
 		checkedNum++;
+
+        for (int aabb = 0;  aabb < m_aabbs.size(); aabb++)
+        {
+            m_aabbs[aabb].CollisionWithCircle(m_circles[circle1], *m_manifold);
+        }
 	}
+
+    // AABBvsAABB
+    for(int aabb1 = 0; aabb1 < m_aabbs.size(); aabb1++)
+    {
+        for (int aabb2 = aabb1 + 1; aabb2 < m_aabbs.size(); aabb2++)
+        {
+            m_aabbs[aabb1].CollisionWithAABB(m_aabbs[aabb2], *m_manifold);
+        }
+    }
 }
 
 
@@ -151,4 +186,9 @@ void PhysicsSystem::UpdateObjectPhysics()
 	{
 		circle.Update();
 	}
+
+    for(auto& aabb : m_aabbs)
+    {
+        aabb.Update();
+    }
 }
