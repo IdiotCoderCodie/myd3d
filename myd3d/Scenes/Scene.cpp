@@ -82,17 +82,25 @@ Entity* Scene::GetEntity(const std::string& entityId)
 
 void Scene::Update(double time)
 {
-    for(auto it = m_Entities.begin(); it != m_Entities.end(); ++it)
+    for (int i = 0; i < m_Entities.size(); i++)
+    {
+        m_Entities[i]->Update(time);
+    }
+    /*for(auto it = m_Entities.begin(); it != m_Entities.end(); ++it)
     {
         (*it)->Update(time);
-    }
+    }*/
 }
 
 
 void Scene::Draw(D3D& d3d)
 {
-    for(auto it = m_Entities.begin(); it != m_Entities.end(); ++it)
+    for(int i = 0; i < m_Entities.size(); i++)
+    {
+        m_Entities[i]->Draw(d3d);
+    }
+    /*for(auto it = m_Entities.begin(); it != m_Entities.end(); ++it)
     {
         (*it)->Draw(d3d);
-    }
+    }*/
 }

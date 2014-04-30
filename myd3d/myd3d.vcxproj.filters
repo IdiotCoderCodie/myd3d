@@ -189,6 +189,9 @@
     <ClCompile Include="Entities\PhysCircleEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Entities\PhysAABBEntity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D.h">
@@ -375,6 +378,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Entities\PhysCircleEntity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\PhysAABBEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

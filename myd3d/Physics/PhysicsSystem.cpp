@@ -2,7 +2,6 @@
 
 
 PhysicsSystem::PhysicsSystem(void)
-    : m_numCircles(0)
 {
 	m_manifold = new ContactManifold();
 }
@@ -42,19 +41,21 @@ Circle& PhysicsSystem::AddCircle(Entity* entity, float radius, const glm::vec2& 
 }
 
 
-void PhysicsSystem::AddAABB(Entity* entity, const glm::vec2& min, const glm::vec2& max, 
+AABB& PhysicsSystem::AddAABB(Entity* entity, const glm::vec2& min, const glm::vec2& max, 
                             const glm::vec2& vel, float mass)
 {
-    AABB aabb;
-    aabb.SetParent(entity);
-    aabb.SetMin(min);
-    aabb.SetMax(max);
-    aabb.SetVel(vel.x, vel.y);
-    aabb.SetMass(mass);
-    aabb.SetPos(entity->GetPos().x, entity->GetPos().y);
-    aabb.SetElasticity(0.4f);
+    AABB* aabb = new AABB();
+    aabb->SetParent(entity);
+    aabb->SetMin(min);
+    aabb->SetMax(max);
+    aabb->SetVel(vel.x, vel.y);
+    aabb->SetMass(mass);
+    aabb->SetPos(entity->GetPos().x, entity->GetPos().y);
+    aabb->SetElasticity(0.4f);
 
     m_aabbs.push_back(aabb);
+
+    return *aabb;
 }
 
 
@@ -130,14 +131,14 @@ bool PhysicsSystem::StaticSphereCollisionDetection(Circle& circle1, Circle& circ
 
 void PhysicsSystem::CalculateObjectPhysics()
 {
-	for (auto circle : m_circles)
+	for (auto& circle : m_circles)
 	{
 		circle->CalculatePhysics(m_dt);
 	}
 
     for(auto& aabb : m_aabbs)
     {
-        aabb.CalculatePhysics(m_dt);
+        aabb->CalculatePhysics(m_dt);
     }
 }
 
@@ -156,7 +157,7 @@ void PhysicsSystem::DynamicCollisionDetection()
 
         for (int aabb = 0;  aabb < m_aabbs.size(); aabb++)
         {
-            m_aabbs[aabb].CollisionWithCircle(*m_circles[circle1], *m_manifold);
+            m_aabbs[aabb]->CollisionWithCircle(*m_circles[circle1], *m_manifold);
         }
 	}
 
@@ -165,7 +166,7 @@ void PhysicsSystem::DynamicCollisionDetection()
     {
         for (int aabb2 = aabb1 + 1; aabb2 < m_aabbs.size(); aabb2++)
         {
-            m_aabbs[aabb1].CollisionWithAABB(m_aabbs[aabb2], *m_manifold);
+            m_aabbs[aabb1]->CollisionWithAABB(*m_aabbs[aabb2], *m_manifold);
         }
     }
 }
@@ -186,13 +187,13 @@ void PhysicsSystem::DynamicCollisionResponse()
 
 void PhysicsSystem::UpdateObjectPhysics()
 {
-	for (auto circle : m_circles)
+	for (auto& circle : m_circles)
 	{
 		circle->Update();
 	}
 
     for(auto& aabb : m_aabbs)
     {
-        aabb.Update();
+        aabb->Update();
     }
 }

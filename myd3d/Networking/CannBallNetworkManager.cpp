@@ -88,7 +88,7 @@ void CannBallNetworkManager::EstablishPeerConnection(int playerNum)
                                 }
                                 else if(!entityType.compare("SQR"))
                                 {
-                                    // LoadSqare(istream& stream)
+                                    LoadSquare(ssBuffer, entityId);
                                 }                                
                             }
                         }  
@@ -112,6 +112,7 @@ void CannBallNetworkManager::EstablishPeerConnection(int playerNum)
 void CannBallNetworkManager::LoadCircle(istream& in, std::string& id)
 {
     float x, y;
+    float r;
 
     char attr;
     in >> attr;
@@ -121,13 +122,22 @@ void CannBallNetworkManager::LoadCircle(istream& in, std::string& id)
         in >> x >> y;
     }
 
-    m_scene->AddCircle(x, y, 50.0f, id);
+    in >> attr;
+    if(attr == 'R')
+    {
+        in.ignore(1);
+        in >> r;
+    }
+
+    m_scene->AddCircle(x, y, r, id);
 }
 
 
 void CannBallNetworkManager::LoadSquare(istream& in, std::string& id)
 {
-    float x, y;
+     float x, y;
+    float w, h;
+
     char attr;
     in >> attr;
     if(attr == 'X')
@@ -136,7 +146,21 @@ void CannBallNetworkManager::LoadSquare(istream& in, std::string& id)
         in >> x >> y;
     }
 
-    // TODO: Call m_scene->AddSquare(position, radius)
+    in >> attr;
+    if(attr == 'W')
+    {
+        in.ignore(1);
+        in >> w;
+    }
+
+    in >> attr;
+    if(attr == 'H')
+    {
+        in.ignore(1);
+        in >> h;
+    }
+
+    m_scene->AddSquare(x, y, w, h, id);
 }
 
 
@@ -192,8 +216,21 @@ void CannBallNetworkManager::GetPeerUpdates(int playerNum)
             }
             else if(!type.compare("SQR"))
             {
-                // TODO: Square stuff.
-                // Same as circle I think?
+                float x, y;
+                char attr;
+                bufferStream >> attr;
+                if(attr == 'X')
+                { 
+                    // Update position.
+                    bufferStream.ignore(1); // Ignore ":"
+                    bufferStream >> x >> y;
+                    entID = "P" + to_string(m_playerNum) + entID;
+                    Entity* ent = m_scene->GetEntity(entID);
+                    if(ent)
+                    {
+                        ent->SetPos(glm::vec3(x, y, 0.0f));
+                    }
+                }
             }
 
             //bufferStream >> head; // Get next entID, (if there is one...)

@@ -21,6 +21,8 @@ TerrainDestructionOffworldScene::TerrainDestructionOffworldScene(const std::stri
 	m_screenWidth	= d3d.GetScreenWidth();
 	m_screenHeight	= d3d.GetScreenHeight();
 
+    EntityFactory::CreateBmpEntity(*this, d3d, L"jan2.dds", 1000, 1000, m_screenWidth, m_screenHeight, "sqwer");
+
     // Camera.
     EntityFactory::CreateOrthoFpCameraEntity(*this, -m_screenWidth / 2.0f, m_screenWidth / 2.0f,
 		-m_screenHeight / 2.0f, m_screenHeight / 2.0f, "testCam");
@@ -97,6 +99,16 @@ void TerrainDestructionOffworldScene::AddCircle(float x, float y, float radius, 
         EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), L"cement.dds", 
                                        L"circleStencil.dds", radius*2.0f, radius*2.0f, 
                                        m_screenWidth, m_screenHeight, id);
+
+    newEnt->SetPos(glm::vec3(x, y, 0.0f));
+}
+
+
+void TerrainDestructionOffworldScene::AddSquare(float x, float y, float w, float h, std::string& id)
+{
+    Entity* newEnt =
+        EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), L"cement.dds", 
+        w, h, m_screenWidth, m_screenHeight, id);
 
     newEnt->SetPos(glm::vec3(x, y, 0.0f));
 }

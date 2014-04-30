@@ -93,13 +93,17 @@ void TerrainDestructionScene::AddCircle(float x, float y, float radius, glm::vec
 void TerrainDestructionScene::AddAABB(float x, float y, glm::vec2& min, glm::vec2& max, glm::vec2& vel, 
                                       float mass, std::string& id)
 {
-    Entity* newEnt = 
+    PhysAABBEntity* newEnt = new PhysAABBEntity(*this, id, m_physicsSystem, max.x - min.x, max.y - min.y, 
+                                                glm::vec2(x, y), vel, mass, 0.4f);
+
+    this->AddEntity(newEnt);
+    /*Entity* newEnt = 
         EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), L"cement.dds",
                                        max.x - min.x, max.y - min.y, m_screenWidth, m_screenHeight, 
                                        id);
 
     newEnt->SetPos(glm::vec3(x, y, 0.0f));
-    m_physicsSystem.AddAABB(newEnt, min, max, vel, mass);
+    m_physicsSystem.AddAABB(newEnt, min, max, vel, mass);*/
 
     m_aabbs.push_back(newEnt);
 }

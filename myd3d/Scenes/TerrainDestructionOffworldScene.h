@@ -20,7 +20,7 @@ public:
     std::vector<Entity*>& GetLines()   { return m_lines; }
 
     void AddCircle(float x, float y, float radius, std::string& id);
-    void AddSquare(float x, float y, float dimension, std::string& id);
+    void AddSquare(float x, float y, float w, float h, std::string& id);
     
 private:
     int                     m_screenWidth;

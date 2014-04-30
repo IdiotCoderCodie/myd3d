@@ -247,6 +247,12 @@ void NetworkManager::SendUpdateData()
         // TODO: get rotation vectors.
     }
 
+    for(auto ent : m_scene->GetAABBs())
+    {
+        ssBuffer << "UPD " << ent->GetID() << " "
+                 << "SQR " << "X: " << ent->GetPos().x << " " << ent->GetPos().y << endl;
+    }
+
     ssBuffer.seekp(0, ios::end);
     int bufSize = ssBuffer.tellp();
     int timeo = 1000;
@@ -274,7 +280,6 @@ void NetworkManager::SendInitData(SocketStream& peer)
         ssBuffer << "ENT " << ent->GetID() << " "
                  << "CIRC " << "X: " << ent->GetPos().x << " " << ent->GetPos().y 
                  << "R: " << ent->GetRadius() << endl;
-        // TODO: Get radius...
         // TODO: Get rotation vectors...etc...
     }
 
@@ -283,7 +288,8 @@ void NetworkManager::SendInitData(SocketStream& peer)
     {
         ssBuffer << "ENT " << ent->GetID() << " "
                  << "SQR " << "X: " << ent->GetPos().x << " " << ent->GetPos().y 
-                 
+                 << "W: " << ent->GetMax().x - ent->GetMin().x  << " "
+                 << "H: " << ent->GetMax().y - ent->GetMin().y                
                  << endl;
 
         // TODO: Create PhysSquareEnt, like PhysCircleEnt to get all needed data.

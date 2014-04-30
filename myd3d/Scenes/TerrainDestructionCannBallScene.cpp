@@ -83,3 +83,12 @@ void TerrainDestructionCannBallScene::AddCircle(float x, float y, float radius, 
 
     newEnt->SetPos(glm::vec3(x, y, 0.0f));
 }
+
+void TerrainDestructionCannBallScene::AddSquare(float x, float y, float w, float h, std::string& id)
+{
+    Entity* newEnt =
+        EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), L"cement.dds", 
+        w, h, m_screenWidth, m_screenHeight, id);
+
+    newEnt->SetPos(glm::vec3(x, y, 0.0f));
+}

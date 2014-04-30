@@ -4,6 +4,7 @@
 #include "../Physics/PhysicsSystem.h"
 #include "../Networking/NetworkManager.h"
 #include "../Entities/PhysCircleEntity.h"
+#include "../Entities/PhysAABBEntity.h"
 #include "WSA.h"
 
 class TerrainDestructionScene : public Scene
@@ -21,7 +22,7 @@ public:
                  float mass, std::string& id);
 
     std::vector<PhysCircleEntity*>& GetCircles() { return m_circles; }
-    std::vector<Entity*>& GetAABBs() { return m_aabbs; }
+    std::vector<PhysAABBEntity*>& GetAABBs() { return m_aabbs; }
     std::vector<Entity*>& GetLines()   { return m_lines; }
 
     
@@ -29,7 +30,7 @@ private:
     int                  m_screenWidth;
     int                  m_screenHeight;
     std::vector<PhysCircleEntity*> m_circles;
-    std::vector<Entity*> m_aabbs;
+    std::vector<PhysAABBEntity*> m_aabbs;
     std::vector<Entity*> m_lines;
 
 	PhysicsSystem   m_physicsSystem;

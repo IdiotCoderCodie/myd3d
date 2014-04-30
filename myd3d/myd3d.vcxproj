@@ -20,7 +20,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -88,6 +88,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Entities\PhysAABBEntity.cpp" />
     <ClCompile Include="Entities\PhysCircleEntity.cpp" />
     <ClCompile Include="Physics\RigidBody\AABB.cpp" />
     <ClCompile Include="Components\Visual\VisualBezierPatchComponent.cpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="Thread\Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Entities\PhysAABBEntity.h" />
     <ClInclude Include="Entities\PhysCircleEntity.h" />
     <ClInclude Include="Physics\RigidBody\AABB.h" />
     <ClInclude Include="Components\Visual\VisualBezierPatchComponent.h" />

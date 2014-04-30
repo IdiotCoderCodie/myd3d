@@ -15,7 +15,7 @@ public:
     void Update(double time);
 
 	Circle& AddCircle(Entity* entity, float radius, const glm::vec2& velocity, float mass);
-    void AddAABB(Entity* entity, const glm::vec2& min, const glm::vec2& max, 
+    AABB& AddAABB(Entity* entity, const glm::vec2& min, const glm::vec2& max, 
                  const glm::vec2& velocity, float mass);
 
 private:
@@ -33,8 +33,7 @@ private:
 	ContactManifold* m_manifold;
 	//std::vector<Circle> m_circles;
     std::vector<Circle*> m_circles;
-    //Circle m_circles[100];
-    int m_numCircles;
-    std::vector<AABB>   m_aabbs;
+    std::vector<AABB*>   m_aabbs;
+    
 };
 
