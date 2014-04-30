@@ -98,6 +98,7 @@ void OffworldNetworkManager::EstablishPeerConnection()
 void OffworldNetworkManager::LoadCircle(istream& in, std::string& id)
 {
     float x, y;
+    float r;
 
     char attr;
     in >> attr;
@@ -107,7 +108,14 @@ void OffworldNetworkManager::LoadCircle(istream& in, std::string& id)
         in >> x >> y;
     }
 
-    m_scene->AddCircle(x, y, 50.0f, id);
+    in >> attr;
+    if(attr == 'R')
+    {
+        in.ignore(1);
+        in >> r;
+    }
+
+    m_scene->AddCircle(x, y, r, id);
     
     // TODO: Call m_scene->AddCircle(position, radius)
 }

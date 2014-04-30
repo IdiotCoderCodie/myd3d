@@ -19,6 +19,11 @@ public:
     float GetRadius()       { return m_circle->GetRadius(); }
     float GetMass()         { return m_circle->GetMass(); }
 
+    void SetElasticity(float elasticity)    { m_circle->SetElasticity(elasticity); }
+    void SetVelocity(const glm::vec2& vel)  { m_circle->SetVel(vel); }
+    void SetRadius(float radius)            { m_circle->SetRadius(radius); }
+    void SetMass(float mass)                { m_circle->SetMass(mass); }
+
 private:
     PhysicsSystem& m_physicsSystem;
     VisualBitmapComponent* m_bmp; 

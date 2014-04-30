@@ -31,7 +31,10 @@ private:
 	float m_dt;
     Scene* m_parentScene;
 	ContactManifold* m_manifold;
-	std::vector<Circle> m_circles;
+	//std::vector<Circle> m_circles;
+    std::vector<Circle*> m_circles;
+    //Circle m_circles[100];
+    int m_numCircles;
     std::vector<AABB>   m_aabbs;
 };
 

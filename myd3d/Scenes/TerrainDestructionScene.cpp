@@ -22,7 +22,9 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 
 
     AddCircle(100.0f, 220.0f, 10.0f, glm::vec2(0.0f, -50.0f), 1.0f, std::string("circ1"));
-    AddCircle(-100.0f, 50.0f, 10.0f, glm::vec2(0.0f, 0.0f), 1.0f, std::string("circ2"));
+    AddCircle(0.0f, -50.0f, 10.0f, glm::vec2(0.0f, 0.0f), 1.0f, std::string("circ2"));
+    AddCircle(0.0f, -50.0f, 20.0f, glm::vec2(0.0f, 0.0f), 1.0f, std::string("circ3"));
+
     AddAABB(0.0f, -100.0f, glm::vec2(-20.0f, -20.0f), glm::vec2(20.0f, 20.0f), glm::vec2(0.0f, 0.0f), 1.0f, 
             std::string("square1"));
     AddAABB(20.0f, 100.0f, glm::vec2(-20.0f, -20.0f), glm::vec2(20.0f, 20.0f), glm::vec2(0.0f, 0.0f), 1.0f,
@@ -84,7 +86,7 @@ void TerrainDestructionScene::AddCircle(float x, float y, float radius, glm::vec
 
     m_physicsSystem.AddCircle(newEnt, radius, vel, mass);*/
 
-    m_circles.push_back(&(*newEnt));
+    m_circles.push_back(newEnt);
 }
 
 

@@ -2,6 +2,7 @@
 
 
 PhysicsSystem::PhysicsSystem(void)
+    : m_numCircles(0)
 {
 	m_manifold = new ContactManifold();
 }
@@ -9,7 +10,7 @@ PhysicsSystem::PhysicsSystem(void)
 
 PhysicsSystem::~PhysicsSystem(void)
 {
-	m_circles.clear();
+	/*m_circles.clear();*/
 
 	delete m_manifold;
 	m_manifold = 0;
@@ -27,17 +28,17 @@ void PhysicsSystem::Update(double time)
 
 Circle& PhysicsSystem::AddCircle(Entity* entity, float radius, const glm::vec2& velocity, float mass)
 {
-    Circle circle;
-	circle.SetParent(entity);
-	circle.SetRadius(radius);
-	circle.SetVel(velocity.x, velocity.y);
-	circle.SetMass(mass);
-	circle.SetPos(entity->GetPos().x, entity->GetPos().y);
-    circle.SetElasticity(0.4f);
+    Circle* circle = new Circle();
+	circle->SetParent(entity);
+	circle->SetRadius(radius);
+	circle->SetVel(velocity.x, velocity.y);
+	circle->SetMass(mass);
+	circle->SetPos(entity->GetPos().x, entity->GetPos().y);
+    circle->SetElasticity(0.4f);
 
 	m_circles.push_back(circle);
 
-    return m_circles[m_circles.size() - 1];
+    return *circle;
 }
 
 
@@ -94,7 +95,7 @@ void PhysicsSystem::StaticCollisionDetection()
 		{
 			for (int circle2 = checkedNum + 1; circle2 < m_circles.size(); circle2++)
 			{
-				loop |= StaticSphereCollisionDetection(m_circles[circle1], m_circles[circle2]);
+				loop |= StaticSphereCollisionDetection(*m_circles[circle1], *m_circles[circle2]);
 			}
 			checkedNum++;
 		}
@@ -129,9 +130,9 @@ bool PhysicsSystem::StaticSphereCollisionDetection(Circle& circle1, Circle& circ
 
 void PhysicsSystem::CalculateObjectPhysics()
 {
-	for (auto& circle : m_circles)
+	for (auto circle : m_circles)
 	{
-		circle.CalculatePhysics(m_dt);
+		circle->CalculatePhysics(m_dt);
 	}
 
     for(auto& aabb : m_aabbs)
@@ -149,13 +150,13 @@ void PhysicsSystem::DynamicCollisionDetection()
 	{
 		for (int circle2 = circle1 + 1; circle2 < m_circles.size(); circle2++)
 		{
-			m_circles[circle1].CollisionWithCircle(m_circles[circle2], *m_manifold);
+			(*m_circles[circle1]).CollisionWithCircle(*m_circles[circle2], *m_manifold);
 		}
 		checkedNum++;
 
         for (int aabb = 0;  aabb < m_aabbs.size(); aabb++)
         {
-            m_aabbs[aabb].CollisionWithCircle(m_circles[circle1], *m_manifold);
+            m_aabbs[aabb].CollisionWithCircle(*m_circles[circle1], *m_manifold);
         }
 	}
 
@@ -185,9 +186,9 @@ void PhysicsSystem::DynamicCollisionResponse()
 
 void PhysicsSystem::UpdateObjectPhysics()
 {
-	for (auto& circle : m_circles)
+	for (auto circle : m_circles)
 	{
-		circle.Update();
+		circle->Update();
 	}
 
     for(auto& aabb : m_aabbs)

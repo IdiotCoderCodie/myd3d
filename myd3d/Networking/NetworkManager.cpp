@@ -272,7 +272,8 @@ void NetworkManager::SendInitData(SocketStream& peer)
     for(auto ent : circleEnts)
     {
         ssBuffer << "ENT " << ent->GetID() << " "
-                 << "CIRC " << "X: " << ent->GetPos().x << " " << ent->GetPos().y << endl;
+                 << "CIRC " << "X: " << ent->GetPos().x << " " << ent->GetPos().y 
+                 << "R: " << ent->GetRadius() << endl;
         // TODO: Get radius...
         // TODO: Get rotation vectors...etc...
     }
@@ -281,7 +282,9 @@ void NetworkManager::SendInitData(SocketStream& peer)
     for (auto ent : squareEnts)
     {
         ssBuffer << "ENT " << ent->GetID() << " "
-                 << "SQR " << "X: " << ent->GetPos().x << " " << ent->GetPos().y << endl;
+                 << "SQR " << "X: " << ent->GetPos().x << " " << ent->GetPos().y 
+                 
+                 << endl;
 
         // TODO: Create PhysSquareEnt, like PhysCircleEnt to get all needed data.
     }
