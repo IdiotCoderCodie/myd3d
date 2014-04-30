@@ -18,6 +18,10 @@ public:
     VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView* srcTexture, 
                            ID3D11ShaderResourceView* stencilTexture, int width, int height, 
                            int screenWidth, int screenHeight);
+    VisualBitmapComponent(D3D& d3d, WCHAR* texName, int width, int height,
+                          int screenWidth, int screenHeight);
+    VisualBitmapComponent(D3D& d3d, WCHAR* srcTex, WCHAR* stencilTex, int width, int height,
+                          int screenWidth, int screenHeight);
 
     virtual ~VisualBitmapComponent(void);
 

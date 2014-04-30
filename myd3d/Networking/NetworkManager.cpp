@@ -267,7 +267,7 @@ void NetworkManager::SendInitData(SocketStream& peer)
     std::ostringstream ssBuffer;
 
     ssBuffer << "INIT" << endl;
-    auto circleEnts = m_scene->GetCircles();
+    auto& circleEnts = m_scene->GetCircles();
    
     for(auto ent : circleEnts)
     {
@@ -275,6 +275,13 @@ void NetworkManager::SendInitData(SocketStream& peer)
                  << "CIRC " << "X: " << ent->GetPos().x << " " << ent->GetPos().y << endl;
         // TODO: Get radius...
         // TODO: Get rotation vectors...
+    }
+
+    auto& squareEnts = m_scene->GetAABBs();
+    for (auto ent : squareEnts)
+    {
+        ssBuffer << "ENT " << ent->GetID() << " "
+                 << "SQR " << "X: " << ent->GetPos().x << " " << ent->GetPos().y << endl;
     }
 
     ssBuffer << "ENDINIT" << endl;

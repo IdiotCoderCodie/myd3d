@@ -20,7 +20,7 @@ public:
                  float mass, std::string& id);
 
     std::vector<Entity*>& GetCircles() { return m_circles; }
-    std::vector<Entity*>& GetSquares() { return m_squares; }
+    std::vector<Entity*>& GetAABBs() { return m_aabbs; }
     std::vector<Entity*>& GetLines()   { return m_lines; }
 
     
@@ -28,7 +28,7 @@ private:
     int                  m_screenWidth;
     int                  m_screenHeight;
     std::vector<Entity*> m_circles;
-    std::vector<Entity*> m_squares;
+    std::vector<Entity*> m_aabbs;
     std::vector<Entity*> m_lines;
 
 	PhysicsSystem   m_physicsSystem;

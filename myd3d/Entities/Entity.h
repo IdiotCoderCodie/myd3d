@@ -21,16 +21,16 @@ public:
     Entity(Scene& parent, const entityId_t& id, Frame& transform);
     Entity(Scene& parent, const entityId_t& id, const glm::vec3& pos, const glm::vec3& forward, 
         const glm::vec3& up);
-    ~Entity();
+    virtual ~Entity();
 private:
     Entity& operator=(const Entity& other);
 public:
 
-    const Scene& GetParent() const { return m_Parent; }
-    Scene& GetParent() { return m_Parent; }
+    const Scene& GetParent() const  { return m_Parent; }
+    Scene& GetParent()              { return m_Parent; }
 
     const entityId_t GetID() const              { return m_id; }
-    void SetID(const entityId_t& id)             { m_id = id; }
+    void SetID(const entityId_t& id)            { m_id = id; }
 
     Component* GetComponent(const componentId_t& familyId) ;
     Component* GetComponent(const componentId_t& familyId, const componentId_t& componentId);

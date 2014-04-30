@@ -1,5 +1,6 @@
 #include "Bitmap.h"
 #include "../../d3d_safe_release.h"
+#include "TextureManager.h"
 
 Bitmap::Bitmap(D3D& d3d, const Texture& texture, int width, int height, int screenWidth, int screenHeight)
     :   m_texture(texture.GetTexture()),
@@ -24,6 +25,28 @@ Bitmap::Bitmap(D3D& d3d, ID3D11ShaderResourceView* texture, int width, int heigh
 	InitBuffers(d3d);
 }
 
+Bitmap::Bitmap(D3D& d3d, WCHAR* texture, int width, int height, int screenWidth,
+    int screenHeight)
+    : m_texture(),
+    m_vertexBuffer(0), m_indexBuffer(0),
+    m_vertexCount(0), m_indexCount(0),
+    m_screenWidth(screenWidth), m_screenHeight(screenHeight),
+    m_bitmapWidth(width), m_bitmapHeight(height)
+{
+    std::wstring ws(texture);
+    std::string sTexName(ws.begin(), ws.end());
+
+    Texture* tex = G_TextureManager().GetTexture(sTexName);
+    if (!tex)
+    {
+        tex = G_TextureManager().LoadTexture(d3d, texture, sTexName);
+    }
+
+    m_texture = tex->GetTexture();
+
+    Init(&d3d.GetDevice());
+    InitBuffers(d3d);
+}
 
 Bitmap::~Bitmap(void)
 {

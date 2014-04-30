@@ -4,6 +4,7 @@
 #include "../../Scenes/SceneManager.h"
 #include "../../glm/gtc/matrix_transform.hpp"
 #include "../../Assets/Shaders/ShaderResources/constant_buffers.h"
+#include "../../Assets/Textures/TextureManager.h"
 #include "../Camera/CameraComponent.h"
 
 VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView* srcTexture, 
@@ -37,6 +38,35 @@ VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, ID3D11ShaderResourceView*
     }
 
     SetShader(G_ShaderManager().GetShader("Bitmap"));
+}
+
+
+VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, WCHAR* texName, int width, int height,
+    int screenWidth, int screenHeight)
+    : VisualComponent(),
+    m_bitmap(d3d, texName, width, height, screenWidth, screenHeight),
+    m_stencilTexture(0),
+    m_materialColor(1.0f, 1.0f, 1.0f)
+{
+}
+
+VisualBitmapComponent::VisualBitmapComponent(D3D& d3d, WCHAR*srcTex, WCHAR* stencilTex, int width, int height,
+    int screenWidth, int screenHeight)
+    : VisualComponent(),
+    m_bitmap(d3d, srcTex, width, height, screenWidth, screenHeight),
+    m_stencilTexture(0),
+    m_materialColor(1.0f, 1.0f, 1.0f)
+{
+    std::wstring ws(stencilTex);
+    std::string sTexName(ws.begin(), ws.end());
+
+    Texture* tex = G_TextureManager().GetTexture(sTexName);
+    if (!tex)
+    {
+        tex = G_TextureManager().LoadTexture(d3d, stencilTex, sTexName);
+    }
+
+    m_stencilTexture = tex->GetTexture();
 }
 
 VisualBitmapComponent::~VisualBitmapComponent(void)

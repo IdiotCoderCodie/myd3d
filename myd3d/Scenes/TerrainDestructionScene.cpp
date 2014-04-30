@@ -31,6 +31,7 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
     AddAABB(150.0f, 0.0f, glm::vec2(-20.0f, -20.0f), glm::vec2(20.0f, 20.0f), glm::vec2(0.0f, 0.0f), 1.0f,
             std::string("square3"));
 
+    // Walls.
     AddAABB(-320.0f, 0.0f, glm::vec2(-10.0f, -240.0f), glm::vec2(10.0f, 240.0f), glm::vec2(0.0f), 0.0f,
             std::string("leftWall"));
     
@@ -40,32 +41,6 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
     AddAABB(0.0f, -240.0f, glm::vec2(-310.0f, -10.0f), glm::vec2(310.0f, 10.0f), glm::vec2(0.0f), 0.0f,
             std::string("floorWall"));
 
-
-
-
-	/*Entity* noPhysSphere = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
-		"noPhysSphere");*/
-
-   /* m_circles.push_back(&(*noPhysSphere));*/
-
-	/*Entity* testSphere = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
-		"sphere1");
-	testSphere->MoveUp(200.0f);
-    testSphere->MoveRight(40.0f);
-
-	m_physicsSystem.AddCircle(testSphere, 50.0f, glm::vec2(0.0f, -50.0f), 1.0f);
-
-    m_circles.push_back(&(*testSphere));
-
-    testSphere = EntityFactory::CreateBmpEntity(*this, d3d, L"cement.dds", L"circleStencil.dds", 100, 100, m_screenWidth, m_screenHeight,
-		"sphere2");
-
-    testSphere->MoveRight(-50.0f);
-    testSphere->MoveUp(50.0f);
-
-	m_physicsSystem.AddCircle(testSphere, 50.0f, glm::vec2(0.0f, 0.0f), 0.0f);
-
-    m_circles.push_back(&(*testSphere));*/
 
 	EntityFactory::CreateOrthoFpCameraEntity(*this, -m_screenWidth / 2.0f, m_screenWidth / 2.0f,
 		-m_screenHeight / 2.0f, m_screenHeight / 2.0f, "testCam");
@@ -118,7 +93,7 @@ void TerrainDestructionScene::AddAABB(float x, float y, glm::vec2& min, glm::vec
     newEnt->SetPos(glm::vec3(x, y, 0.0f));
     m_physicsSystem.AddAABB(newEnt, min, max, vel, mass);
 
-    m_squares.push_back(newEnt);
+    m_aabbs.push_back(newEnt);
 }
 
 

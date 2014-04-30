@@ -2,6 +2,7 @@
 #include "../../glm/glm.hpp"
 #include "../../D3D.h"
 #include "Texture.h"
+#include <string>
 
 namespace bitmap
 {
@@ -24,6 +25,8 @@ public:
     Bitmap(D3D& d3d, const Texture& texture, int height, int width, int screenWidth, int screenHeight);
     Bitmap(D3D& d3d, ID3D11ShaderResourceView* texture, int width, int height, int screenWidth,
            int screenHeight);
+    Bitmap(D3D& d3d, WCHAR* texture, int width, int height, int screenWidth,
+        int screenHeight);
     ~Bitmap(void);
 
     ID3D11ShaderResourceView* GetTextureShaderResourceView() const       { return m_texture; }
