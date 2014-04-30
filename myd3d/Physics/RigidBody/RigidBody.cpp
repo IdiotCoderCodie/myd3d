@@ -9,8 +9,8 @@ RigidBody::RigidBody(void)
     m_velocity(0.0f),
     m_newVelocity(0.0f),
     m_force(0.0f),
-    m_staticFriction(0.1f),
-    m_dynamicFriction(0.05f),
+    m_staticFriction(0.05f),
+    m_dynamicFriction(0.02f),
     m_parentEntity(0)
 {
 }

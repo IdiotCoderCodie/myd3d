@@ -201,16 +201,16 @@ void AABB::CollisionResponse(ManifoldPoint& point)
 
      // Solve friction.
     // Get new relative velocity.
-    vec2 rvT = B.GetVel() - A.GetVel();
+    vec2 rvT = B.GetNewVel() - A.GetNewVel();
 
     // solve for tangent vec.
-    vec2 tangent = rvT - dot(rv, point.contactNormal) * point.contactNormal;
+    vec2 tangent = rvT - dot(rvT, point.contactNormal) * point.contactNormal;
     if(glm::length2(tangent) > 0.01)
     {
         tangent = glm::normalize(tangent);
 
         // Solve for magnitude.
-        float jt = -dot(rv, tangent);
+        float jt = -dot(rvT, tangent);
         jt = jt / (A.GetInvMass() + B.GetInvMass());
 
         // Get friction component. of Ff = uFn
@@ -232,8 +232,8 @@ void AABB::CollisionResponse(ManifoldPoint& point)
         B.SetNewVel( B.GetNewVel() + B.GetInvMass() * frictionImpulse);
     }
     // Positional Correction.
-    const float percent = 0.2;
-    const float slop = 0.1f;
+    const float percent = 0.4;
+    const float slop = 0.05f;
 
     glm::vec2 correction = glm::max(point.penetration - slop, 0.0f) 
                             / (A.GetInvMass() + B.GetInvMass()) * percent * point.contactNormal;

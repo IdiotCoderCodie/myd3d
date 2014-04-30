@@ -7,11 +7,14 @@
 #include <io.h>
 #include <fcntl.h>
 
+#include <time.h>
+
 unsigned int exeCode = 0;
 using namespace std;
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE , PSTR, int)
 {
+    srand(time(NULL));
     // Create console for input.
     AllocConsole();
 

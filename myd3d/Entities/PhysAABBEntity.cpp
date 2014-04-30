@@ -18,7 +18,7 @@ PhysAABBEntity::PhysAABBEntity(Scene& scene, const entityId_t& id, PhysicsSystem
                                float mass, float elasticity)
      : Entity(scene, id),
      m_physicsSystem(physicsSystem),
-     m_bmp(new VisualBitmapComponent(scene.GetParent().GetD3DInstance(), L"cement.dds", width, 
+     m_bmp(new VisualBitmapComponent(scene.GetParent().GetD3DInstance(), L"tim.dds", width, 
                                      height, 0, 0)),
      m_aabb(0)
 {
