@@ -52,6 +52,8 @@ public:
     void SetNewVel(glm::vec2& vel)      { m_newVelocity = vel; }
     void SetMass(float mass)            { m_mass = mass; }
     void SetElasticity(float elasticity){ m_elasticity = elasticity; }
+    void SetStaticFriction(float fric)  { m_staticFriction = fric; }
+    void SetDynamicFriction(float fric) { m_dynamicFriction = fric; }
 
     glm::vec2 GetPos() const            { return m_position; }
     glm::vec2 GetNewPos() const         { return m_newPosition; }
@@ -60,6 +62,8 @@ public:
     float GetMass() const               { return m_mass; }
     float GetInvMass() const            { return (m_mass == 0.0f ? 0.0f : 1.0f / m_mass); }
     float GetElasticity() const         { return m_elasticity; }
+    float GetStaticFriction() const     { return m_staticFriction; }
+    float GetDynamicFriction() const    { return m_dynamicFriction; }
 
     void ResetPos()                     { m_newPosition = m_position; }
 
@@ -80,6 +84,8 @@ private:
     glm::vec2   m_velocity;
     glm::vec2   m_newVelocity;
     glm::vec2   m_force;
+    float       m_staticFriction;
+    float       m_dynamicFriction;
     int         m_objectID;
 	Entity*     m_parentEntity;
 

@@ -10,7 +10,7 @@ PhysAABBEntity::PhysAABBEntity(Scene& scene, const entityId_t& id, PhysicsSystem
 {
     this->SetComponent(m_bmp);
     m_aabb = &physicsSystem.AddAABB(this, glm::vec2(-20.0f / 2.0f, -20.0f / 2.0f), 
-        glm::vec2(20.0f / 2.0f, 20.0f / 2.0f), glm::vec2(0.0f), 1.0f);
+        glm::vec2(20.0f / 2.0f, 20.0f / 2.0f), glm::vec2(0.0f), 1.0f, 1.0f);
 }
 
 PhysAABBEntity::PhysAABBEntity(Scene& scene, const entityId_t& id, PhysicsSystem& physicsSystem,
@@ -25,7 +25,7 @@ PhysAABBEntity::PhysAABBEntity(Scene& scene, const entityId_t& id, PhysicsSystem
     this->SetComponent(m_bmp);
     this->SetPos(glm::vec3(pos.x, pos.y, 0.0f));
     m_aabb = &physicsSystem.AddAABB(this, glm::vec2(-width / 2.0f, -height / 2.0f), 
-        glm::vec2(width / 2.0f, height / 2.0f), glm::vec2(0.0f), mass);
+        glm::vec2(width / 2.0f, height / 2.0f), vel, mass, elasticity);
 }
 
 

@@ -21,27 +21,27 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
     Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, L"jan2.dds", 1000, 1000, m_screenWidth, m_screenHeight, "sqwer");
 
 
-    AddCircle(100.0f, 220.0f, 10.0f, glm::vec2(0.0f, -50.0f), 1.0f, std::string("circ1"));
-    AddCircle(0.0f, -50.0f, 10.0f, glm::vec2(0.0f, 0.0f), 1.0f, std::string("circ2"));
-    AddCircle(0.0f, -50.0f, 20.0f, glm::vec2(0.0f, 0.0f), 1.0f, std::string("circ3"));
+    AddCircle(100.0f, 220.0f, 10.0f, glm::vec2(0.0f, -50.0f), 1.0f, 0.7f, std::string("circ1"));
+    AddCircle(0.0f, -50.0f, 10.0f, glm::vec2(-300.0f, 400.0f), 1.0f, 0.7f, std::string("circ2"));
+    AddCircle(250.0f, -50.0f, 20.0f, glm::vec2(200.0f, 50.0f), 1.0f, 0.7f, std::string("circ3"));
 
-    AddAABB(0.0f, -100.0f, glm::vec2(-20.0f, -20.0f), glm::vec2(20.0f, 20.0f), glm::vec2(0.0f, 0.0f), 1.0f, 
-            std::string("square1"));
-    AddAABB(20.0f, 100.0f, glm::vec2(-20.0f, -20.0f), glm::vec2(20.0f, 20.0f), glm::vec2(0.0f, 0.0f), 1.0f,
-            std::string("square2"));
+    AddAABB(0.0f, -100.0f, glm::vec2(-30.0f, -30.0f), glm::vec2(30.0f, 30.0f), 
+            glm::vec2(100.0f, 0.0f), 1.0f, 0.5f, std::string("square1"));
+    AddAABB(20.0f, 100.0f, glm::vec2(-20.0f, -20.0f), glm::vec2(20.0f, 20.0f), 
+            glm::vec2(0.0f, 0.0f), 1.0f, 0.5f, std::string("square2"));
 
-    AddAABB(150.0f, 0.0f, glm::vec2(-20.0f, -20.0f), glm::vec2(20.0f, 20.0f), glm::vec2(0.0f, 0.0f), 1.0f,
-            std::string("square3"));
+    AddAABB(150.0f, 0.0f, glm::vec2(-20.0f, -20.0f), glm::vec2(20.0f, 20.0f), 
+            glm::vec2(0.0f, 0.0f), 1.0f, 0.5f, std::string("square3"));
 
     // Walls.
-    AddAABB(-320.0f, 0.0f, glm::vec2(-10.0f, -240.0f), glm::vec2(10.0f, 240.0f), glm::vec2(0.0f), 0.0f,
-            std::string("leftWall"));
+    AddAABB(-320.0f, 0.0f, glm::vec2(-10.0f, -240.0f), glm::vec2(10.0f, 240.0f), glm::vec2(0.0f), 
+            0.0f, 0.8f, std::string("leftWall"));
     
-    AddAABB(+320.0f, 0.0f, glm::vec2(-10.0f, -240.0f), glm::vec2(10.0f, 240.0f), glm::vec2(0.0f), 0.0f,
-            std::string("rightWall"));
+    AddAABB(+320.0f, 0.0f, glm::vec2(-10.0f, -240.0f), glm::vec2(10.0f, 240.0f), glm::vec2(0.0f), 
+            0.0f, 0.8f, std::string("rightWall"));
 
-    AddAABB(0.0f, -240.0f, glm::vec2(-310.0f, -10.0f), glm::vec2(310.0f, 10.0f), glm::vec2(0.0f), 0.0f,
-            std::string("floorWall"));
+    AddAABB(0.0f, -240.0f, glm::vec2(-310.0f, -10.0f), glm::vec2(310.0f, 10.0f), glm::vec2(0.0f), 
+            0.0f, 0.8f, std::string("floorWall"));
 
 
 	EntityFactory::CreateOrthoFpCameraEntity(*this, -m_screenWidth / 2.0f, m_screenWidth / 2.0f,
@@ -69,10 +69,11 @@ TerrainDestructionScene::~TerrainDestructionScene(void)
 }
 
 
-void TerrainDestructionScene::AddCircle(float x, float y, float radius, glm::vec2& vel, float mass, std::string& id)
+void TerrainDestructionScene::AddCircle(float x, float y, float radius, glm::vec2& vel, 
+                                        float mass, float elast, std::string& id)
 {
     PhysCircleEntity* newEnt =
-        new PhysCircleEntity(*this, id, m_physicsSystem, radius, glm::vec2(x, y), vel, mass, 0.4f);
+        new PhysCircleEntity(*this, id, m_physicsSystem, radius, glm::vec2(x, y), vel, mass, elast);
 
     this->AddEntity(newEnt);
 /*
@@ -91,10 +92,10 @@ void TerrainDestructionScene::AddCircle(float x, float y, float radius, glm::vec
 
 
 void TerrainDestructionScene::AddAABB(float x, float y, glm::vec2& min, glm::vec2& max, glm::vec2& vel, 
-                                      float mass, std::string& id)
+                                      float mass, float elast, std::string& id)
 {
     PhysAABBEntity* newEnt = new PhysAABBEntity(*this, id, m_physicsSystem, max.x - min.x, max.y - min.y, 
-                                                glm::vec2(x, y), vel, mass, 0.4f);
+                                                glm::vec2(x, y), vel, mass, elast);
 
     this->AddEntity(newEnt);
     /*Entity* newEnt = 

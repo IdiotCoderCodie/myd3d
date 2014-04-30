@@ -11,7 +11,7 @@ PhysCircleEntity::PhysCircleEntity(Scene& scene, const entityId_t& id, PhysicsSy
   m_circle(0)
 {
     this->SetComponent(m_bmp);
-    m_circle = &physicsSystem.AddCircle(this, 5.0f, glm::vec2(0.0f), 1.0f);
+    m_circle = &physicsSystem.AddCircle(this, 5.0f, glm::vec2(0.0f), 1.0f, 1.0f);
 }
 
 PhysCircleEntity::PhysCircleEntity(Scene& scene, const entityId_t& id, PhysicsSystem& physicsSystem,
@@ -25,7 +25,7 @@ PhysCircleEntity::PhysCircleEntity(Scene& scene, const entityId_t& id, PhysicsSy
 {
     this->SetComponent(m_bmp);
     this->SetPos(glm::vec3(pos.x, pos.y, 0.0f));
-    m_circle = &physicsSystem.AddCircle(this, radius, vel, mass);
+    m_circle = &physicsSystem.AddCircle(this, radius, vel, mass, elasticity);
 }
 
 

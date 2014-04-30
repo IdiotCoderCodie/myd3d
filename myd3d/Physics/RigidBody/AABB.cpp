@@ -185,6 +185,7 @@ void AABB::CollisionResponse(ManifoldPoint& point)
     if (velAlongNorm > 0.0f)
         return;
 
+    //float e = (A.GetElasticity() + B.GetElasticity()) / 2.0f;
     float e = glm::min(A.GetElasticity(), B.GetElasticity());
 
     // Calc impulse scalar
@@ -198,6 +199,38 @@ void AABB::CollisionResponse(ManifoldPoint& point)
 
     point.responded = true;
 
+     // Solve friction.
+    // Get new relative velocity.
+    vec2 rvT = B.GetVel() - A.GetVel();
+
+    // solve for tangent vec.
+    vec2 tangent = rvT - dot(rv, point.contactNormal) * point.contactNormal;
+    if(glm::length2(tangent) > 0.01)
+    {
+        tangent = glm::normalize(tangent);
+
+        // Solve for magnitude.
+        float jt = -dot(rv, tangent);
+        jt = jt / (A.GetInvMass() + B.GetInvMass());
+
+        // Get friction component. of Ff = uFn
+        float u = sqrt(A.GetStaticFriction() * A.GetStaticFriction() + B.GetStaticFriction() * B.GetStaticFriction()); 
+
+        // Clamp magnitude.
+        vec2 frictionImpulse;
+        if(abs(jt) < j * u)
+        {
+            frictionImpulse = jt * tangent;
+        }
+        else
+        {
+            float dynamicFriction = sqrt(A.GetDynamicFriction() * A.GetDynamicFriction() + B.GetDynamicFriction() * B.GetDynamicFriction());
+            frictionImpulse = -j * tangent * dynamicFriction;
+        }
+
+        A.SetNewVel( A.GetNewVel() - A.GetInvMass() * frictionImpulse);
+        B.SetNewVel( B.GetNewVel() + B.GetInvMass() * frictionImpulse);
+    }
     // Positional Correction.
     const float percent = 0.2;
     const float slop = 0.1f;

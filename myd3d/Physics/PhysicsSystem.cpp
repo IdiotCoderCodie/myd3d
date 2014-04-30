@@ -25,7 +25,7 @@ void PhysicsSystem::Update(double time)
 }
 
 
-Circle& PhysicsSystem::AddCircle(Entity* entity, float radius, const glm::vec2& velocity, float mass)
+Circle& PhysicsSystem::AddCircle(Entity* entity, float radius, const glm::vec2& velocity, float mass, float elast)
 {
     Circle* circle = new Circle();
 	circle->SetParent(entity);
@@ -33,7 +33,7 @@ Circle& PhysicsSystem::AddCircle(Entity* entity, float radius, const glm::vec2& 
 	circle->SetVel(velocity.x, velocity.y);
 	circle->SetMass(mass);
 	circle->SetPos(entity->GetPos().x, entity->GetPos().y);
-    circle->SetElasticity(0.4f);
+    circle->SetElasticity(0.6f);
 
 	m_circles.push_back(circle);
 
@@ -42,7 +42,7 @@ Circle& PhysicsSystem::AddCircle(Entity* entity, float radius, const glm::vec2& 
 
 
 AABB& PhysicsSystem::AddAABB(Entity* entity, const glm::vec2& min, const glm::vec2& max, 
-                            const glm::vec2& vel, float mass)
+                            const glm::vec2& vel, float mass, float elast)
 {
     AABB* aabb = new AABB();
     aabb->SetParent(entity);
@@ -51,7 +51,7 @@ AABB& PhysicsSystem::AddAABB(Entity* entity, const glm::vec2& min, const glm::ve
     aabb->SetVel(vel.x, vel.y);
     aabb->SetMass(mass);
     aabb->SetPos(entity->GetPos().x, entity->GetPos().y);
-    aabb->SetElasticity(0.4f);
+    aabb->SetElasticity(elast);
 
     m_aabbs.push_back(aabb);
 
