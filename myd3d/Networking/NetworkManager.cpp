@@ -274,7 +274,7 @@ void NetworkManager::SendInitData(SocketStream& peer)
         ssBuffer << "ENT " << ent->GetID() << " "
                  << "CIRC " << "X: " << ent->GetPos().x << " " << ent->GetPos().y << endl;
         // TODO: Get radius...
-        // TODO: Get rotation vectors...
+        // TODO: Get rotation vectors...etc...
     }
 
     auto& squareEnts = m_scene->GetAABBs();
@@ -282,6 +282,8 @@ void NetworkManager::SendInitData(SocketStream& peer)
     {
         ssBuffer << "ENT " << ent->GetID() << " "
                  << "SQR " << "X: " << ent->GetPos().x << " " << ent->GetPos().y << endl;
+
+        // TODO: Create PhysSquareEnt, like PhysCircleEnt to get all needed data.
     }
 
     ssBuffer << "ENDINIT" << endl;
