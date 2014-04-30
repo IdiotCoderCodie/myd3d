@@ -69,6 +69,12 @@ TerrainDestructionScene::~TerrainDestructionScene(void)
 
 void TerrainDestructionScene::AddCircle(float x, float y, float radius, glm::vec2& vel, float mass, std::string& id)
 {
+    PhysCircleEntity* newEnt =
+        new PhysCircleEntity(*this, id, m_physicsSystem, radius, glm::vec2(x, y), vel, mass, 0.4f);
+
+    this->AddEntity(newEnt);
+/*
+
     Entity* newEnt = 
         EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), L"cement.dds", 
                                        L"circleStencil.dds", radius*2.0f, radius*2.0f, 
@@ -76,7 +82,7 @@ void TerrainDestructionScene::AddCircle(float x, float y, float radius, glm::vec
 
     newEnt->SetPos(glm::vec3(x, y, 0.0f));
 
-    m_physicsSystem.AddCircle(newEnt, radius, vel, mass);
+    m_physicsSystem.AddCircle(newEnt, radius, vel, mass);*/
 
     m_circles.push_back(&(*newEnt));
 }

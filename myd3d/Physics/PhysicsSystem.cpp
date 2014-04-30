@@ -25,7 +25,7 @@ void PhysicsSystem::Update(double time)
 }
 
 
-Circle& PhysicsSystem::AddCircle(Entity* entity, float radius, glm::vec2& velocity, float mass)
+Circle& PhysicsSystem::AddCircle(Entity* entity, float radius, const glm::vec2& velocity, float mass)
 {
     Circle circle;
 	circle.SetParent(entity);
@@ -37,11 +37,12 @@ Circle& PhysicsSystem::AddCircle(Entity* entity, float radius, glm::vec2& veloci
 
 	m_circles.push_back(circle);
 
-    return m_circles[m_circles.size()];
+    return m_circles[m_circles.size() - 1];
 }
 
 
-void PhysicsSystem::AddAABB(Entity* entity, glm::vec2& min, glm::vec2& max, glm::vec2& vel, float mass)
+void PhysicsSystem::AddAABB(Entity* entity, const glm::vec2& min, const glm::vec2& max, 
+                            const glm::vec2& vel, float mass)
 {
     AABB aabb;
     aabb.SetParent(entity);

@@ -17,6 +17,7 @@
 #include "../Components/Collision/CollisionComponent.h"
 #include "../Components/BehaviourControllers/PaperPlaneBC.h"
 #include "../Components/Visual/VisualRaymarchComponent.h"
+#include "../Entities/PhysCircleEntity.h"
 
 
 //extern TextureManager G_TextureManager;
@@ -763,4 +764,18 @@ Entity* EntityFactory::CreatePaperPlaneEntity(Scene& scene, D3D& d3d, const glm:
     scene.AddEntity(newEntity);
 
     return newEntity;
+}
+
+
+Entity* EntityFactory::CreatePhysCircleEntity(Scene& scene, D3D& d3d, PhysicsSystem& physicsSystem,
+    const glm::vec2& pos, float radius,
+    const glm::vec2& vel, float mass, float elasticity,
+    const std::string& id)
+{
+    PhysCircleEntity* physCircleEnt = new PhysCircleEntity(scene, id, physicsSystem, radius,
+        pos, vel, mass, elasticity);
+
+    scene.AddEntity(physCircleEnt);
+
+    return physCircleEnt;
 }

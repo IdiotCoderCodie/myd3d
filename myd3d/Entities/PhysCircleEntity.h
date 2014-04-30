@@ -8,7 +8,10 @@ class PhysicsSystem;
 class PhysCircleEntity : public Entity
 {
 public:
-    PhysCircleEntity(Scene& scene, std::string& id, PhysicsSystem& physicsSystem);
+    PhysCircleEntity(Scene& scene, const entityId_t& id, PhysicsSystem& physicsSystem);
+    PhysCircleEntity(Scene& scene, const entityId_t& id, PhysicsSystem& physicsSystem,
+                     float radius, const glm::vec2& pos, const glm::vec2& vel, 
+                     float mass, float elasticity);
     ~PhysCircleEntity();
 
 private:

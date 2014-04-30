@@ -3,6 +3,7 @@
 #include "../RenderTarget.h"
 #include "../Components/Physics/FollowPathComponent.h"
 #include "../Assets/Textures/Texture.h"
+#include "../Physics/PhysicsSystem.h"
 #include <string>
 #include <vector>
 
@@ -144,4 +145,9 @@ namespace EntityFactory
                                    const std::vector<FollowPathComponent::Node>& pathNodes,
                                    const std::string& id);
 
+
+    Entity* CreatePhysCircleEntity(Scene& scene, D3D& d3d, PhysicsSystem& physicsSystem, 
+                                   const glm::vec2& pos, float radius, 
+                                   const glm::vec2& vel, float mass, float elasticity,
+                                   const std::string& id);
 };

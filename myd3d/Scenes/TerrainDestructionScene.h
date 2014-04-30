@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "../Physics/PhysicsSystem.h"
 #include "../Networking/NetworkManager.h"
+#include "../Entities/PhysCircleEntity.h"
 #include "WSA.h"
 
 class TerrainDestructionScene : public Scene
@@ -19,7 +20,7 @@ public:
     void AddAABB(float x, float y, glm::vec2& min, glm::vec2& max, glm::vec2& vel, 
                  float mass, std::string& id);
 
-    std::vector<Entity*>& GetCircles() { return m_circles; }
+    std::vector<PhysCircleEntity*>& GetCircles() { return m_circles; }
     std::vector<Entity*>& GetAABBs() { return m_aabbs; }
     std::vector<Entity*>& GetLines()   { return m_lines; }
 
@@ -27,7 +28,7 @@ public:
 private:
     int                  m_screenWidth;
     int                  m_screenHeight;
-    std::vector<Entity*> m_circles;
+    std::vector<PhysCircleEntity*> m_circles;
     std::vector<Entity*> m_aabbs;
     std::vector<Entity*> m_lines;
 

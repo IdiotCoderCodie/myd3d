@@ -14,8 +14,9 @@ public:
 
     void Update(double time);
 
-	Circle& AddCircle(Entity* entity, float radius, glm::vec2& velocity, float mass);
-    void AddAABB(Entity* entity, glm::vec2& min, glm::vec2& max, glm::vec2& velocity, float mass);
+	Circle& AddCircle(Entity* entity, float radius, const glm::vec2& velocity, float mass);
+    void AddAABB(Entity* entity, const glm::vec2& min, const glm::vec2& max, 
+                 const glm::vec2& velocity, float mass);
 
 private:
 	void SimulationLoop(double time);
