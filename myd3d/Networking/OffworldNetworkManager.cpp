@@ -224,6 +224,8 @@ void OffworldNetworkManager::GetPeerUpdates()
 
 int OffworldNetworkManager::run()
 {
+    SetThreadAffinityMask(GetHandle(), 2);
+
     // TODO: 1. Search for connection via broadcaster.
     EstablishPeerConnection(); // DONE ^^
     

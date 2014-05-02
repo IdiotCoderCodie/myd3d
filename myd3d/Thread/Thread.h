@@ -18,6 +18,8 @@ public:
     void finish() { m_finish = true; }
     bool isFinishing() { return m_finish; } 
     virtual int run() = 0;
+
+    HANDLE GetHandle() { return m_hThread;  }
     
     void waitForFinish();
 

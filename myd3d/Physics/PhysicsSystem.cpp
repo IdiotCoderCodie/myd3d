@@ -21,12 +21,16 @@ PhysicsSystem::~PhysicsSystem(void)
 
 int PhysicsSystem::run()
 {
+    SetThreadAffinityMask(this->GetHandle(), 4);
     m_timer.Start();
 
     float elapsedTime = m_timer.GetTimeInSeconds();
     while (!isFinishing())
     {
         Update(elapsedTime);
+        std::cout << elapsedTime << std::endl;
+        Sleep(1);
+        //SetThreadAffinityMask(this->GetHandle(), 4);
     }
 
     return 0;

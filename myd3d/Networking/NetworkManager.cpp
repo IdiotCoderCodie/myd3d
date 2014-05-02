@@ -334,6 +334,7 @@ void NetworkManager::SendInitData(SocketStream& peer)
 
 int NetworkManager::run()
 {
+    SetThreadAffinityMask(GetHandle(), 2);
     // First things first... check for game connection.
     // TODO: Won't need to do this for camera views.
     EstablishGameConnection();

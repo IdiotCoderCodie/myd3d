@@ -247,6 +247,8 @@ void CannBallNetworkManager::GetPeerUpdates(int playerNum)
 
 int CannBallNetworkManager::run()
 {
+    SetThreadAffinityMask(GetHandle(), 2);
+
     m_followCam = &m_scene->GetActiveCamera()->GetParent();
 
     EstablishPeerConnection(1); // DONE ^^
