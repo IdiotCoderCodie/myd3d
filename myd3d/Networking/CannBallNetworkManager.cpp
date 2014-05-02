@@ -57,9 +57,9 @@ void CannBallNetworkManager::EstablishPeerConnection(int playerNum)
                 cout << "Connection to peer [" << peer.GetPeerAddr().ToString() << "]" 
                      << endl;
 
-                char recvBuffer[2000];
-                memset(recvBuffer, 0, 2000);
-                if(peer.Recv(recvBuffer, 2000, 0) > 0)
+                char recvBuffer[100000];
+                memset(recvBuffer, 0, 100000);
+                if (peer.Recv(recvBuffer, 100000, 0) > 0)
                 {
                     std::stringstream ssBuffer(recvBuffer);
                     std::string head;

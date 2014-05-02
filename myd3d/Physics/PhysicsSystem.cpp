@@ -14,13 +14,15 @@ m_tweakBar(0)
 {
 	m_manifold = new ContactManifold();
 
-    m_tweakBar = TwNewBar("Physics Info./Settings");
+    m_tweakBar = TwNewBar("PhysicsInfo");
 
     TwAddVarRW(m_tweakBar, "targetFPS", TW_TYPE_INT32, &m_targetfps, "");
     TwAddVarRO(m_tweakBar, "actualFPS", TW_TYPE_INT32, &m_actualfps, "");
     TwAddVarRO(m_tweakBar, "dt", TW_TYPE_FLOAT, &m_dt, "step=0.0001");
     TwAddVarRW(m_tweakBar, "GravityVec", TW_TYPE_DIR3F, &m_gravity, "");
     TwAddVarRW(m_tweakBar, "GravityScale", TW_TYPE_FLOAT, &m_gravityScale, "step = 0.01");
+
+    TwDefine(("PhysicsInfo iconified=true "));
 }
 
 

@@ -52,9 +52,9 @@ void OffworldNetworkManager::EstablishPeerConnection()
                 cout << "Connection to peer [" << m_peer.GetPeerAddr().ToString() << "]" 
                      << endl;
 
-                char recvBuffer[2000];
-                memset(recvBuffer, 0, 2000);
-                if(m_peer.Recv(recvBuffer, 2000, 0) > 0)
+                char recvBuffer[100000];
+                memset(recvBuffer, 0, 100000);
+                if(m_peer.Recv(recvBuffer, 100000, 0) > 0)
                 {
                     std::stringstream ssBuffer(recvBuffer);
                     std::string head;
@@ -159,7 +159,7 @@ void OffworldNetworkManager::GetPeerUpdates()
     char buffer[100000];
     memset(buffer, 0, 100000);
 
-    if(m_peer.Recv(buffer, 1000, 0) < 1)
+    if(m_peer.Recv(buffer, 100000, 0) < 1)
     {
         // Nothing received... keep calm and carry on.
         return;

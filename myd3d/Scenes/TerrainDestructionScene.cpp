@@ -24,7 +24,7 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
     ////
     //AddCircle(100.0f, 220.0f, 50.0f, glm::vec2(200.0f, -50.0f), 10.0f, 0.7f, std::string("circ1"));
     //AddCircle(0.0f, -50.0f, 10.0f, glm::vec2(-300.0f, 400.0f), 1.0f, 0.7f, std::string("circ2"));
-    AddCircle(250.0f, 300.0f, 20.0f, glm::vec2(-50.0f, 0.0f), 1.0f, 0.9f, std::string("circ3"));
+    AddCircle(250.0f, 400.0f, 20.0f, glm::vec2(-20.0f, 0.0f), 1.0f, 0.9f, std::string("circ3"));
 
     /*for (int i = 0; i < 15; i++)
     {
@@ -35,7 +35,7 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 
     for(int i = 0; i < 20; i++)
     {
-        for(int y = 0; y < rand() % 6 + 6; y++)
+        for(int y = 0; y < rand() % 7 + 6; y++)
         {
             AddAABB(-320.0f + 11.0f + 15.5f + (31.0f * i), -239.0f + 10.0f + 15.5f + (32.0f * y),
                     glm::vec2(-15.0f, -15.0f), glm::vec2(15.0f, 15.0f),

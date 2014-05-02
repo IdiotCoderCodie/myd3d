@@ -1,6 +1,6 @@
 #include "RigidBody.h"
 #include "../../Entities/Entity.h"
-
+#include <iostream>
 #include "../../glm/gtx/norm.hpp" // length2
 
 RigidBody::RigidBody(void) 
@@ -11,8 +11,8 @@ RigidBody::RigidBody(void)
     m_velocity(0.0f),
     m_newVelocity(0.0f),
     m_force(0.0f),
-    m_staticFriction(0.05f),
-    m_dynamicFriction(0.02f),
+    m_staticFriction(0.2f),
+    m_dynamicFriction(0.05f),
     m_parentEntity(0)
 {
 }
@@ -44,19 +44,6 @@ void RigidBody::Update()
     m_velocity = m_newVelocity;
     m_position = m_newPosition;
 	m_parentEntity->SetPos(glm::vec3(m_newPosition, 0.0f));
-
-    //if(m_position.y < -200.0f)
-    //{
-    //    m_velocity.y = abs(m_velocity.y);
-    //}
-    //if(m_position.x < -300.0f)
-    //{
-    //    m_velocity.x = abs(m_velocity.x);
-    //}
-    //else if(m_position.x > 300.0f)
-    //{
-    //    m_velocity.x = -abs(m_velocity.x);
-    //}
 }
 
 
@@ -74,9 +61,6 @@ RigidBody::Derivative RigidBody::Evaluate(const State& initial, float dt, const 
 
 glm::vec2 RigidBody::Acceleration(const State& state, float dt)
 {
-    // TODO: Calculate the acceleration from forces acting.
-    /*glm::vec2 force(0.0f, -98.1f * m_mass);*/
-    //m_force += glm::vec2(0.0f, -98.10f * m_mass);
     m_force *= m_mass;
     glm::vec2 accel = m_force * GetInvMass();  // m_mass;
 
@@ -115,8 +99,9 @@ void RigidBody::CollisionResponse(ManifoldPoint& point, float time)
     if (velAlongNorm > 0.0f)
         return;
 
-    //float e = (A.GetElasticity() + B.GetElasticity()) / 2.0f;
     float e = glm::min(A.GetElasticity(), B.GetElasticity());
+    if (glm::length2(rv) < 0.00001)
+        e = 0.0f;
 
     // Calc impulse scalar
     float j = -(1.0f + e) * velAlongNorm;
@@ -139,12 +124,12 @@ void RigidBody::CollisionResponse(ManifoldPoint& point, float time)
     {
         tangent = glm::normalize(tangent);
 
-        // Solve for magnitude.
+        // Solve impulse magnitude along tangent.
         float jt = -dot(rvT, tangent);
         jt = jt / (A.GetInvMass() + B.GetInvMass());
 
         // Get friction component. of Ff = uFn
-        float u = sqrt(A.GetStaticFriction() * A.GetStaticFriction() + B.GetStaticFriction() * B.GetStaticFriction());
+        float u = (A.GetStaticFriction() + B.GetStaticFriction()) / 2.0f; // sqrt(A.GetStaticFriction() * A.GetStaticFriction() + B.GetStaticFriction() * B.GetStaticFriction());
 
         // Clamp magnitude.
         vec2 frictionImpulse;
@@ -154,12 +139,13 @@ void RigidBody::CollisionResponse(ManifoldPoint& point, float time)
         }
         else
         {
-            float dynamicFriction = sqrt(A.GetDynamicFriction() * A.GetDynamicFriction() + B.GetDynamicFriction() * B.GetDynamicFriction());
+            float dynamicFriction = (A.GetDynamicFriction() + B.GetDynamicFriction()) / 2.0f;
+            //float dynamicFriction = sqrt(A.GetDynamicFriction() * A.GetDynamicFriction() + B.GetDynamicFriction() * B.GetDynamicFriction());
             frictionImpulse = -j * tangent * dynamicFriction;
         }
 
         A.SetNewVel(A.GetNewVel() - A.GetInvMass() * frictionImpulse);
-        B.SetNewVel(B.GetNewVel() + B.GetInvMass() * frictionImpulse);
+        B.SetNewVel(B.GetNewVel() + B.GetInvMass() * frictionImpulse);  
     }
     // Positional Correction.
     const float percent = 0.2;

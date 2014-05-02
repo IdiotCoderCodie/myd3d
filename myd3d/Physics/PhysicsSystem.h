@@ -25,17 +25,24 @@ public:
 
     void Update(double time);
 
-	Circle& AddCircle(Entity* entity, float radius, const glm::vec2& velocity, float mass, float elast);
+	Circle& AddCircle(Entity* entity, float radius, const glm::vec2& velocity, float mass, 
+                      float elast);
     AABB& AddAABB(Entity* entity, const glm::vec2& min, const glm::vec2& max, 
-                 const glm::vec2& velocity, float mass, float elast);
+                  const glm::vec2& velocity, float mass, float elast);
+
+    const glm::vec2& GetGravity() { return glm::vec2(m_gravity.x, m_gravity.y) * m_gravityScale; }
 
 private:
 	void SimulationLoop(double time);
+
 	void StaticCollisionDetection();
 	bool StaticSphereCollisionDetection(Circle& circle1, Circle& circle2);
+
 	void CalculateObjectPhysics();
+
 	void DynamicCollisionDetection();
 	void DynamicCollisionResponse();
+
 	void UpdateObjectPhysics();
 
 private:
@@ -45,10 +52,9 @@ private:
     int                     m_actualfps;
     Scene*                  m_parentScene;
 	ContactManifold*        m_manifold;
-	//std::vector<Circle> m_circles;
     std::vector<Circle*>    m_circles;
     std::vector<AABB*>      m_aabbs;   
     TwBar*                  m_tweakBar;
-    float                   m_gravityScale  = 9.81f;
-    glm::vec3               m_gravity       = glm::vec3(0.0f, -1.0f, 0.0f);
+    float                   m_gravityScale  = 9.81f * 5.0f; // Could put in struct tbh.
+    glm::vec3               m_gravity       = glm::vec3(0.0f, -1.0f, 0.0f); // vec3 for AntTw.
 };
