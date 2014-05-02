@@ -10,7 +10,9 @@ m_parentScene(0),
 m_manifold(0),
 m_circles(),
 m_aabbs(),
-m_tweakBar(0)
+m_tweakBar(0),
+m_gravityScale(9.81f * 5.0f),
+m_gravity(0.0f, -1.0f, 0.0f)
 {
 	m_manifold = new ContactManifold();
 

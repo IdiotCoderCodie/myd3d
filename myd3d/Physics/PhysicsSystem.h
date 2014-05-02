@@ -55,6 +55,6 @@ private:
     std::vector<Circle*>    m_circles;
     std::vector<AABB*>      m_aabbs;   
     TwBar*                  m_tweakBar;
-    float                   m_gravityScale  = 9.81f * 5.0f; // Could put in struct tbh.
-    glm::vec3               m_gravity       = glm::vec3(0.0f, -1.0f, 0.0f); // vec3 for AntTw.
+    float                   m_gravityScale;// = 9.81f * 5.0f; // Could put in struct tbh.
+    glm::vec3               m_gravity;// = glm::vec3(0.0f, -1.0f, 0.0f); // vec3 for AntTw.
 };
