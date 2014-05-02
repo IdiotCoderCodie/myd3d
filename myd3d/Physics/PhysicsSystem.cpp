@@ -1,9 +1,24 @@
 #include "PhysicsSystem.h"
 
 
-PhysicsSystem::PhysicsSystem(void)
+PhysicsSystem::PhysicsSystem(void) :
+m_timer(),
+m_dt(0.0f),
+m_targetfps(500), 
+m_parentScene(0),
+m_manifold(0),
+m_circles(),
+m_aabbs(),
+m_tweakBar(0)
 {
 	m_manifold = new ContactManifold();
+
+    m_tweakBar = TwNewBar("Physics Info./Settings");
+
+    TwAddVarRW(m_tweakBar, "targetFPS", TW_TYPE_INT32, &m_targetfps, "");
+    TwAddVarRO(m_tweakBar, "dt", TW_TYPE_FLOAT, &m_dt, "step=0.0001");
+    TwAddVarRW(m_tweakBar, "GravityVec", TW_TYPE_DIR3F, &m_gravity, "");
+    TwAddVarRW(m_tweakBar, "GravityScale", TW_TYPE_FLOAT, &m_gravityScale, "step = 0.01");
 }
 
 
@@ -18,7 +33,6 @@ PhysicsSystem::~PhysicsSystem(void)
 }
 
 
-
 int PhysicsSystem::run()
 {
     SetThreadAffinityMask(this->GetHandle(), 4);
@@ -27,7 +41,19 @@ int PhysicsSystem::run()
     float elapsedTime = m_timer.GetTimeInSeconds();
     while (!isFinishing())
     {
+        TwRefreshBar(m_tweakBar);
         elapsedTime = m_timer.GetTimeInSeconds();
+        if (m_targetfps > 0)
+        {
+            float targetUpdTime = 1.0f / m_targetfps;
+            if (elapsedTime < targetUpdTime)
+            {
+                float sleepTime = (targetUpdTime - elapsedTime) * 1000.0f;
+                DWORD dSleep = (DWORD)sleepTime;
+                Sleep((DWORD)sleepTime);
+                SetThreadAffinityMask(this->GetHandle(), 4);
+            }
+        }
         Update(elapsedTime);
        // std::cout << elapsedTime << std::endl;
         //Sleep(1);
@@ -87,6 +113,18 @@ void PhysicsSystem::SimulationLoop(double time)
 	//StaticCollisionDetection();
 
 	// Calculate the physics calculations on all objects.
+
+    // Apply gravity to all.
+    for (auto& circle : m_circles)
+    {
+        circle->ApplyForce(glm::vec2(m_gravity.x, m_gravity.y) * m_gravityScale);
+    }
+
+    for (auto& aabb : m_aabbs)
+    {
+        aabb->ApplyForce(glm::vec2(m_gravity.x, m_gravity.y) * m_gravityScale);
+    }
+
 	CalculateObjectPhysics();
 
 	// Assess and remove any collisions that no longer take place.

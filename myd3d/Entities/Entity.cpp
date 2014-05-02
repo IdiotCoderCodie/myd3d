@@ -12,7 +12,7 @@ Entity::Entity(Scene& parent, const entityId_t& id)
         m_tweakBar(0)
 {
     // Create tweak bar.
-    m_tweakBar = TwNewBar(id.c_str());
+    //m_tweakBar = TwNewBar(id.c_str());
     
     // Add various transform variables to the tweak bar.
     TwAddVarRO(m_tweakBar, "PosX", TW_TYPE_FLOAT, &m_Transform.GetPosition().x, 
@@ -156,5 +156,15 @@ void Entity::Draw(D3D& d3d)
     for(auto it = m_Components.begin(); it != m_Components.end(); ++it)
     {
         it->second->Draw(d3d);
+    }
+}
+
+
+void Entity::DeleteTweakBar()
+{
+    if (m_tweakBar)
+    {
+        TwDeleteBar(m_tweakBar);
+        m_tweakBar = nullptr;
     }
 }

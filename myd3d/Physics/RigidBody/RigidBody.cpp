@@ -76,7 +76,8 @@ glm::vec2 RigidBody::Acceleration(const State& state, float dt)
 {
     // TODO: Calculate the acceleration from forces acting.
     /*glm::vec2 force(0.0f, -98.1f * m_mass);*/
-    m_force += glm::vec2(0.0f, -98.10f * m_mass);
+    //m_force += glm::vec2(0.0f, -98.10f * m_mass);
+    m_force *= m_mass;
     glm::vec2 accel = m_force * GetInvMass();  // m_mass;
 
     return accel;

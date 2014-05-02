@@ -72,6 +72,7 @@ public:
     void SetScaleZ(float z)                        { m_Transform.SetScaleZ(z); }
 
     TwBar* GetTweakBar() const { return m_tweakBar; }
+    void DeleteTweakBar();
 
 private:
     Scene&                              m_Parent;

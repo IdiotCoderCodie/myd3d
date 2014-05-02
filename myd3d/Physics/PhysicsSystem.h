@@ -11,6 +11,10 @@
 #include "RigidBody\RBPolygon.h"
 #include "../HiResTimer.h"
 
+#include <AntTweakBar.h>
+
+#define EPSILON 0.0001
+
 class PhysicsSystem : public Thread
 {
 public:
@@ -37,9 +41,13 @@ private:
 private:
     HiResTimer              m_timer;
 	float                   m_dt;
+    int                     m_targetfps;
     Scene*                  m_parentScene;
 	ContactManifold*        m_manifold;
 	//std::vector<Circle> m_circles;
     std::vector<Circle*>    m_circles;
     std::vector<AABB*>      m_aabbs;   
+    TwBar*                  m_tweakBar;
+    float                   m_gravityScale  = 9.81f;
+    glm::vec3               m_gravity       = glm::vec3(0.0f, -1.0f, 0.0f);
 };
