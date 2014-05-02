@@ -18,10 +18,24 @@ PhysicsSystem::~PhysicsSystem(void)
 }
 
 
+
+int PhysicsSystem::run()
+{
+    m_timer.Start();
+
+    float elapsedTime = m_timer.GetTimeInSeconds();
+    while (!isFinishing())
+    {
+        Update(elapsedTime);
+    }
+
+    return 0;
+}
+
 void PhysicsSystem::Update(double time)
 {
 	// TODO: DO IT.
-    time = 1.0f / 60.0f;
+   // time = 1.0f / 60.0f;
 	SimulationLoop(time);
 }
 

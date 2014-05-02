@@ -1,16 +1,23 @@
+#define WIN32_LEAN_AND_MEAN
+#define _WINSOCKAPI_
 #pragma once
+
+#include "../Thread/Thread.h"
 #include "../Scenes/Scene.h"
 #include "ContactManifold.h"
 #include "RigidBody\RigidBody.h"
 #include "RigidBody\Circle.h"
 #include "RigidBody\AABB.h"
 #include "RigidBody\RBPolygon.h"
+#include "../HiResTimer.h"
 
-class PhysicsSystem
+class PhysicsSystem : public Thread
 {
 public:
     PhysicsSystem(void);
     ~PhysicsSystem(void);
+
+    int run();
 
     void Update(double time);
 
@@ -28,12 +35,11 @@ private:
 	void UpdateObjectPhysics();
 
 private:
-	float m_dt;
-    Scene* m_parentScene;
-	ContactManifold* m_manifold;
+    HiResTimer              m_timer;
+	float                   m_dt;
+    Scene*                  m_parentScene;
+	ContactManifold*        m_manifold;
 	//std::vector<Circle> m_circles;
-    std::vector<Circle*> m_circles;
-    std::vector<AABB*>   m_aabbs;
-    
+    std::vector<Circle*>    m_circles;
+    std::vector<AABB*>      m_aabbs;   
 };
-

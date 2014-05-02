@@ -1,3 +1,5 @@
+#define WIN32_LEAN_AND_MEAN
+#define _WINSOCKAPI_
 #pragma once
 #include "../../glm/glm.hpp"
 #include "../ContactManifold.h"
