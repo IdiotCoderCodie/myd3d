@@ -134,7 +134,7 @@ void TerrainDestructionScene::Update(double time)
 {
     Scene::Update(time);
 
-	m_physicsSystem.Update(time);
+	//m_physicsSystem.Update(time);
 }
 
 

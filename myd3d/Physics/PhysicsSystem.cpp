@@ -4,7 +4,8 @@
 PhysicsSystem::PhysicsSystem(void) :
 m_timer(),
 m_dt(0.0f),
-m_targetfps(500), 
+m_targetfps(1000), 
+m_actualfps(0),
 m_parentScene(0),
 m_manifold(0),
 m_circles(),
@@ -16,6 +17,7 @@ m_tweakBar(0)
     m_tweakBar = TwNewBar("Physics Info./Settings");
 
     TwAddVarRW(m_tweakBar, "targetFPS", TW_TYPE_INT32, &m_targetfps, "");
+    TwAddVarRO(m_tweakBar, "actualFPS", TW_TYPE_INT32, &m_actualfps, "");
     TwAddVarRO(m_tweakBar, "dt", TW_TYPE_FLOAT, &m_dt, "step=0.0001");
     TwAddVarRW(m_tweakBar, "GravityVec", TW_TYPE_DIR3F, &m_gravity, "");
     TwAddVarRW(m_tweakBar, "GravityScale", TW_TYPE_FLOAT, &m_gravityScale, "step = 0.01");
@@ -52,8 +54,10 @@ int PhysicsSystem::run()
                 DWORD dSleep = (DWORD)sleepTime;
                 Sleep((DWORD)sleepTime);
                 SetThreadAffinityMask(this->GetHandle(), 4);
+                elapsedTime += m_timer.GetTimeInSeconds();
             }
         }
+        m_actualfps = (int)(1.0f / elapsedTime);
         Update(elapsedTime);
        // std::cout << elapsedTime << std::endl;
         //Sleep(1);

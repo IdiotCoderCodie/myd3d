@@ -42,6 +42,7 @@ private:
     HiResTimer              m_timer;
 	float                   m_dt;
     int                     m_targetfps;
+    int                     m_actualfps;
     Scene*                  m_parentScene;
 	ContactManifold*        m_manifold;
 	//std::vector<Circle> m_circles;
