@@ -18,7 +18,7 @@ void AABB::CollisionWithCircle(Circle& circle, ContactManifold& manifold)
     AABB&   A   = *this;
     Circle& B   = circle;
 
-    glm::vec2 n = B.GetPos() - A.GetPos();
+    glm::vec2 n = B.GetNewPos() - A.GetNewPos();
 
     glm::vec2 closest = n;
 
@@ -84,7 +84,7 @@ void AABB::CollisionWithCircle(Circle& circle, ContactManifold& manifold)
     m.contactID2 = &B;
     m.contactNormal = glm::normalize(normal); // Have to normalize n?
     m.penetration = r - d;
-    m.contactPos = A.GetPos() + d;
+    m.contactPos = A.GetNewPos() + d;
     
     m.responded = false;
 
@@ -98,7 +98,7 @@ void AABB::CollisionWithAABB(AABB& aabb, ContactManifold& contactManifold)
     AABB& A = *this;
     AABB& B = aabb;
 
-    glm::vec2 n = B.GetPos() - A.GetPos();
+    glm::vec2 n = B.GetNewPos() - A.GetNewPos();
 
     // Calculate half extents along x axis for each obj.
     float aExtentX = (A.GetMax().x - A.GetMin().x) / 2.0f;
@@ -135,7 +135,7 @@ void AABB::CollisionWithAABB(AABB& aabb, ContactManifold& contactManifold)
 
                 m.penetration = xOverlap;
                 
-                m.contactPos = (A.GetPos() + m.contactNormal * aExtentX) 
+                m.contactPos = (A.GetNewPos() + m.contactNormal * aExtentX) 
                                 + glm::vec2(0.0f, aExtentY - yOverlap);
             }
             else
@@ -151,7 +151,7 @@ void AABB::CollisionWithAABB(AABB& aabb, ContactManifold& contactManifold)
 
                 m.penetration = yOverlap;
 
-                m.contactPos = (A.GetPos() + m.contactNormal * aExtentY) 
+                m.contactPos = (A.GetNewPos() + m.contactNormal * aExtentY) 
                                 + glm::vec2(aExtentX - xOverlap, 0.0f);
                 
             }
@@ -176,7 +176,7 @@ void AABB::CollisionResponse(ManifoldPoint& point)
     RigidBody& B = *point.contactID2;
 
     // Relative velocity.
-    vec2 rv = B.GetVel() - A.GetVel();
+    vec2 rv = B.GetNewVel() - A.GetNewVel();
 
     // Get in terms of normal direction.
     float velAlongNorm = glm::dot(rv, point.contactNormal);
@@ -194,8 +194,8 @@ void AABB::CollisionResponse(ManifoldPoint& point)
 
     // Apply impulse.
     vec2 impulse = j * point.contactNormal;
-    A.SetNewVel(A.GetVel() - (A.GetInvMass()) * impulse);
-    B.SetNewVel(B.GetVel() + (B.GetInvMass()) * impulse);
+    A.SetNewVel(A.GetNewVel() - (A.GetInvMass()) * impulse);
+    B.SetNewVel(B.GetNewVel() + (B.GetInvMass()) * impulse);
 
     point.responded = true;
 
@@ -238,8 +238,8 @@ void AABB::CollisionResponse(ManifoldPoint& point)
     glm::vec2 correction = glm::max(point.penetration - slop, 0.0f) 
                             / (A.GetInvMass() + B.GetInvMass()) * percent * point.contactNormal;
 
-    A.SetNewPos(A.GetPos() - A.GetInvMass() * correction);
-    B.SetNewPos(B.GetPos() + B.GetInvMass() * correction);
+    A.SetNewPos(A.GetNewPos() - A.GetInvMass() * correction);
+    B.SetNewPos(B.GetNewPos() + B.GetInvMass() * correction);
 }
 
 //void AABB::CollisionResponseWithCircle(ManifoldPoint& point)

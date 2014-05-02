@@ -19,7 +19,7 @@ PhysCircleEntity::PhysCircleEntity(Scene& scene, const entityId_t& id, PhysicsSy
                                    float mass, float elasticity)
 : Entity(scene, id),
   m_physicsSystem(physicsSystem),
-  m_bmp(new VisualBitmapComponent(scene.GetParent().GetD3DInstance(), L"cement.dds", 
+  m_bmp(new VisualBitmapComponent(scene.GetParent().GetD3DInstance(), L"goldCircle.dds", 
                                   L"circleStencil.dds", radius * 2.0f, radius * 2.0f, 0, 0)),
   m_circle(0)
 {

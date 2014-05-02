@@ -21,6 +21,7 @@ PhysicsSystem::~PhysicsSystem(void)
 void PhysicsSystem::Update(double time)
 {
 	// TODO: DO IT.
+    time = 1.0f / 60.0f;
 	SimulationLoop(time);
 }
 

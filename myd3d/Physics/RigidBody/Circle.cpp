@@ -15,7 +15,7 @@ void Circle::CollisionWithCircle(Circle& circle, ContactManifold& contactManifol
     float r = this->GetRadius() + circle.GetRadius();
     float r2 = r * r;
 
-    glm::vec2 n = circle.GetPos() - this->GetPos();
+    glm::vec2 n = circle.GetNewPos() - this->GetNewPos();
     if (glm::length2(n) > r2)
     {
         return;
@@ -30,13 +30,13 @@ void Circle::CollisionWithCircle(Circle& circle, ContactManifold& contactManifol
         newPoint.penetration = r - d;
         // Convert n to unit vector, already used a sqrt for d, so use it.
         newPoint.contactNormal = n / d;
-        newPoint.contactPos = this->GetPos() + newPoint.contactNormal * this->GetRadius();
+        newPoint.contactPos = this->GetNewPos() + newPoint.contactNormal * this->GetRadius();
     }
     else
     {
         // Circles have same position... so default penetration to this' radius and normal as up.
         newPoint.penetration = this->GetRadius();
-        newPoint.contactPos = this->GetPos();
+        newPoint.contactPos = this->GetNewPos();
         newPoint.contactNormal = glm::vec2(1.0f, 0.0f);
     }
     newPoint.contactID1 = this;
@@ -67,7 +67,7 @@ void Circle::CollisionResponse(ManifoldPoint& point)
     RigidBody& B = *point.contactID2;
 
     // Relative velocity.
-    vec2 rv = B.GetVel() - A.GetVel();
+    vec2 rv = B.GetNewVel() - A.GetNewVel();
 
     // Get in terms of normal direction.
     float velAlongNorm = glm::dot(rv, point.contactNormal);
@@ -85,8 +85,8 @@ void Circle::CollisionResponse(ManifoldPoint& point)
 
     // Apply impulse.
     vec2 impulse = j * point.contactNormal;
-    A.SetNewVel(A.GetVel() - (A.GetInvMass()) * impulse);
-    B.SetNewVel(B.GetVel() + (B.GetInvMass()) * impulse);
+    A.SetNewVel(A.GetNewVel() - (A.GetInvMass()) * impulse);
+    B.SetNewVel(B.GetNewVel() + (B.GetInvMass()) * impulse);
 
     point.responded = true;
 
@@ -129,8 +129,8 @@ void Circle::CollisionResponse(ManifoldPoint& point)
     glm::vec2 correction = glm::max(point.penetration - slop, 0.0f) 
                             / (A.GetInvMass() + B.GetInvMass()) * percent * point.contactNormal;
 
-    A.SetNewPos(A.GetPos() - A.GetInvMass() * correction);
-    B.SetNewPos(B.GetPos() + B.GetInvMass() * correction);
+    A.SetNewPos(A.GetNewPos() - A.GetInvMass() * correction);
+    B.SetNewPos(B.GetNewPos() + B.GetInvMass() * correction);
 }
 
 //
