@@ -20,13 +20,20 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 
     Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, L"spaceBG.dds", 1280, 800, m_screenWidth, m_screenHeight, "sqwer");
     
-    AddCircle(101.0f, 300.0f, 10.0f, glm::vec2(200.0f, -50.0f), 5.0f, 0.7f, std::string("circ1"));
-    //
+    //AddCircle(101.0f, 300.0f, 10.0f, glm::vec2(200.0f, -50.0f), 5.0f, 0.7f, std::string("circ1"));
+    ////
     //AddCircle(100.0f, 220.0f, 50.0f, glm::vec2(200.0f, -50.0f), 10.0f, 0.7f, std::string("circ1"));
-    ////AddCircle(0.0f, -50.0f, 10.0f, glm::vec2(-300.0f, 400.0f), 1.0f, 0.7f, std::string("circ2"));
+    //AddCircle(0.0f, -50.0f, 10.0f, glm::vec2(-300.0f, 400.0f), 1.0f, 0.7f, std::string("circ2"));
     //AddCircle(250.0f, -50.0f, 20.0f, glm::vec2(200.0f, 50.0f), 1.0f, 0.7f, std::string("circ3"));
 
-    for(int i = 0; i < 20; i++)
+    for (int i = 0; i < 15; i++)
+    {
+        AddCircle(-250.0f + (i+1 * 2.0f * 2.6f), 220.0f - (i+1 * 2.0f * 2.6f), i * 2.5f, glm::vec2(0.0f, 0.0f), i * 1.0f, 0.7f, 
+                  std::string("circle" + to_string(i + 4)));
+
+    }
+
+    /*for(int i = 0; i < 20; i++)
     {
         for(int y = 0; y < rand() % 6 + 6; y++)
         {
@@ -34,15 +41,15 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
                     glm::vec2(-15.0f, -15.0f), glm::vec2(15.0f, 15.0f),
                     glm::vec2(0.0f), 1.0f, 0.4f, std::string("sqwer") + to_string(i*y));
         }
-    }
+    }*/
 
-   /*AddAABB(0.0f, -100.0f, glm::vec2(-30.0f, -30.0f), glm::vec2(30.0f, 30.0f), 
-            glm::vec2(100.0f, 0.0f), 1.0f, 0.5f, std::string("square1"));*/
-    //AddAABB(20.0f, 100.0f, glm::vec2(-20.0f, -20.0f), glm::vec2(20.0f, 20.0f), 
-    //        glm::vec2(0.0f, 0.0f), 1.0f, 0.5f, std::string("square2"));
+   AddAABB(0.0f, -100.0f, glm::vec2(-30.0f, -30.0f), glm::vec2(30.0f, 30.0f), 
+            glm::vec2(100.0f, 0.0f), 1.0f, 0.5f, std::string("square1"));
+    AddAABB(20.0f, 100.0f, glm::vec2(-20.0f, -20.0f), glm::vec2(20.0f, 20.0f), 
+            glm::vec2(0.0f, 0.0f), 1.0f, 0.5f, std::string("square2"));
 
-    //AddAABB(150.0f, 0.0f, glm::vec2(-20.0f, -20.0f), glm::vec2(20.0f, 20.0f), 
-    //        glm::vec2(0.0f, 0.0f), 1.0f, 0.5f, std::string("square3"));
+    AddAABB(150.0f, 0.0f, glm::vec2(-20.0f, -20.0f), glm::vec2(20.0f, 20.0f), 
+            glm::vec2(0.0f, 0.0f), 1.0f, 0.5f, std::string("square3"));
 
     // Walls.
     AddAABB(-320.0f, 0.0f, glm::vec2(-10.0f, -240.0f), glm::vec2(10.0f, 240.0f), glm::vec2(0.0f), 
