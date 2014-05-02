@@ -19,11 +19,6 @@ public:
     void CollisionWithAABB(AABB& aabb, ContactManifold& contactManifold);
     void CollisionWithPolygon(RBPolygon& polygon, ContactManifold& manifold);
 
-    void CollisionResponse(ManifoldPoint& point);
-   /* void CollisionResponseWithCircle(ManifoldPoint& point);
-    void CollisionResponseWithAABB(ManifoldPoint& point);
-    void CollisionResponseWithPolygon(ManifoldPoint* point);*/
-
 private:
     glm::vec2 m_min;
     glm::vec2 m_max;

@@ -38,7 +38,7 @@ public:
 
     void Update();
 
-    virtual void CollisionResponse(ManifoldPoint& point) = 0;
+    void CollisionResponse(ManifoldPoint& point, float time);
    /* virtual void CollisionResponseWithCircle(ManifoldPoint& point) = 0;
     virtual void CollisionResponseWithAABB(ManifoldPoint& point) = 0;
     virtual void CollisionResponseWithPolygon(ManifoldPoint& point) = 0;*/

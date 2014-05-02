@@ -27,10 +27,11 @@ int PhysicsSystem::run()
     float elapsedTime = m_timer.GetTimeInSeconds();
     while (!isFinishing())
     {
+        elapsedTime = m_timer.GetTimeInSeconds();
         Update(elapsedTime);
-        std::cout << elapsedTime << std::endl;
-        Sleep(1);
-        //SetThreadAffinityMask(this->GetHandle(), 4);
+       // std::cout << elapsedTime << std::endl;
+        //Sleep(1);
+        SetThreadAffinityMask(this->GetHandle(), 4);
     }
 
     return 0;
@@ -198,7 +199,7 @@ void PhysicsSystem::DynamicCollisionResponse()
 		ManifoldPoint& point = m_manifold->GetPoint(collision);
 		if (!point.responded)
 		{
-			point.contactID1->CollisionResponse(point);
+			point.contactID1->CollisionResponse(point, m_dt);
 		}
 	}
 }

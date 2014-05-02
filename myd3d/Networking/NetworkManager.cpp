@@ -64,6 +64,8 @@ void NetworkManager::EstablishGameConnection()
             SocketAddr peerAddrStreamPort(peerAddr.GetIpAddr(), STREAM_PORT);
 
             Sleep(50);// Sleep, give peer time to setup their end.
+            SetThreadAffinityMask(GetHandle(), 2);
+
             if(m_opponent.Open(peerAddrStreamPort, 0))
             {
                 cout << "Connected to peer: [" << m_opponent.GetPeerAddr().ToString() << "]" 
@@ -371,6 +373,7 @@ int NetworkManager::run()
 
         CheckForNewPeer();
         Sleep(33); // TODO: Remove.
+        SetThreadAffinityMask(GetHandle(), 2);
 
         SendUpdateData();
         //PackAndSendData();

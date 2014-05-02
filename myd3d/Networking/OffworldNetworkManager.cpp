@@ -44,6 +44,8 @@ void OffworldNetworkManager::EstablishPeerConnection()
 
             SocketAddr peerAddrStreamPort(peerAddr.GetIpAddr(), STREAM_PORT);
             Sleep(20); // Sleep gives peer time to setup their end.
+            SetThreadAffinityMask(GetHandle(), 2);
+
             if(m_peer.Open(peerAddrStreamPort, 0))
             {
                 // managed to connect.

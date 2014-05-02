@@ -49,6 +49,8 @@ void CannBallNetworkManager::EstablishPeerConnection(int playerNum)
 
             SocketAddr peerAddrStreamPort(peerAddr.GetIpAddr(), STREAM_PORT);
             Sleep(20); // Sleep gives peer time to setup their end.
+            SetThreadAffinityMask(GetHandle(), 2);
+
             if(peer.Open(peerAddrStreamPort, 0))
             {
                 // managed to connect.
