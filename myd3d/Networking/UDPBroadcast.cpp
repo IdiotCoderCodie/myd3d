@@ -7,7 +7,7 @@ UDPBroadcast::UDPBroadcast(void)
      m_foundPeer(false),
      m_message(to_string(CONNECT_MAGIC_NUM)),
      m_port(BROADCAST_PORT),
-     m_attempts(1)
+     m_attempts(5)
 {
 }
 
@@ -31,6 +31,8 @@ int UDPBroadcast::run()
     char optVal = 1;
     setsockopt(m_socket.GetHandle(), SOL_SOCKET, SO_BROADCAST, &optVal, sizeof(optVal));
     
+    char rcvBuff[100000];
+
     for(int i = 0; i < m_attempts; i++)
     {
         SocketAddr peerAnyAddr(INADDR_BROADCAST, m_port);
@@ -41,26 +43,23 @@ int UDPBroadcast::run()
             continue;
         }
 
-        char response[100000];
-        memset(response, 0, 100000);
-
         cout << "Waiting for response... " << endl;
 
         // Set timeout of .25second on the recieve.
-       /* int timeoSecs = 250;
-        setsockopt(m_socket.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoSecs, sizeof(timeoSecs));*/
+        int timeoSecs = 500;
+        setsockopt(m_socket.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoSecs, sizeof(timeoSecs));
         std::string t = m_socket.GetLocalAddr().ToString();
         cout << t << endl;
         
         SocketDgram dgramReceive;
         dgramReceive.Open(m_port);
 
-        char rcvBuff[100000];
         bool echoMatch = false;
-        while(!echoMatch)
+        //while(!echoMatch)
+        //{
+        memset(rcvBuff, 0, 100000);
+        for(int attempt = 0; attempt < 50; attempt++) // look for our message amongst any background crap.
         {
-            memset(rcvBuff, 0, 100000);
-
             int bytesRcvd = dgramReceive.RecvFrom(rcvBuff, 100000, 0, m_peerAddr);
             if(bytesRcvd > 0)
             {
@@ -76,10 +75,11 @@ int UDPBroadcast::run()
                 }
                 else
                 {
-                    cout << "No match... trying again." << endl;
+                    cout << "No match... trying again?" << endl;
                 } 
             }
         }
+        //}
 
         int bytesRcvd = 0;
 
