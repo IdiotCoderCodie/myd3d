@@ -20,13 +20,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -209,6 +209,7 @@
     <ClInclude Include="Components\Visual\VisualBitmapComponent.h" />
     <ClInclude Include="Assets\Shaders\ShaderManager.h" />
     <ClInclude Include="Scenes\TerrainDestructionCannBallScene.h" />
+    <ClInclude Include="Scenes\TerrainDestructionConsts.h" />
     <ClInclude Include="Scenes\TerrainDestructionOffworldScene.h" />
     <ClInclude Include="Scenes\TerrainDestructionScene.h" />
     <ClInclude Include="Thread\Thread.h" />
