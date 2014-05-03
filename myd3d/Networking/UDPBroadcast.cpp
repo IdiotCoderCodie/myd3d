@@ -1,5 +1,6 @@
 #include "UDPBroadcast.h"
 #include "NET_CONSTS.h"
+#include <sstream>
 
 UDPBroadcast::UDPBroadcast(void)
      : m_socket() ,
@@ -40,26 +41,76 @@ int UDPBroadcast::run()
             continue;
         }
 
-        char response[100];
-        memset(response, 0, 100);
+        char response[100000];
+        memset(response, 0, 100000);
 
         cout << "Waiting for response... " << endl;
 
         // Set timeout of .25second on the recieve.
-        int timeoSecs = 250;
-        setsockopt(m_socket.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoSecs, sizeof(timeoSecs));
-        if(m_socket.RecvFrom(response, 100, 0, m_peerAddr) > 0)
+       /* int timeoSecs = 250;
+        setsockopt(m_socket.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoSecs, sizeof(timeoSecs));*/
+        std::string t = m_socket.GetLocalAddr().ToString();
+        cout << t << endl;
+        
+        SocketDgram dgramReceive;
+        dgramReceive.Open(m_port);
+
+        char rcvBuff[100000];
+        bool echoMatch = false;
+        while(!echoMatch)
         {
-            m_foundPeer = true;
-            cout << "Read response: \'" << response << "\'" << endl;
-            cout << "From: " << m_peerAddr.ToString() << endl;
-            return 1;
+            memset(rcvBuff, 0, 100000);
+
+            int bytesRcvd = dgramReceive.RecvFrom(rcvBuff, 100000, 0, m_peerAddr);
+            if(bytesRcvd > 0)
+            {
+                cout << "Rcvd " << bytesRcvd << " from " << m_peerAddr.ToString();
+
+                if(!strcmp(rcvBuff, m_message.c_str()))
+                {
+                    // Match
+                    cout << "Found peer, received same message sent!" << endl;
+                    echoMatch = true;
+                    m_foundPeer = true;
+                    return 0;
+                }
+                else
+                {
+                    cout << "No match... trying again." << endl;
+                } 
+            }
         }
-        else
-        {
-            cout << "Failed to get a response from Broadcast." << endl;
-            continue; // Try again (if we have more attempts remaining)
-        }
+
+        int bytesRcvd = 0;
+
+        //while(true)
+        //{
+        //    while(bytesRcvd < 1)
+        //    {
+        //        bytesRcvd = m_socket.RecvFrom(response, 100000, 0, m_peerAddr);;
+        //    }
+
+        //    std::string recvString(response);
+        //    if(!recvString.compare(m_message))
+        //    {
+        //        // Echo successful! Found a peer.
+        //        m_foundPeer = true;
+        //        cout << "Read response: \'" << response << "\'" << endl;
+        //        cout << "From: " << m_peerAddr.ToString() << endl;
+        //        break;
+        //        return 0;
+        //    }           
+        //}
+        //if(bytesRcd > 0)
+        //{
+        //    
+        //    return 1;
+        //}
+        //else
+        //{
+        //    cout << "Failed to get a response from Broadcast." << endl;
+        //    continue; // Try again (if we have more attempts remaining)
+        //}
     }
 
     return 0;
