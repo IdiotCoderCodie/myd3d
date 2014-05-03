@@ -39,7 +39,7 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
         {
             AddAABB(-320.0f + 11.0f + 15.5f + (31.0f * i), -239.0f + 10.0f + 15.5f + (32.0f * y),
                     glm::vec2(-15.0f, -15.0f), glm::vec2(15.0f, 15.0f),
-                    glm::vec2(0.0f), 1.0f, 0.9f, std::string("sqwer") + to_string(i*y));
+                    glm::vec2(0.0f), 1.0f, 0.9f, std::string("sqwer") + to_string(i*20 + y));
         }
     }
 

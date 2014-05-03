@@ -149,7 +149,10 @@ void NetworkManager::CheckForNewPeer()
         cout << "NetManager: Receiver has picked up a connection. " << endl;
        /* SocketAddr peerAddr;
         m_receiver.GetPeerAddr(peerAddr);
-*/
+*/      
+        Sleep(250);
+        SetThreadAffinityMask(GetHandle(), 2);
+
         SocketListener listener(SocketAddr(INADDR_ANY, STREAM_PORT));
 
         if(!listener.Listen())
@@ -315,19 +318,23 @@ void NetworkManager::SendInitData(SocketStream& peer)
     char response[100];
     memset(response, 0, 100);
     setsockopt(peer.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeo, sizeof(timeo));
-    while(true)
-    { // Keep cheking if received anything. Will break out of loop when "ACK" received.
-        int bytesRead = peer.Recv(response, 100, 0);
-        timeo = 1000;
-        if(bytesRead > 0)
-        {
-            // Read something...
-            std::string sBuffer = std::string(response);
-            if(!sBuffer.compare("ACK"))
+
+    for (int i = 0; i < 5; i++) // Loop to keep checking for a response, if no response then leave.
+    {
+        //while(true)
+        { // Keep cheking if received anything. Will break out of loop when "ACK" received.
+            int bytesRead = peer.Recv(response, 100, 0);
+            timeo = 1000;
+            if(bytesRead > 0)
             {
-                // Acknowledgement of initialization confirmed.
-                // Break out of loop pls.
-                break;
+                // Read something...
+                std::string sBuffer = std::string(response);
+                if(!sBuffer.compare("ACK"))
+                {
+                    // Acknowledgement of initialization confirmed.
+                    // Break out of loop pls.
+                    break;
+                }
             }
         }
     }
