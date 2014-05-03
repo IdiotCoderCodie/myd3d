@@ -45,14 +45,12 @@ int UDPBroadcast::run()
 
         cout << "Waiting for response... " << endl;
 
-        // Set timeout of .25second on the recieve.
-        int timeoSecs = 500;
-        setsockopt(m_socket.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoSecs, sizeof(timeoSecs));
-        std::string t = m_socket.GetLocalAddr().ToString();
-        cout << t << endl;
-        
         SocketDgram dgramReceive;
         dgramReceive.Open(m_port);
+        int timeoSecs = 5;
+        setsockopt(dgramReceive.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoSecs, sizeof(timeoSecs));
+        std::string t = m_socket.GetLocalAddr().ToString();
+        cout << t << endl;    
 
         bool echoMatch = false;
         //while(!echoMatch)
