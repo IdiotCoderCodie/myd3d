@@ -1,6 +1,7 @@
 #include "TerrainDestructionScene.h"
 #include "SceneManager.h"
 #include "../Entities/EntityFactory.h"
+#include "TerrainDestructionConsts.h"
 //#include "../Physics/PhysicsSystem.h"
 #include <time.h>
 #include <fstream>
@@ -18,7 +19,7 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 	m_screenWidth	= d3d.GetScreenWidth();
 	m_screenHeight	= d3d.GetScreenHeight();
 
-    Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, L"spaceBG.dds", 1280, 800, m_screenWidth, m_screenHeight, "sqwer");
+    Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, BACKGROUND_TEX, 1280, 800, m_screenWidth, m_screenHeight, "sqwer");
     
     //AddCircle(101.0f, 400.0f, 10.0f, glm::vec2(50.0f, 0.0f), 5.0f, 0.7f, std::string("circ1"));
     ////

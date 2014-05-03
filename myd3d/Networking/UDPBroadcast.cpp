@@ -46,7 +46,7 @@ int UDPBroadcast::run()
         cout << "Waiting for response... " << endl;
 
         SocketDgram dgramReceive;
-        dgramReceive.Open(m_port);
+        dgramReceive.Open(0);
         int timeoSecs = 5;
         setsockopt(dgramReceive.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoSecs, sizeof(timeoSecs));
         std::string t = m_socket.GetLocalAddr().ToString();

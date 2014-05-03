@@ -54,8 +54,8 @@ int BroadcastReceiver::run()
                 // Send reply... will be setting up listener for you to connect to...
                 for(int i = 0; i < 100; i++)
                 {
-                    SocketAddr newAddr = SocketAddr(m_clientAddr.GetIpAddr(), m_port);
-                    int bytesSent = m_socket.SendTo(newAddr, m_key.c_str(), m_key.size(), 0);
+                    //SocketAddr newAddr = SocketAddr(m_clientAddr.GetIpAddr(), m_port);
+                    int bytesSent = m_socket.SendTo(m_clientAddr, m_key.c_str(), m_key.size(), 0);
                     if(bytesSent > 0)
                     {
                         cout << "Sent " << bytesSent << "bytes." << endl;

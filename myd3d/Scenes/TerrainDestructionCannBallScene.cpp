@@ -4,6 +4,7 @@
 #include "../Physics/PhysicsSystem.h"
 #include "../Entities/Entity.h"
 #include "../Assets/Textures/TextureManager.h"
+#include "TerrainDestructionConsts.h"
 
 #include <fstream>
 
@@ -21,7 +22,7 @@ TerrainDestructionCannBallScene::TerrainDestructionCannBallScene(const std::stri
 	m_screenWidth	= d3d.GetScreenWidth();
 	m_screenHeight	= d3d.GetScreenHeight();
 
-    Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, L"jan2.dds", 1000, 1000, m_screenWidth, m_screenHeight, "sqwer");
+    Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, BACKGROUND_TEX, 1000, 1000, m_screenWidth, m_screenHeight, "sqwer");
 
     // Camera.
     EntityFactory::CreateOrthoFpCameraEntity(*this, -m_screenWidth / 2.0f, m_screenWidth / 2.0f,
@@ -77,7 +78,7 @@ void TerrainDestructionCannBallScene::Draw(D3D& d3d)
 void TerrainDestructionCannBallScene::AddCircle(float x, float y, float radius, std::string& id)
 {
     Entity* newEnt = 
-        EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), L"cement.dds", 
+        EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), PHYS_CIRC_TEX, 
                                        L"circleStencil.dds", radius*2.0f, radius*2.0f, 
                                        m_screenWidth, m_screenHeight, id);
 
@@ -87,7 +88,7 @@ void TerrainDestructionCannBallScene::AddCircle(float x, float y, float radius, 
 void TerrainDestructionCannBallScene::AddSquare(float x, float y, float w, float h, std::string& id)
 {
     Entity* newEnt =
-        EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), L"cement.dds", 
+        EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), PHYS_BLOCK_TEX, 
         w, h, m_screenWidth, m_screenHeight, id);
 
     newEnt->SetPos(glm::vec3(x, y, 0.0f));

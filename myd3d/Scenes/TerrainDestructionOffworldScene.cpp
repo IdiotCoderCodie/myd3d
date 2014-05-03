@@ -5,6 +5,8 @@
 #include "../Entities/Entity.h"
 #include "../Assets/Textures/TextureManager.h"
 
+#include "TerrainDestructionConsts.h"
+
 #include <fstream>
 
 #ifndef _NETWORK_DEBUGOUT
@@ -21,7 +23,7 @@ TerrainDestructionOffworldScene::TerrainDestructionOffworldScene(const std::stri
 	m_screenWidth	= d3d.GetScreenWidth();
 	m_screenHeight	= d3d.GetScreenHeight();
 
-    EntityFactory::CreateBmpEntity(*this, d3d, L"jan2.dds", 1000, 1000, m_screenWidth, m_screenHeight, "sqwer");
+    EntityFactory::CreateBmpEntity(*this, d3d, BACKGROUND_TEX, 1000, 1000, m_screenWidth, m_screenHeight, "sqwer");
 
     // Camera.
     EntityFactory::CreateOrthoFpCameraEntity(*this, -m_screenWidth / 2.0f, m_screenWidth / 2.0f,
@@ -80,23 +82,23 @@ void TerrainDestructionOffworldScene::Draw(D3D& d3d)
 {
     Scene::Draw(d3d);
 
-    auto circleData = m_networkManager.GetCircleData();
+    //auto circleData = m_networkManager.GetCircleData();
 
-    for(int i = 0; i < circleData.size(); i++)
-    {
-        // TODO: circle data size can be bigger than number of circles. Need a number storing how
-        // many circles there currently are.
-        // DIRTY AS FUCK.
-        m_circleEnt->SetPos(glm::vec3(circleData[i].position.x, circleData[i].position.y, 0.0f));
-        m_circleEnt->Draw(d3d);
-    }
+    //for(int i = 0; i < circleData.size(); i++)
+    //{
+    //    // TODO: circle data size can be bigger than number of circles. Need a number storing how
+    //    // many circles there currently are.
+    //    // DIRTY AS FUCK.
+    //    m_circleEnt->SetPos(glm::vec3(circleData[i].position.x, circleData[i].position.y, 0.0f));
+    //    m_circleEnt->Draw(d3d);
+    //}
 }
 
 
 void TerrainDestructionOffworldScene::AddCircle(float x, float y, float radius, std::string& id)
 {
     Entity* newEnt = 
-        EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), L"cement.dds", 
+        EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), PHYS_CIRC_TEX, 
                                        L"circleStencil.dds", radius*2.0f, radius*2.0f, 
                                        m_screenWidth, m_screenHeight, id);
 
@@ -107,7 +109,7 @@ void TerrainDestructionOffworldScene::AddCircle(float x, float y, float radius, 
 void TerrainDestructionOffworldScene::AddSquare(float x, float y, float w, float h, std::string& id)
 {
     Entity* newEnt =
-        EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), L"cement.dds", 
+        EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), PHYS_BLOCK_TEX, 
         w, h, m_screenWidth, m_screenHeight, id);
 
     newEnt->SetPos(glm::vec3(x, y, 0.0f));

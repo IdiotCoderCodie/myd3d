@@ -3,6 +3,7 @@
 #include "../Scenes/Scene.h"
 #include "../Scenes/SceneManager.h"
 #include "../Physics/PhysicsSystem.h"
+#include "../Scenes/TerrainDestructionConsts.h"
 
 PhysCircleEntity::PhysCircleEntity(Scene& scene, const entityId_t& id, PhysicsSystem& physicsSystem)
 : Entity(scene, id),
@@ -19,7 +20,7 @@ PhysCircleEntity::PhysCircleEntity(Scene& scene, const entityId_t& id, PhysicsSy
                                    float mass, float elasticity)
 : Entity(scene, id),
   m_physicsSystem(physicsSystem),
-  m_bmp(new VisualBitmapComponent(scene.GetParent().GetD3DInstance(), L"goldCircle.dds", 
+  m_bmp(new VisualBitmapComponent(scene.GetParent().GetD3DInstance(), PHYS_CIRC_TEX, 
                                   L"circleStencil.dds", radius * 2.0f, radius * 2.0f, 0, 0)),
   m_circle(0)
 {
