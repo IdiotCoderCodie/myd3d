@@ -49,10 +49,10 @@ int BroadcastReceiver::run()
             else
             {
                 cout << "Received message matches key!" << endl;
-                Sleep(100); // TODO: Remove.
+                //Sleep(100); // TODO: Remove.
                 SetThreadAffinityMask(GetHandle(), 2);
                 // Send reply... will be setting up listener for you to connect to...
-                for(int i = 0; i < 1; i++)
+                for(int i = 0; i < 100; i++)
                 {
                     SocketAddr newAddr = SocketAddr(m_clientAddr.GetIpAddr(), m_port);
                     int bytesSent = m_socket.SendTo(newAddr, m_key.c_str(), m_key.size(), 0);

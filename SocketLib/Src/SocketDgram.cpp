@@ -38,7 +38,7 @@ int SocketDgram::SendTo(const SocketAddr& peerAddr, const char* buffer,
     }
     else
     {
-         debugOut << "Sending " << bytesSent << "bytes \'" << buffer << "\'" << endl; 
+         //debugOut << "Sending " << bytesSent << "bytes \'" << buffer << "\'" << endl; 
     }
 
     return bytesSent;
@@ -56,7 +56,7 @@ int SocketDgram::RecvFrom(char* buffer, int size, int flags, SocketAddr& fromOut
     }
     else
     {
-        debugOut << "Recieving " << bytesRcvd << "bytes \'" << buffer << "\'" << endl;
+       // debugOut << "Recieving " << bytesRcvd << "bytes \'" << buffer << "\'" << endl;
         fromOut.SetAddr(from);
     }
 
