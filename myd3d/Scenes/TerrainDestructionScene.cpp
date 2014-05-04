@@ -114,6 +114,29 @@ void TerrainDestructionScene::AddCircle(float x, float y, float radius, glm::vec
 }
 
 
+// Adds a circle to the scene, as well as prepping it to be sent over the network.
+void TerrainDestructionScene::AddCircleNetwork(float x, float y, float radius, glm::vec2& vel,
+    float mass, float elast, std::string& id)
+{
+    PhysCircleEntity* newEnt =
+        new PhysCircleEntity(*this, id, m_physicsSystem, radius, glm::vec2(x, y), vel, mass, elast);
+
+    //this->AddEntity(newEnt);
+
+    {
+        std::lock_guard<std::mutex> lock(m_circlesToAddMutex);
+        m_circlesToAdd.push_back(newEnt);
+    }
+
+    {
+        std::lock_guard<std::mutex> lock2(m_networkCirclesMutex);
+        m_newNetworkCircles.push_back(newEnt);
+    }
+
+    //m_circles.push_back(newEnt);
+}
+
+
 void TerrainDestructionScene::AddAABB(float x, float y, glm::vec2& min, glm::vec2& max, glm::vec2& vel, 
                                       float mass, float elast, std::string& id)
 {
@@ -174,10 +197,28 @@ void TerrainDestructionScene::LoadNewAABBs()
 }
 
 
+void TerrainDestructionScene::GetNewNetworkCircles(ostream& out)
+{
+    std:lock_guard<std::mutex> lock(m_networkCirclesMutex);
+    for (auto it = m_newNetworkCircles.begin(); it != m_newNetworkCircles.end(); )
+    {
+        PhysCircleEntity& ent = *(*it);
+        out << "ADD " << ent.GetID() << " CIRC "
+            << "X: " << ent.GetPos().x << " " << ent.GetPos().y << " "
+            << "R: " << ent.GetRadius() << endl;
+
+        it = m_newNetworkCircles.erase(it);
+        if (it == m_newNetworkCircles.end())
+            break;
+
+        ++it;
+    }
+}
+
+
 void TerrainDestructionScene::Update(double time)
 {
     Scene::Update(time);
-
     LoadNewCircles();
     LoadNewAABBs();
 
@@ -189,9 +230,17 @@ void TerrainDestructionScene::Update(double time)
         if (timeUntilNextShot < 0.00001f)
         {
             // Fire shot.
-            AddCircle(200.0f, 500.0f, 10.0f, glm::vec2(0.0f, -100.0f), 1.0f, 0.9f, 
-                      std::string("shot") + to_string(totalShots));
-
+            if (m_networkManager.GetNumPeers() > 0)
+            {
+                AddCircleNetwork(-200.0f, 500.0f, 10.0f, glm::vec2(0.0f, -100.0f), 1.0f, 0.9f,
+                    std::string("shot") + to_string(totalShots));
+            }
+            else
+            { // No peers are connected, so no need to signal that new stuff has been added.
+                AddCircle(-200.0f, 500.0f, 10.0f, glm::vec2(0.0f, -100.0f), 1.0f, 0.9f,
+                    std::string("shot") + to_string(totalShots));
+            }
+            totalShots++;
             timeUntilNextShot = timeBetweenShots;
         }
     }

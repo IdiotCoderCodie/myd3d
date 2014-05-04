@@ -7,6 +7,8 @@
 #include "../Entities/PhysAABBEntity.h"
 #include "WSA.h"
 
+#include <ostream>
+
 class TerrainDestructionScene : public Scene
 {
 public:
@@ -18,6 +20,10 @@ public:
 
     void AddCircle(float x, float y, float radius, glm::vec2& vel, float mass, float elast,
                    std::string& id);
+    // Adds circle to scene and preps to be added to any peers over the network.
+    void AddCircleNetwork(float x, float y, float radius, glm::vec2& vel, float mass, float elast,
+                   std::string& id);
+
     void AddAABB(float x, float y, glm::vec2& min, glm::vec2& max, glm::vec2& vel, 
                  float mass, float elast, std::string& id);
 
@@ -31,6 +37,8 @@ public:
     std::mutex& GetCirclesMutex() { return m_circlesMutex;  }
     std::mutex& GetAABBsMutex()   { return m_aabbsMutex; }
 
+    void GetNewNetworkCircles(ostream& out);
+
 private:
     int                             m_screenWidth;
     int                             m_screenHeight;
@@ -40,10 +48,15 @@ private:
     std::vector<PhysAABBEntity*>    m_aabbsToAdd;
     std::vector<Entity*>            m_lines;
 
+    std::vector<PhysCircleEntity*>  m_newNetworkCircles;
+
     std::mutex                      m_circlesToAddMutex;
     std::mutex                      m_aabbsToAddMutex;
     std::mutex                      m_circlesMutex;
     std::mutex                      m_aabbsMutex;
+
+    std::mutex                      m_networkCirclesMutex;
+    std::mutex                      m_networkAABBsMutex;
     //std::mutex                      
 
 	PhysicsSystem   m_physicsSystem;

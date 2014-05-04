@@ -18,6 +18,7 @@ public:
     glm::vec2 GetVelocity() { return m_circle->GetVel(); }
     float GetRadius()       { return m_circle->GetRadius(); }
     float GetMass()         { return m_circle->GetMass(); }
+    Circle& GetCircle()     { return *m_circle; }
 
     void SetElasticity(float elasticity)    { m_circle->SetElasticity(elasticity); }
     void SetVelocity(const glm::vec2& vel)  { m_circle->SetVel(vel); }

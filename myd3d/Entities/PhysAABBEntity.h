@@ -19,6 +19,7 @@ public:
     const glm::vec2& GetMin()   { return m_aabb->GetMin(); }
     const glm::vec2& GetMax()   { return m_aabb->GetMax(); }
     float GetMass()             { return m_aabb->GetMass(); }
+    AABB& GetAABB()             { return *m_aabb; }
 
     void SetElasticity(float elasticity)    { m_aabb->SetElasticity(elasticity); }
     void SetVelocity(const glm::vec2& vel)  { m_aabb->SetVel(vel); }

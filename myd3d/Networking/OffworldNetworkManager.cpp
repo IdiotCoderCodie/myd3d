@@ -176,6 +176,7 @@ void OffworldNetworkManager::GetPeerUpdates()
     // int circleNum = 0;
     while(!bufferStream.eof())
     {
+        /////////////   UPDATE ENTITY    /////////////
         if(!head.compare("UPD"))
         {
             // ReadUpdateMessage
@@ -222,6 +223,26 @@ void OffworldNetworkManager::GetPeerUpdates()
                 }
             }         
         }
+        //////////////////////////////////////////////
+        ///////////////   ADD ENTITY    //////////////
+        else if (!head.compare("ADD"))
+        {
+            std::string entID;
+            bufferStream >> entID;
+            entID = "P" + to_string(m_playerNum) + entID;
+            std::string type;
+            bufferStream >> type;
+            if (!type.compare("CIRC"))
+            {
+                LoadCircle(bufferStream, entID);
+            }
+            else if (!type.compare("SQR"))
+            {
+                LoadSquare(bufferStream, entID);
+            }
+        }
+
+
         bufferStream >> head; // Get next entID, (if there is one...)
     }
 }

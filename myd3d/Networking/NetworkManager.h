@@ -42,6 +42,8 @@ public:
     // Returns what number player we are (1 or 2).
     int GetPlayerNum() { return m_playerNum; }
 
+    int GetNumPeers() { return m_numPeers; }
+
 private:
     void EstablishGameConnection();
 

@@ -260,6 +260,8 @@ void NetworkManager::SendUpdateData()
                  << "SQR " << "X: " << ent->GetPos().x << " " << ent->GetPos().y << endl;
     }
 
+    m_scene->GetNewNetworkCircles(ssBuffer); // Add on any Additional circles :)
+
     ssBuffer.seekp(0, ios::end);
     int bufSize = ssBuffer.tellp();
     int timeo = 1000;
