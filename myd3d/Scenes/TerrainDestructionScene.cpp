@@ -105,19 +105,12 @@ void TerrainDestructionScene::AddCircle(float x, float y, float radius, glm::vec
     PhysCircleEntity* newEnt =
         new PhysCircleEntity(*this, id, m_physicsSystem, radius, glm::vec2(x, y), vel, mass, elast);
 
-    this->AddEntity(newEnt);
-/*
+    //this->AddEntity(newEnt);
 
-    Entity* newEnt = 
-        EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), L"cement.dds", 
-                                       L"circleStencil.dds", radius*2.0f, radius*2.0f, 
-                                       m_screenWidth, m_screenHeight, id);
+    std::lock_guard<std::mutex> lock(m_circlesToAddMutex);
+    m_circlesToAdd.push_back(newEnt);
 
-    newEnt->SetPos(glm::vec3(x, y, 0.0f));
-
-    m_physicsSystem.AddCircle(newEnt, radius, vel, mass);*/
-
-    m_circles.push_back(newEnt);
+    //m_circles.push_back(newEnt);
 }
 
 
@@ -127,22 +120,64 @@ void TerrainDestructionScene::AddAABB(float x, float y, glm::vec2& min, glm::vec
     PhysAABBEntity* newEnt = new PhysAABBEntity(*this, id, m_physicsSystem, max.x - min.x, max.y - min.y, 
                                                 glm::vec2(x, y), vel, mass, elast);
 
-    this->AddEntity(newEnt);
-    /*Entity* newEnt = 
-        EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), L"cement.dds",
-                                       max.x - min.x, max.y - min.y, m_screenWidth, m_screenHeight, 
-                                       id);
 
-    newEnt->SetPos(glm::vec3(x, y, 0.0f));
-    m_physicsSystem.AddAABB(newEnt, min, max, vel, mass);*/
+    std::lock_guard<std::mutex> lock(m_aabbsToAddMutex);
+    m_aabbsToAdd.push_back(newEnt);
 
-    m_aabbs.push_back(newEnt);
+   /* this->AddEntity(newEnt);*/
+
+    //m_aabbs.push_back(newEnt);
+}
+
+
+void TerrainDestructionScene::LoadNewCircles()
+{
+    std::lock_guard<std::mutex> lock(m_circlesToAddMutex);
+    // TODO: lock m_circleMutex too.
+    
+    for (auto it = m_circlesToAdd.begin(); it != m_circlesToAdd.end();)
+    {
+        // Add to vector for networking data access and add to scenes entities.
+        m_circles.push_back(*it);
+        this->AddEntity(*it);
+
+        it = m_circlesToAdd.erase(it);
+
+        if (it == m_circlesToAdd.end())
+            break;
+
+        ++it;
+    }
+}
+
+
+void TerrainDestructionScene::LoadNewAABBs()
+{
+    std::lock_guard<std::mutex> lock(m_aabbsToAddMutex); 
+    // TODO: lock m_aabbsMutex.
+
+    for (auto it = m_aabbsToAdd.begin(); it != m_aabbsToAdd.end();)
+    {
+        // Add to vector for networking data access and add to scenes entities.
+        m_aabbs.push_back(*it);
+        this->AddEntity(*it);
+
+        it = m_aabbsToAdd.erase(it);
+
+        if (it == m_aabbsToAdd.end())
+            break;
+
+        ++it;
+    }
 }
 
 
 void TerrainDestructionScene::Update(double time)
 {
     Scene::Update(time);
+
+    LoadNewCircles();
+    LoadNewAABBs();
 
     const float timeBetweenShots = 2.0f;
     static float timeUntilNextShot = 0.0f;
