@@ -82,7 +82,7 @@ void NetworkManager::EstablishGameConnection()
 
                 m_playerNum = 2;
                 cout << "WE ARE PLAYER TWO!" << endl;
-
+                m_foundOpponent = true;
                 return; // Connection established, now return.
             }
         }
@@ -128,6 +128,7 @@ void NetworkManager::EstablishGameConnection()
                 // Player who picks up a broadcast is set to player 1.
                 m_playerNum = 1;
                 cout << "WE ARE PLAYER ONE!" << endl;
+                m_foundOpponent = true;
                 return;
             }
         }

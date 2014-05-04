@@ -46,6 +46,7 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
             {
                 worldOffsetX = 320.5f;
             }
+            break;
         }
     }
 
