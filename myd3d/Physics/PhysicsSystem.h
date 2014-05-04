@@ -11,6 +11,8 @@
 #include "RigidBody\RBPolygon.h"
 #include "../HiResTimer.h"
 
+#include <mutex>
+
 #include <AntTweakBar.h>
 
 #define EPSILON 0.0001
@@ -29,6 +31,10 @@ public:
                       float elast);
     AABB& AddAABB(Entity* entity, const glm::vec2& min, const glm::vec2& max, 
                   const glm::vec2& velocity, float mass, float elast);
+
+    void LoadNewCircles();
+
+    void LoadNewAABBs();
 
     const glm::vec2& GetGravity() { return glm::vec2(m_gravity.x, m_gravity.y) * m_gravityScale; }
 
@@ -53,7 +59,11 @@ private:
     Scene*                  m_parentScene;
 	ContactManifold*        m_manifold;
     std::vector<Circle*>    m_circles;
+    std::vector<Circle*>    m_circlesToAdd;
+    std::mutex              m_circleToAddMutex;
     std::vector<AABB*>      m_aabbs;   
+    std::vector<AABB*>      m_aabbsToAdd;
+    std::mutex              m_aabbsToAddMutex;
     TwBar*                  m_tweakBar;
     float                   m_gravityScale;// = 9.81f * 5.0f; // Could put in struct tbh.
     glm::vec3               m_gravity;// = glm::vec3(0.0f, -1.0f, 0.0f); // vec3 for AntTw.

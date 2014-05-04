@@ -25,6 +25,7 @@ m_gravity(0.0f, -1.0f, 0.0f)
     TwAddVarRW(m_tweakBar, "GravityScale", TW_TYPE_FLOAT, &m_gravityScale, "step = 0.01");
 
     TwDefine(("PhysicsInfo iconified=true "));
+
 }
 
 
@@ -87,9 +88,12 @@ Circle& PhysicsSystem::AddCircle(Entity* entity, float radius, const glm::vec2& 
 	circle->SetVel(velocity.x, velocity.y);
 	circle->SetMass(mass);
 	circle->SetPos(entity->GetPos().x, entity->GetPos().y);
-    circle->SetElasticity(0.6f);
+    circle->SetElasticity(elast);
 
-	m_circles.push_back(circle);
+    {
+        std::lock_guard<std::mutex> lock(m_circleToAddMutex);
+        m_circlesToAdd.push_back(circle);
+    }
 
     return *circle;
 }
@@ -107,9 +111,43 @@ AABB& PhysicsSystem::AddAABB(Entity* entity, const glm::vec2& min, const glm::ve
     aabb->SetPos(entity->GetPos().x, entity->GetPos().y);
     aabb->SetElasticity(elast);
 
-    m_aabbs.push_back(aabb);
+    { // Get access to mutex.
+        std::lock_guard<std::mutex> lock(m_aabbsToAddMutex);
+        m_aabbsToAdd.push_back(aabb);
+    }
 
     return *aabb;
+}
+
+
+void PhysicsSystem::LoadNewCircles()
+{
+    std::lock_guard<std::mutex> lock(m_circleToAddMutex);
+    int size = m_circlesToAdd.size();
+
+    for (auto it = m_circlesToAdd.begin(); it != m_circlesToAdd.end(); /*++it*/)
+    {
+        m_circles.push_back(*it);
+        it = m_circlesToAdd.erase(it);
+        if (it == m_circlesToAdd.end()) break;
+        ++it; // Increment iterator here, to avoid invalid iterator.
+    }
+}
+
+
+void PhysicsSystem::LoadNewAABBs()
+{
+    std::lock_guard<std::mutex> lock(m_aabbsToAddMutex);
+    int size = m_aabbsToAdd.size();
+
+    for (auto it = m_aabbsToAdd.begin(); it != m_aabbsToAdd.end(); /*++it*/)
+    {
+        m_aabbs.push_back(*it);
+        it = m_aabbsToAdd.erase(it);
+
+        if (it == m_aabbsToAdd.end()) break;
+        ++it; // Increment iterator here, to avoid invalid iterator.
+    }
 }
 
 
@@ -121,7 +159,8 @@ void PhysicsSystem::SimulationLoop(double time)
 	//StaticCollisionDetection();
 
 	// Calculate the physics calculations on all objects.
-
+    LoadNewCircles();
+    LoadNewAABBs();
     // Apply gravity to all.
     for (auto& circle : m_circles)
     {

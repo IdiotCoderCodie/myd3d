@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "../Entities/EntityFactory.h"
 #include "TerrainDestructionConsts.h"
+#include "../InputManager.h"
 //#include "../Physics/PhysicsSystem.h"
 #include <time.h>
 #include <fstream>
@@ -29,26 +30,26 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 
     // Wait for connection to peer, and get the player num to position world.
     float worldOffsetX = 0.0f;
-    while (true)
-    {
-        if (!m_networkManager.HasFoundOpponent())
-        {
-            Sleep(100); // Sleep for a bit.
-        }
-        else
-        {
-            int playerNum = m_networkManager.GetPlayerNum();
-            if (playerNum == 1)
-            {
-                worldOffsetX = -320.5f;
-            }
-            else
-            {
-                worldOffsetX = 320.5f;
-            }
-            break;
-        }
-    }
+    //while (true)
+    //{
+    //    if (!m_networkManager.HasFoundOpponent())
+    //    {
+    //        Sleep(100); // Sleep for a bit.
+    //    }
+    //    else
+    //    {
+    //        int playerNum = m_networkManager.GetPlayerNum();
+    //        if (playerNum == 1)
+    //        {
+    //            worldOffsetX = -320.5f;
+    //        }
+    //        else
+    //        {
+    //            worldOffsetX = 320.5f;
+    //        }
+    //        break;
+    //    }
+    //}
 
 
 	m_screenWidth	= d3d.GetScreenWidth();
@@ -93,6 +94,8 @@ TerrainDestructionScene::~TerrainDestructionScene(void)
 {
     m_networkManager.finish();
     m_networkManager.waitForFinish();
+    m_physicsSystem.finish();
+    m_physicsSystem.waitForFinish();
 }
 
 
@@ -140,6 +143,23 @@ void TerrainDestructionScene::AddAABB(float x, float y, glm::vec2& min, glm::vec
 void TerrainDestructionScene::Update(double time)
 {
     Scene::Update(time);
+
+    const float timeBetweenShots = 2.0f;
+    static float timeUntilNextShot = 0.0f;
+    static int totalShots = 0;
+    if (G_InputManager().IsKeyPressed(DIK_1))
+    {
+        if (timeUntilNextShot < 0.00001f)
+        {
+            // Fire shot.
+            AddCircle(200.0f, 500.0f, 10.0f, glm::vec2(0.0f, -100.0f), 1.0f, 0.9f, 
+                      std::string("shot") + to_string(totalShots));
+
+            timeUntilNextShot = timeBetweenShots;
+        }
+    }
+    timeUntilNextShot -= (float)time;
+   // InputManager
 
 	//m_physicsSystem.Update(time);
 }
