@@ -379,7 +379,7 @@ int NetworkManager::run()
             return 0;
 
         CheckForNewPeer();
-        Sleep(100); // TODO: Remove.
+        Sleep(20); // TODO: Remove.
         SetThreadAffinityMask(GetHandle(), 2);
 
         SendUpdateData();

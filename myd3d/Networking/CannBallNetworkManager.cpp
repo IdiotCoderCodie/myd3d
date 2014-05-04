@@ -172,17 +172,17 @@ void CannBallNetworkManager::GetPeerUpdates(int playerNum)
 
     int timeoMs = 500;
     setsockopt(peer.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoMs, sizeof(timeoMs));
-    char buffer[100000];
-    memset(buffer, 0, 100000);
+    static char buffer[10000];
+    memset(buffer, 0, 10000);
     
-    if(peer.Recv(buffer, 1000, 0) < 1)
+    if(peer.Recv(buffer, 9999, 0) < 1)
     {
         // Nothing received... keep calm and carry on.
         return;
     }
 
-    std::string strBuffer(buffer);
-    std::stringstream bufferStream(strBuffer);
+    //std::string strBuffer(buffer);
+    std::stringstream bufferStream(buffer);
 
     std::string head;
     bufferStream >> head;
@@ -226,7 +226,7 @@ void CannBallNetworkManager::GetPeerUpdates(int playerNum)
                     // Update position.
                     bufferStream.ignore(1); // Ignore ":"
                     bufferStream >> x >> y;
-                    entID = "P" + to_string(m_playerNum) + entID;
+                    entID = "P" + to_string(playerNum) + entID;
                     Entity* ent = m_scene->GetEntity(entID);
                     if(ent)
                     {

@@ -50,6 +50,7 @@ TerrainDestructionCannBallScene::TerrainDestructionCannBallScene(const std::stri
         m_networkManager.SetTerrainDestructionCannBallScene(*this);
         m_networkManager.SetPlayerNum(playerNum);
         m_networkManager.start();
+        Sleep(5000);
     }
 }
 
