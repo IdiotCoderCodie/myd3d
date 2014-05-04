@@ -8,8 +8,10 @@
 #include <sstream>
 
 CannBallNetworkManager::CannBallNetworkManager(void)
-    : m_followCam(0),
-    m_followBall(0)
+: m_connected(false),
+    m_followCam(0),
+    m_followBall(0),
+    m_followBallStr()
     // TODO: Initialization list.
 {
 }
@@ -85,8 +87,11 @@ void CannBallNetworkManager::EstablishPeerConnection(int playerNum)
                                     LoadCircle(ssBuffer, entityId);
 
                                     // Update circle to follow if it matches the player we're following.
-                                    if(playerNum == m_playerNum)
-                                        m_followBall = m_scene->GetEntity(entityId);
+                                    if (playerNum == m_playerNum)
+                                    {
+                                        m_followBallStr = entityId;
+                                    }
+                                       // m_followBall = m_scene->GetEntitySafe(entityId);
                                 }
                                 else if(!entityType.compare("SQR"))
                                 {
@@ -209,7 +214,7 @@ void CannBallNetworkManager::GetPeerUpdates(int playerNum)
                     bufferStream.ignore(1); // Ignore ":"
                     bufferStream >> x >> y;
                     entID = "P" + to_string(playerNum) + entID;
-                    Entity* ent = m_scene->GetEntity(entID);
+                    Entity* ent = m_scene->GetEntitySafe(entID);
                     if(ent)
                     {
                         ent->SetPos(glm::vec3(x, y, 0.0f));
@@ -227,23 +232,50 @@ void CannBallNetworkManager::GetPeerUpdates(int playerNum)
                     bufferStream.ignore(1); // Ignore ":"
                     bufferStream >> x >> y;
                     entID = "P" + to_string(playerNum) + entID;
-                    Entity* ent = m_scene->GetEntity(entID);
+                    Entity* ent = m_scene->GetEntitySafe(entID);
                     if(ent)
                     {
                         ent->SetPos(glm::vec3(x, y, 0.0f));
                     }
                 }
             }
-
-            //bufferStream >> head; // Get next entID, (if there is one...)
+        }
+        ///////////////   ADD ENTITY    //////////////
+        else if (!head.compare("ADD"))
+        {
+            std::string entID;
+            bufferStream >> entID;
+            entID = "P" + to_string(playerNum) + entID;
+            std::string type;
+            bufferStream >> type;
+            if (!type.compare("CIRC"))
+            {
+                LoadCircle(bufferStream, entID);
+                if (playerNum == m_playerNum)
+                {
+                    m_followBallStr = entID;
+                }
+            }
+            else if (!type.compare("SQR"))
+            {
+                LoadSquare(bufferStream, entID);
+            }
         }
         bufferStream >> head;
     }
 
-    if(m_followCam && m_followBall)
+    if (m_followCam)
+    {
+        m_followBall = m_scene->GetEntitySafe(m_followBallStr);
+        if (m_followBall)
+        {
+            m_followCam->SetPos(-m_followBall->GetPos());
+        }
+    }
+    /*if(m_followCam && m_followBall)
     {
         m_followCam->SetPos(-m_followBall->GetPos());
-    }
+    }*/
 }
 
 
@@ -255,6 +287,8 @@ int CannBallNetworkManager::run()
 
     EstablishPeerConnection(1); // DONE ^^
     EstablishPeerConnection(2);
+
+    m_connected = true;
     
     while(true)
     {

@@ -38,8 +38,6 @@ public:
     int GetPlayerNum() { return m_playerNum; }
     void SetTerrainDestructionOffworldScene(TerrainDestructionOffworldScene& scene) { m_scene = &scene; }
 
-    std::vector<NetCircle>& GetCircleData() { return m_circles; }
-
     bool IsConnected() { return m_connected; }
 
 private:
@@ -53,5 +51,4 @@ private:
     int m_playerNum;
     SocketStream m_peer; 
     TerrainDestructionOffworldScene* m_scene;
-    std::vector<NetCircle> m_circles;
 };

@@ -64,18 +64,6 @@ TerrainDestructionOffworldScene::TerrainDestructionOffworldScene(const std::stri
 		-m_screenHeight / 2.0f, m_screenHeight / 2.0f, "testCam");
 
     cam->SetPos(glm::vec3(-worldOffsetX, 0.0f, 0.0f));
-
-    Texture* mainCircTex = G_TextureManager().GetTexture("cement.dds");
-    if(!mainCircTex)
-    {
-        mainCircTex = G_TextureManager().LoadTexture(d3d, L"cement.dds", "cement.dds");
-    }
-
-    Texture* circStencil =  G_TextureManager().GetTexture("circleStencil.dds");
-    if(!circStencil)
-    {
-        circStencil = G_TextureManager().LoadTexture(d3d, L"circleStencil.dds", "circleStencil.dds");
-    }
 }
 
 

@@ -38,6 +38,8 @@ public:
     void SetPlayerNum(int num) { m_playerNum = num; }
     void SetTerrainDestructionCannBallScene(TerrainDestructionCannBallScene& scene) { m_scene = &scene; }
 
+    bool IsConnected() { return m_connected; }
+
 private:
     void LoadCircle(istream& in, std::string& id);
     void LoadSquare(istream& in, std::string& id);
@@ -45,10 +47,12 @@ private:
     void GetPeerUpdates(int playerNum);
 
 private:
+    bool m_connected;
     int m_playerNum;
     SocketStream m_player1;
     SocketStream m_player2;
     TerrainDestructionCannBallScene* m_scene;
     Entity* m_followBall;
+    std::string m_followBallStr;
     Entity* m_followCam;
 };
