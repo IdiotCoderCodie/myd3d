@@ -133,7 +133,7 @@ void TerrainDestructionScene::AddAABB(float x, float y, glm::vec2& min, glm::vec
 void TerrainDestructionScene::LoadNewCircles()
 {
     std::lock_guard<std::mutex> lock(m_circlesToAddMutex);
-    // TODO: lock m_circleMutex too.
+    // TODO: lock m_circleMutex too. (NetMgr accesses m_circles for info.)
     std::lock_guard<std::mutex> lock2(m_circlesMutex);
     
     for (auto it = m_circlesToAdd.begin(); it != m_circlesToAdd.end();)

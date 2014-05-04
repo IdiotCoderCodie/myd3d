@@ -90,7 +90,7 @@ void OffworldNetworkManager::EstablishPeerConnection()
                         }                       
                         m_peer.Send("ACK", 3, 0);
 
-                        m_connected = true;
+                        //m_connected = true;
                     }
                 }
                 break;
@@ -162,14 +162,14 @@ void OffworldNetworkManager::GetPeerUpdates()
     char buffer[100000];
     memset(buffer, 0, 100000);
 
-    if(m_peer.Recv(buffer, 100000, 0) < 1)
+    if(m_peer.Recv(buffer, 99999, 0) < 1)
     {
         // Nothing received... keep calm and carry on.
         return;
     }
 
-    std::string strBuffer(buffer);
-    std::stringstream bufferStream(strBuffer);
+    //std::string strBuffer(buffer);
+    std::stringstream bufferStream(buffer);
 
     std::string head;
     bufferStream >> head;
@@ -196,7 +196,7 @@ void OffworldNetworkManager::GetPeerUpdates()
                     bufferStream.ignore(1); // Ignore ":"
                     bufferStream >> x >> y;
                     entID = "P" + to_string(m_playerNum) + entID;
-                    Entity* ent = m_scene->GetEntity(entID);
+                    Entity* ent = m_scene->GetEntitySafe(entID);
                     if(ent)
                     {
                         ent->SetPos(glm::vec3(x, y, 0.0f));
@@ -214,7 +214,7 @@ void OffworldNetworkManager::GetPeerUpdates()
                     bufferStream.ignore(1); // Ignore ":"
                     bufferStream >> x >> y;
                     entID = "P" + to_string(m_playerNum) + entID;
-                    Entity* ent = m_scene->GetEntity(entID);
+                    Entity* ent = m_scene->GetEntitySafe(entID);
                     if(ent)
                     {
                         ent->SetPos(glm::vec3(x, y, 0.0f));
@@ -233,7 +233,7 @@ int OffworldNetworkManager::run()
 
     // TODO: 1. Search for connection via broadcaster.
     EstablishPeerConnection(); // DONE ^^
-    
+    m_connected = true;
     while(true)
     {
         if(isFinishing())
