@@ -12,7 +12,8 @@ using namespace std;
 
 
 NetworkManager::NetworkManager(void)
-    : m_receiver(),
+:   m_foundOpponent(false),
+    m_receiver(),
     m_numPeers(0),
     m_playerNum(1)
 {

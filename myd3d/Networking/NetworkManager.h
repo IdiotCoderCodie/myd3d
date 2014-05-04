@@ -37,6 +37,11 @@ public:
 
     void SetTerrainDestructionScene(TerrainDestructionScene& scene) { m_scene = &scene; }
 
+    bool HasFoundOpponent() { return m_foundOpponent; }
+
+    // Returns what number player we are (1 or 2).
+    int GetPlayerNum() { return m_playerNum; }
+
 private:
     void EstablishGameConnection();
 
@@ -49,6 +54,7 @@ private:
     void SendInitData(SocketStream& peer);
 
 private:
+    bool                        m_foundOpponent;
     BroadcastReceiver           m_receiver;
     SocketStream                m_peers[NM_MAX_PEERS];
     bool                        m_peerIsInit[NM_MAX_PEERS];
