@@ -48,9 +48,9 @@ int UDPBroadcast::run()
         SocketDgram dgramReceive;
         dgramReceive.Open(0);
         int timeoSecs = 5;
-        setsockopt(dgramReceive.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoSecs, sizeof(timeoSecs));
-        std::string t = m_socket.GetLocalAddr().ToString();
-        cout << t << endl;    
+        setsockopt(m_socket.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoSecs, sizeof(timeoSecs));
+      /*  std::string t = m_socket.GetLocalAddr().ToString();
+        cout << t << endl;    */
 
         bool echoMatch = false;
         //while(!echoMatch)
@@ -58,7 +58,7 @@ int UDPBroadcast::run()
         memset(rcvBuff, 0, 100000);
         for(int attempt = 0; attempt < 50; attempt++) // look for our message amongst any background crap.
         {
-            int bytesRcvd = dgramReceive.RecvFrom(rcvBuff, 100000, 0, m_peerAddr);
+            int bytesRcvd = m_socket.RecvFrom(rcvBuff, 100000, 0, m_peerAddr);
             if(bytesRcvd > 0)
             {
                 cout << "Rcvd " << bytesRcvd << " from " << m_peerAddr.ToString();

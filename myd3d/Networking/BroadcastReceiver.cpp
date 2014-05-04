@@ -50,7 +50,7 @@ int BroadcastReceiver::run()
             {
                 cout << "Received message matches key!" << endl;
                 //Sleep(100); // TODO: Remove.
-                SetThreadAffinityMask(GetHandle(), 2);
+                //SetThreadAffinityMask(GetHandle(), 2);
                 // Send reply... will be setting up listener for you to connect to...
                 for(int i = 0; i < 100; i++)
                 {
