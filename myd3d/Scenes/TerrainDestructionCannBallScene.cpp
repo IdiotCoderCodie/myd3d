@@ -60,7 +60,7 @@ TerrainDestructionCannBallScene::TerrainDestructionCannBallScene(const std::stri
         }
     }
 
-    Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, BACKGROUND_TEX, 1000, 1000, m_screenWidth, m_screenHeight, "sqwer");
+    Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, BACKGROUND_TEX, 2560, 1600, m_screenWidth, m_screenHeight, "sqwer");
     
 }
 
