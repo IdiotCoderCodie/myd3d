@@ -7,6 +7,7 @@
 #include <sstream>
 
 OffworldNetworkManager::OffworldNetworkManager(void)
+: m_connected(false)
 {
 }
 
@@ -88,6 +89,8 @@ void OffworldNetworkManager::EstablishPeerConnection()
                             }
                         }                       
                         m_peer.Send("ACK", 3, 0);
+
+                        m_connected = true;
                     }
                 }
                 break;

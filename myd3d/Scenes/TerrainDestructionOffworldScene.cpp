@@ -20,14 +20,50 @@ TerrainDestructionOffworldScene::TerrainDestructionOffworldScene(const std::stri
 {
     D3D& d3d = GetParent().GetD3DInstance();
 
+    if (!m_wsa.isOk())
+    {
+        cerr << "Error initializing wsa." << endl;
+    }
+    else
+    {
+        m_networkManager.SetTerrainDestructionOffworldScene(*this);
+        m_networkManager.SetPlayerNum(playerNum);
+        m_networkManager.start();
+    }
+
+    float worldOffsetX = 0.0f;
+    // Wait until connection is made before doing anything stupid.
+    while (true)
+    {
+        if (!m_networkManager.IsConnected())
+        {
+            Sleep(100);
+        }
+        else
+        {
+            // Don't really need this bit here, as it doesn't rely on netMgr connecting. ah well.
+            if (playerNum == 1)
+            { 
+                worldOffsetX = -320.5f;
+            }
+            else
+            {
+                worldOffsetX = 320.5f;
+            }
+            break;
+        }
+    }
+
 	m_screenWidth	= d3d.GetScreenWidth();
 	m_screenHeight	= d3d.GetScreenHeight();
 
     EntityFactory::CreateBmpEntity(*this, d3d, BACKGROUND_TEX, 1000, 1000, m_screenWidth, m_screenHeight, "sqwer");
 
     // Camera.
-    EntityFactory::CreateOrthoFpCameraEntity(*this, -m_screenWidth / 2.0f, m_screenWidth / 2.0f,
+    Entity* cam = EntityFactory::CreateOrthoFpCameraEntity(*this, -m_screenWidth / 2.0f, m_screenWidth / 2.0f,
 		-m_screenHeight / 2.0f, m_screenHeight / 2.0f, "testCam");
+
+    cam->SetPos(glm::vec3(worldOffsetX, 0.0f, 0.0f));
 
     Texture* mainCircTex = G_TextureManager().GetTexture("cement.dds");
     if(!mainCircTex)
@@ -41,25 +77,12 @@ TerrainDestructionOffworldScene::TerrainDestructionOffworldScene(const std::stri
         circStencil = G_TextureManager().LoadTexture(d3d, L"circleStencil.dds", "circleStencil.dds");
     }
    
-    m_circleBmp = new VisualBitmapComponent(d3d, mainCircTex->GetTexture(), circStencil->GetTexture(),
+    /*m_circleBmp = new VisualBitmapComponent(d3d, mainCircTex->GetTexture(), circStencil->GetTexture(),
                                             100, 100, m_screenWidth, m_screenHeight);
 
     m_circleEnt = new Entity(*this, "tehCircle");
 
-    m_circleEnt->SetComponent(m_circleBmp);
-
-
-    cerr << "test" << endl;
-    if(!m_wsa.isOk())
-    {
-        cerr << "Error initializing wsa." << endl;
-    }
-    else
-    {
-        m_networkManager.SetTerrainDestructionOffworldScene(*this);
-        m_networkManager.SetPlayerNum(playerNum);
-        m_networkManager.start();
-    }
+    m_circleEnt->SetComponent(m_circleBmp); */  
 }
 
 

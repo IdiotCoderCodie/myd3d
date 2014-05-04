@@ -30,26 +30,26 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 
     // Wait for connection to peer, and get the player num to position world.
     float worldOffsetX = 0.0f;
-    //while (true)
-    //{
-    //    if (!m_networkManager.HasFoundOpponent())
-    //    {
-    //        Sleep(100); // Sleep for a bit.
-    //    }
-    //    else
-    //    {
-    //        int playerNum = m_networkManager.GetPlayerNum();
-    //        if (playerNum == 1)
-    //        {
-    //            worldOffsetX = -320.5f;
-    //        }
-    //        else
-    //        {
-    //            worldOffsetX = 320.5f;
-    //        }
-    //        break;
-    //    }
-    //}
+    while (true)
+    {
+        if (!m_networkManager.HasFoundOpponent())
+        {
+            Sleep(100); // Sleep for a bit.
+        }
+        else
+        {
+            int playerNum = m_networkManager.GetPlayerNum();
+            if (playerNum == 1)
+            {
+                worldOffsetX = -320.5f;
+            }
+            else
+            {
+                worldOffsetX = 320.5f;
+            }
+            break;
+        }
+    }
 
 
 	m_screenWidth	= d3d.GetScreenWidth();
@@ -134,6 +134,7 @@ void TerrainDestructionScene::LoadNewCircles()
 {
     std::lock_guard<std::mutex> lock(m_circlesToAddMutex);
     // TODO: lock m_circleMutex too.
+    std::lock_guard<std::mutex> lock2(m_circlesMutex);
     
     for (auto it = m_circlesToAdd.begin(); it != m_circlesToAdd.end();)
     {
@@ -155,7 +156,8 @@ void TerrainDestructionScene::LoadNewAABBs()
 {
     std::lock_guard<std::mutex> lock(m_aabbsToAddMutex); 
     // TODO: lock m_aabbsMutex.
-
+    std::lock_guard<std::mutex> lock2(m_circlesMutex);
+    
     for (auto it = m_aabbsToAdd.begin(); it != m_aabbsToAdd.end();)
     {
         // Add to vector for networking data access and add to scenes entities.
