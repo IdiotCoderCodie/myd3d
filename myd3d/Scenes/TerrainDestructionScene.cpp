@@ -81,7 +81,7 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
         if (cannonPosX == i)
         {
             m_cannon = EntityFactory::CreateBmpEntity(*this, d3d, CANNON_TEX, CANNON_STENCIL,
-                UNIT_SIZE, UNIT_SIZE, 0, 0, "cannon");
+                UNIT_SIZE, UNIT_SIZE, 0, 0, "P" + to_string(m_networkManager.GetPlayerNum()) + "cannon");
             m_cannon->SetPos(glm::vec3(xPos, yPos + UNIT_SIZE, 0.0f));
         }
     }
@@ -89,13 +89,13 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 
     // Walls.
     AddAABB(worldOffsetX - 320.0f - 5.0f, 0.0f, glm::vec2(-10.0f, -240.0f), glm::vec2(0.0f, 240.0f), glm::vec2(0.0f),
-            0.0f, 0.8f, std::string("leftWall"));
+        0.0f, 0.8f, "P" + to_string(m_networkManager.GetPlayerNum()) + std::string("leftWall"));
     
     AddAABB(worldOffsetX + 320.0f + 5.0f, 0.0f, glm::vec2(-10.0f, -240.0f), glm::vec2(0.0f, 240.0f), glm::vec2(0.0f),
-            0.0f, 0.8f, std::string("rightWall"));
+        0.0f, 0.8f, "P" + to_string(m_networkManager.GetPlayerNum()) + std::string("rightWall"));
 
     AddAABB(worldOffsetX, -240.0f - 5.0f, glm::vec2(-320.0f, -10.0f), glm::vec2(320.0f, 0.0f), glm::vec2(0.0f),
-            0.0f, 0.8f, std::string("floorWall"));
+        0.0f, 0.8f, "P" + to_string(m_networkManager.GetPlayerNum()) + std::string("floorWall"));
 
 
 	Entity* cam = EntityFactory::CreateOrthoFpCameraEntity(*this, -320.0f, 320.0f,
@@ -125,7 +125,9 @@ void TerrainDestructionScene::AddCircle(float x, float y, float radius, glm::vec
                                         float mass, float elast, std::string& id)
 {
     PhysCircleEntity* newEnt =
-        new PhysCircleEntity(*this, id, m_physicsSystem, radius, glm::vec2(x, y), vel, mass, elast);
+        new PhysCircleEntity(*this,
+        "P" + to_string(m_networkManager.GetPlayerNum()) + id,
+        m_physicsSystem, radius, glm::vec2(x, y), vel, mass, elast);
 
     //this->AddEntity(newEnt);
 
@@ -141,7 +143,9 @@ void TerrainDestructionScene::AddCircleNetwork(float x, float y, float radius, g
     float mass, float elast, std::string& id)
 {
     PhysCircleEntity* newEnt =
-        new PhysCircleEntity(*this, id, m_physicsSystem, radius, glm::vec2(x, y), vel, mass, elast);
+        new PhysCircleEntity(*this, 
+        "P" + to_string(m_networkManager.GetPlayerNum()) + id,
+        m_physicsSystem, radius, glm::vec2(x, y), vel, mass, elast);
 
     //this->AddEntity(newEnt);
 
@@ -162,8 +166,10 @@ void TerrainDestructionScene::AddCircleNetwork(float x, float y, float radius, g
 void TerrainDestructionScene::AddAABB(float x, float y, glm::vec2& min, glm::vec2& max, glm::vec2& vel, 
                                       float mass, float elast, std::string& id)
 {
-    PhysAABBEntity* newEnt = new PhysAABBEntity(*this, id, m_physicsSystem, max.x - min.x, max.y - min.y, 
-                                                glm::vec2(x, y), vel, mass, elast);
+    PhysAABBEntity* newEnt = new PhysAABBEntity(*this, 
+        "P" + to_string(m_networkManager.GetPlayerNum()) + id,
+        m_physicsSystem, max.x - min.x, max.y - min.y,
+        glm::vec2(x, y), vel, mass, elast);
 
 
     std::lock_guard<std::mutex> lock(m_aabbsToAddMutex);

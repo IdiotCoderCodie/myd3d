@@ -78,7 +78,7 @@ void CannBallNetworkManager::EstablishPeerConnection(int playerNum)
                                 // Load in entity data.
                                 ssBuffer >> entityId;
                                  
-                                entityId = "P" + to_string(playerNum) + entityId;
+                                entityId =/* "P" + to_string(playerNum) + */entityId;
                                 // What is it? Circle, Square?
                                 std::string entityType;
                                 ssBuffer >> entityType;
@@ -232,7 +232,7 @@ void CannBallNetworkManager::GetPeerUpdates(int playerNum)
                     // Update position.
                     bufferStream.ignore(1); // Ignore ":"
                     bufferStream >> x >> y;
-                    entID = "P" + to_string(playerNum) + entID;
+                    entID = /*"P" + to_string(playerNum) +*/ entID;
                     Entity* ent = m_scene->GetEntitySafe(entID);
                     if(ent)
                     {
@@ -250,7 +250,7 @@ void CannBallNetworkManager::GetPeerUpdates(int playerNum)
                     // Update position.
                     bufferStream.ignore(1); // Ignore ":"
                     bufferStream >> x >> y;
-                    entID = "P" + to_string(playerNum) + entID;
+                    entID = /*"P" + to_string(playerNum) +*/ entID;
                     Entity* ent = m_scene->GetEntitySafe(entID);
                     if(ent)
                     {
@@ -264,7 +264,7 @@ void CannBallNetworkManager::GetPeerUpdates(int playerNum)
         {
             std::string entID;
             bufferStream >> entID;
-            entID = "P" + to_string(playerNum) + entID;
+            entID = /*"P" + to_string(playerNum) +*/ entID;
             std::string type;
             bufferStream >> type;
             if (!type.compare("CIRC"))

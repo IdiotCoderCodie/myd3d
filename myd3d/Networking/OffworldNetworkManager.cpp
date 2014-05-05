@@ -72,7 +72,7 @@ void OffworldNetworkManager::EstablishPeerConnection()
                                 // Load in entity data.
                                 ssBuffer >> entityId;
                                  
-                                entityId = "P" + to_string(m_playerNum) + entityId;
+                                entityId = /*"P" + to_string(m_playerNum) +*/ entityId;
                                 // What is it? Circle, Square?
                                 std::string entityType;
                                 ssBuffer >> entityType;
@@ -216,7 +216,7 @@ void OffworldNetworkManager::GetPeerUpdates()
                     // Update position.
                     bufferStream.ignore(1); // Ignore ":"
                     bufferStream >> x >> y;
-                    entID = "P" + to_string(m_playerNum) + entID;
+                    entID = /*"P" + to_string(m_playerNum) +*/ entID;
                     Entity* ent = m_scene->GetEntitySafe(entID);
                     if(ent)
                     {
@@ -234,7 +234,7 @@ void OffworldNetworkManager::GetPeerUpdates()
                     // Update position.
                     bufferStream.ignore(1); // Ignore ":"
                     bufferStream >> x >> y;
-                    entID = "P" + to_string(m_playerNum) + entID;
+                    entID = /*"P" + to_string(m_playerNum) +*/ entID;
                     Entity* ent = m_scene->GetEntitySafe(entID);
                     if(ent)
                     {
@@ -249,7 +249,7 @@ void OffworldNetworkManager::GetPeerUpdates()
         {
             std::string entID;
             bufferStream >> entID;
-            entID = "P" + to_string(m_playerNum) + entID;
+            entID = /*"P" + to_string(m_playerNum) +*/ entID;
             std::string type;
             bufferStream >> type;
             if (!type.compare("CIRC"))
