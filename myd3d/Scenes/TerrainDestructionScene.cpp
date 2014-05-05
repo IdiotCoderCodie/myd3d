@@ -43,11 +43,11 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
             int playerNum = m_networkManager.GetPlayerNum();
             if (playerNum == 1)
             {
-                worldOffsetX = -HOME_WIDTH / 2.0f;
+                worldOffsetX = (-HOME_WIDTH / 2.0f) - 10.0f;
             }
             else
             {
-                worldOffsetX = 320.5 / 2.0f;
+                worldOffsetX = (HOME_WIDTH / 2.0f) + 10.0f;
             }
             break;
         }

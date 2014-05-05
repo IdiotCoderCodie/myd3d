@@ -44,11 +44,11 @@ TerrainDestructionOffworldScene::TerrainDestructionOffworldScene(const std::stri
             // Don't really need this bit here, as it doesn't rely on netMgr connecting. ah well.
             if (playerNum == 1)
             { 
-                worldOffsetX = -320.5f;
+                worldOffsetX = (-HOME_WIDTH / 2.0f) - 10.0f;
             }
             else
             {
-                worldOffsetX = 320.5f;
+                worldOffsetX = (HOME_WIDTH / 2.0f) + 10.0f;
             }
             break;
         }
