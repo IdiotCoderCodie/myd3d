@@ -365,6 +365,7 @@ void TerrainDestructionScene::CheckForHandovers()
 
             m_circlesToRemove.push_back(*it); // add the circle entity to be removed.
         }
+        ++it;
     }
 }
 
