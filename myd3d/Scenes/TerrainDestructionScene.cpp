@@ -265,7 +265,7 @@ void TerrainDestructionScene::GetTransferCircles(ostream& out)
         ++it;
     }
 
-    m_circlesToTransfer.empty();
+    m_circlesToTransfer.clear();
 }
 
 
