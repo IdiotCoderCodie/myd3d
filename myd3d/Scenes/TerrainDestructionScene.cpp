@@ -441,9 +441,10 @@ void TerrainDestructionScene::DeleteToBeRemoved()
 
 void TerrainDestructionScene::Update(double time)
 {
+    DeleteToBeRemoved();
     Scene::Update(time);
 
-    
+    CheckForHandovers();
 
     LoadNewCircles();
     LoadNewAABBs();

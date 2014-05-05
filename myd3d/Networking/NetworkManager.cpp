@@ -441,6 +441,7 @@ int NetworkManager::run()
 
     thread checkThread = thread(&NetworkManager::CheckForTransfers, this);
 
+    thread transferThread = thread(&NetworkManager::SendTransfers, this);
 
     // Start the receiver to check for incoming connections.
     // ERROR HERE
