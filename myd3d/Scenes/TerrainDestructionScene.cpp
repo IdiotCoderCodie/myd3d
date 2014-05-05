@@ -280,19 +280,19 @@ void TerrainDestructionScene::FireGrapeShot(int shotNumber)
             HALF_UNIT_SIZE / 4.0f,    // Radius
             glm::normalize(glm::vec2(m_cannonAim.x, m_cannonAim.y * 0.9)) * m_cannonPower, // Vel.
             1.0f, 0.9f,    // Mass, Elast
-            std::string("shot") + to_string(shotNumber));  // ID
+            std::string("shot") + to_string(shotNumber+1));  // ID
         // Third.
         AddCircleNetwork(centrePos.x + HALF_UNIT_SIZE / 2.0f, centrePos.y + HALF_UNIT_SIZE / 2.0f,    // StartPos
             HALF_UNIT_SIZE / 4.0f,    // Radius
             glm::normalize(glm::vec2(m_cannonAim.x * 0.9, m_cannonAim.y)) * m_cannonPower, // Vel.
             1.0f, 0.9f,    // Mass, Elast
-            std::string("shot") + to_string(shotNumber));  // ID
+            std::string("shot") + to_string(shotNumber+2));  // ID
         // Fourth
         AddCircleNetwork(centrePos.x + HALF_UNIT_SIZE / 2.0f, centrePos.y,    // StartPos
             HALF_UNIT_SIZE / 4.0f,    // Radius
             glm::normalize(glm::vec2(m_cannonAim.x * 0.9, m_cannonAim.y * 0.9)) * m_cannonPower, // Vel.
             1.0f, 0.9f,    // Mass, Elast
-            std::string("shot") + to_string(shotNumber));  // ID
+            std::string("shot") + to_string(shotNumber+3));  // ID
     }
     else
     {
@@ -308,19 +308,19 @@ void TerrainDestructionScene::FireGrapeShot(int shotNumber)
             HALF_UNIT_SIZE / 4.0f,    // Radius
             glm::normalize(glm::vec2(m_cannonAim.x, m_cannonAim.y * 0.9)) * m_cannonPower, // Vel.
             1.0f, 0.9f,    // Mass, Elast
-            std::string("shot") + to_string(shotNumber));  // ID
+            std::string("shot") + to_string(shotNumber+1));  // ID
         // Third.
         AddCircle(centrePos.x + HALF_UNIT_SIZE / 2.0f, centrePos.y + HALF_UNIT_SIZE / 2.0f,    // StartPos
             HALF_UNIT_SIZE / 4.0f,    // Radius
             glm::normalize(glm::vec2(m_cannonAim.x * 0.9, m_cannonAim.y)) * m_cannonPower, // Vel.
             1.0f, 0.9f,    // Mass, Elast
-            std::string("shot") + to_string(shotNumber));  // ID
+            std::string("shot") + to_string(shotNumber+2));  // ID
         // Fourth
         AddCircle(centrePos.x + HALF_UNIT_SIZE / 2.0f, centrePos.y,    // StartPos
             HALF_UNIT_SIZE / 4.0f,    // Radius
             glm::normalize(glm::vec2(m_cannonAim.x * 0.9, m_cannonAim.y * 0.9)) * m_cannonPower, // Vel.
             1.0f, 0.9f,    // Mass, Elast
-            std::string("shot") + to_string(shotNumber));  // ID
+            std::string("shot") + to_string(shotNumber+3));  // ID
     }
 }
 
@@ -350,7 +350,7 @@ void TerrainDestructionScene::Update(double time)
         {
             // Fire shot.
             FireGrapeShot(totalShots);
-            totalShots++;
+            totalShots+=4;
             timeUntilNextShot = timeBetweenShots;
         }
     }
