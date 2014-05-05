@@ -1,19 +1,19 @@
 #include "PhysicsSystem.h"
 
 
-PhysicsSystem::PhysicsSystem(void) :
-m_timer(),
-m_dt(0.0f),
-m_dtModifier(1.0f),
-m_targetfps(1000), 
-m_actualfps(0),
-m_parentScene(0),
-m_manifold(0),
-m_circles(),
-m_aabbs(),
-m_tweakBar(0),
-m_gravityScale(9.81f * 5.0f),
-m_gravity(0.0f, -1.0f, 0.0f)
+PhysicsSystem::PhysicsSystem(void) 
+:   m_timer(),
+    m_dt(0.0f),
+    m_dtModifier(1.0f),
+    m_targetfps(1000), 
+    m_actualfps(0),
+    m_parentScene(0),
+    m_manifold(0),
+    m_circles(),
+    m_aabbs(),
+    m_tweakBar(0),
+    m_gravityScale(9.81f * 50.0f),
+    m_gravity(0.0f, -1.0f, 0.0f)
 {
 	m_manifold = new ContactManifold();
 
@@ -24,7 +24,7 @@ m_gravity(0.0f, -1.0f, 0.0f)
     TwAddVarRO(m_tweakBar, "dt", TW_TYPE_FLOAT, &m_dt, "step=0.00001");
     TwAddVarRW(m_tweakBar, "dtMod", TW_TYPE_FLOAT, &m_dtModifier, "step = 0.01");
     TwAddVarRW(m_tweakBar, "GravityVec", TW_TYPE_DIR3F, &m_gravity, "");
-    TwAddVarRW(m_tweakBar, "GravityScale", TW_TYPE_FLOAT, &m_gravityScale, "step = 0.01");
+    TwAddVarRW(m_tweakBar, "GravityScale", TW_TYPE_FLOAT, &m_gravityScale, "step = 1.0");
 
     TwDefine(("PhysicsInfo iconified=true "));
 
@@ -164,12 +164,12 @@ void PhysicsSystem::SimulationLoop(double time)
     // Apply gravity to all.
     for (auto& circle : m_circles)
     {
-        circle->ApplyForce(glm::vec2(m_gravity.x, m_gravity.y) * m_gravityScale);
+        circle->ApplyForce(glm::vec2(m_gravity.x, m_gravity.y) * m_gravityScale * circle->GetMass());
     }
 
     for (auto& aabb : m_aabbs)
     {
-        aabb->ApplyForce(glm::vec2(m_gravity.x, m_gravity.y) * m_gravityScale);
+        aabb->ApplyForce(glm::vec2(m_gravity.x, m_gravity.y) * m_gravityScale * aabb->GetMass());
     }
 
 	CalculateObjectPhysics();

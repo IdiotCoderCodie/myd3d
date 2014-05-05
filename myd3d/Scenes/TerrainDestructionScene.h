@@ -39,6 +39,10 @@ public:
 
     void GetNewNetworkCircles(ostream& out);
 
+    void FireHeavyRound(int shotNumber);
+    void FireGrapeShot(int shotNumber);
+    void FireExplodingShot(int shotNumber);
+
 private:
     int                             m_screenWidth;
     int                             m_screenHeight;

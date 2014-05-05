@@ -61,7 +61,7 @@ RigidBody::Derivative RigidBody::Evaluate(const State& initial, float dt, const 
 
 glm::vec2 RigidBody::Acceleration(const State& state, float dt)
 {
-    m_force *= m_mass;
+    //glm::vec2 force = m_force * m_mass;
     glm::vec2 accel = m_force * GetInvMass();  // m_mass;
 
     return accel;

@@ -238,6 +238,87 @@ void TerrainDestructionScene::GetNewNetworkCircles(ostream& out)
 }
 
 
+void TerrainDestructionScene::FireHeavyRound(int shotNumber)
+{
+    if (m_networkManager.GetNumPeers() > 0)
+    {
+        AddCircleNetwork(m_cannon->GetPos().x, m_cannon->GetPos().y,    // StartPos
+            HALF_UNIT_SIZE / 2.0f,    // Radius
+            glm::vec2(m_cannonAim.x, m_cannonAim.y) * m_cannonPower, // Vel.
+            4.0f, 0.9f,    // Mass, Elast
+            std::string("shot") + to_string(shotNumber));  // ID
+    }
+    else
+    { // No peers are connected, so no need to signal that new stuff has been added.
+        AddCircle(m_cannon->GetPos().x, m_cannon->GetPos().y + 10.0f,    // StartPos
+            HALF_UNIT_SIZE / 2.0f,    // Radius
+            glm::vec2(m_cannonAim.x, m_cannonAim.y) * m_cannonPower,  // Velocity
+            4.0f, 0.9f,    // Mass, Elast
+            std::string("shot") + to_string(shotNumber));
+    }
+}
+
+void TerrainDestructionScene::FireGrapeShot(int shotNumber)
+{
+    if (m_networkManager.GetNumPeers() > 0)
+    {
+        glm::vec2 centrePos(m_cannon->GetPos().x, m_cannon->GetPos().y);
+        // First ball.
+        AddCircleNetwork(centrePos.x, centrePos.y,    // StartPos
+            HALF_UNIT_SIZE / 4.0f,    // Radius
+            glm::normalize(glm::vec2(m_cannonAim.x, m_cannonAim.y)) * m_cannonPower, // Vel.
+            1.0f, 0.9f,    // Mass, Elast
+            std::string("shot") + to_string(shotNumber));  // ID
+        // Second.
+        AddCircleNetwork(centrePos.x, centrePos.y + HALF_UNIT_SIZE / 2.0f,    // StartPos
+            HALF_UNIT_SIZE / 4.0f,    // Radius
+            glm::normalize(glm::vec2(m_cannonAim.x, m_cannonAim.y * 0.9)) * m_cannonPower, // Vel.
+            1.0f, 0.9f,    // Mass, Elast
+            std::string("shot") + to_string(shotNumber));  // ID
+        // Third.
+        AddCircleNetwork(centrePos.x + HALF_UNIT_SIZE / 2.0f, centrePos.y + HALF_UNIT_SIZE / 2.0f,    // StartPos
+            HALF_UNIT_SIZE / 4.0f,    // Radius
+            glm::normalize(glm::vec2(m_cannonAim.x * 0.9, m_cannonAim.y)) * m_cannonPower, // Vel.
+            1.0f, 0.9f,    // Mass, Elast
+            std::string("shot") + to_string(shotNumber));  // ID
+        // Fourth
+        AddCircleNetwork(centrePos.x + HALF_UNIT_SIZE / 2.0f, centrePos.y,    // StartPos
+            HALF_UNIT_SIZE / 4.0f,    // Radius
+            glm::normalize(glm::vec2(m_cannonAim.x * 0.9, m_cannonAim.y * 0.9)) * m_cannonPower, // Vel.
+            1.0f, 0.9f,    // Mass, Elast
+            std::string("shot") + to_string(shotNumber));  // ID
+    }
+    else
+    {
+        glm::vec2 centrePos(m_cannon->GetPos().x, m_cannon->GetPos().y);
+        // First ball.
+        AddCircle(centrePos.x, centrePos.y,    // StartPos
+            HALF_UNIT_SIZE / 4.0f,    // Radius
+            glm::normalize(glm::vec2(m_cannonAim.x, m_cannonAim.y)) * m_cannonPower, // Vel.
+            1.0f, 0.9f,    // Mass, Elast
+            std::string("shot") + to_string(shotNumber));  // ID
+        // Second.
+        AddCircle(centrePos.x, centrePos.y + HALF_UNIT_SIZE / 2.0f,    // StartPos
+            HALF_UNIT_SIZE / 4.0f,    // Radius
+            glm::normalize(glm::vec2(m_cannonAim.x, m_cannonAim.y * 0.9)) * m_cannonPower, // Vel.
+            1.0f, 0.9f,    // Mass, Elast
+            std::string("shot") + to_string(shotNumber));  // ID
+        // Third.
+        AddCircle(centrePos.x + HALF_UNIT_SIZE / 2.0f, centrePos.y + HALF_UNIT_SIZE / 2.0f,    // StartPos
+            HALF_UNIT_SIZE / 4.0f,    // Radius
+            glm::normalize(glm::vec2(m_cannonAim.x * 0.9, m_cannonAim.y)) * m_cannonPower, // Vel.
+            1.0f, 0.9f,    // Mass, Elast
+            std::string("shot") + to_string(shotNumber));  // ID
+        // Fourth
+        AddCircle(centrePos.x + HALF_UNIT_SIZE / 2.0f, centrePos.y,    // StartPos
+            HALF_UNIT_SIZE / 4.0f,    // Radius
+            glm::normalize(glm::vec2(m_cannonAim.x * 0.9, m_cannonAim.y * 0.9)) * m_cannonPower, // Vel.
+            1.0f, 0.9f,    // Mass, Elast
+            std::string("shot") + to_string(shotNumber));  // ID
+    }
+}
+
+
 void TerrainDestructionScene::Update(double time)
 {
     Scene::Update(time);
@@ -252,22 +333,17 @@ void TerrainDestructionScene::Update(double time)
         if (timeUntilNextShot < 0.00001f)
         {
             // Fire shot.
-            if (m_networkManager.GetNumPeers() > 0)
-            {
-                AddCircleNetwork(m_cannon->GetPos().x, m_cannon->GetPos().y,    // StartPos
-                                 HALF_UNIT_SIZE,    // Radius
-                                 glm::vec2(m_cannonAim.x, m_cannonAim.y) * m_cannonPower, // Vel.
-                                 4.0f, 0.9f,    // Mass, Elast
-                                 std::string("shot") + to_string(totalShots));  // ID
-            }
-            else
-            { // No peers are connected, so no need to signal that new stuff has been added.
-                AddCircle(m_cannon->GetPos().x, m_cannon->GetPos().y + 10.0f,    // StartPos
-                          HALF_UNIT_SIZE / 2.0f,    // Radius
-                          glm::vec2(m_cannonAim.x, m_cannonAim.y) * m_cannonPower,  // Velocity
-                          4.0f, 0.9f,    // Mass, Elast
-                          std::string("shot") + to_string(totalShots));
-            }
+            FireHeavyRound(totalShots);
+            totalShots++;
+            timeUntilNextShot = timeBetweenShots;
+        }
+    }
+    else if (G_InputManager().IsKeyPressed(DIK_2))
+    {
+        if (timeUntilNextShot < 0.00001f)
+        {
+            // Fire shot.
+            FireGrapeShot(totalShots);
             totalShots++;
             timeUntilNextShot = timeBetweenShots;
         }
