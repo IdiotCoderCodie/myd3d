@@ -325,7 +325,7 @@ void NetworkManager::CheckForTransfers()
         bufferStream >> head;
         while (!bufferStream.eof())
         {
-            if (!head.compare("LOSTCTRL "))
+            if (!head.compare("LOSTCTRL"))
             {
                 // Incoming circle to add to scene.
                 std::string entID;
