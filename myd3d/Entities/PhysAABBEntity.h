@@ -27,6 +27,8 @@ public:
     void SetMax(const glm::vec2& max)       { m_aabb->SetMax(max); }
     void SetMass(float mass)                { m_aabb->SetMass(mass); }
 
+    void DetachPhysicsObject();
+
 private:
     PhysicsSystem& m_physicsSystem;
     VisualBitmapComponent* m_bmp;

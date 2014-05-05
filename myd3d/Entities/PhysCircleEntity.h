@@ -25,6 +25,8 @@ public:
     void SetRadius(float radius)            { m_circle->SetRadius(radius); }
     void SetMass(float mass)                { m_circle->SetMass(mass); }
 
+    void DetachPhysicsObject();
+
 private:
     PhysicsSystem& m_physicsSystem;
     VisualBitmapComponent* m_bmp; 

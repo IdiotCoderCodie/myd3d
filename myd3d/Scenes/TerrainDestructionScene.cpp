@@ -6,6 +6,7 @@
 //#include "../Physics/PhysicsSystem.h"
 #include <time.h>
 #include <fstream>
+#include <algorithm>
 
 #define _NETWORK_DEBUGOUT
 #ifndef _NETWORK_DEBUGOUT
@@ -15,7 +16,8 @@ std::ofstream debugOut("TerrainDestructionNetworkingLog.txt");
 TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneManager* sceneMgr)
     : Scene(name, sceneMgr),
     m_cannonAim(0.0f, 1.0f, 0.0f),
-    m_cannonPower(400.0f)
+    m_cannonPower(400.0f),
+    m_worldOffsetX(0.0f)
 {
     D3D& d3d = GetParent().GetD3DInstance();
 
@@ -31,7 +33,7 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
     }
 
     // Wait for connection to peer, and get the player num to position world.
-    float worldOffsetX = 0.0f;
+    m_worldOffsetX = 0.0f;
     while (true)
     {
         if (!m_networkManager.HasFoundOpponent())
@@ -43,11 +45,11 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
             int playerNum = m_networkManager.GetPlayerNum();
             if (playerNum == 1)
             {
-                worldOffsetX = (-HOME_WIDTH / 2.0f) - 10.0f;
+                m_worldOffsetX = (-HOME_WIDTH / 2.0f) - 10.0f;
             }
             else
             {
-                worldOffsetX = (HOME_WIDTH / 2.0f) + 10.0f;
+                m_worldOffsetX = (HOME_WIDTH / 2.0f) + 10.0f;
             }
             break;
         }
@@ -60,11 +62,11 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 
     Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, BACKGROUND_TEX, 2560, 1600, m_screenWidth, m_screenHeight, "bg");
     
-    //AddCircle(worldOffsetX + 250.0f, 400.0f, 20.0f, glm::vec2(-20.0f, 0.0f), 1.0f, 0.9f, std::string("circ3"));
+    //AddCircle(m_worldOffsetX + 250.0f, 400.0f, 20.0f, glm::vec2(-20.0f, 0.0f), 1.0f, 0.9f, std::string("circ3"));
 
     for(int i = 0; i < 20; i++)
     {
-        float xPos = worldOffsetX + HOME_LEFT + UNIT_SIZE / 2.0f + (UNIT_SIZE * i);
+        float xPos = m_worldOffsetX + HOME_LEFT + UNIT_SIZE / 2.0f + (UNIT_SIZE * i);
         float yPos;
         for(int y = 0; y < rand() % 7 + 6; y++)
         {
@@ -88,20 +90,20 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 
 
     // Walls.
-    AddAABB(worldOffsetX - 320.0f - 5.0f, 0.0f, glm::vec2(-10.0f, -240.0f), glm::vec2(0.0f, 240.0f), glm::vec2(0.0f),
+    AddAABB(m_worldOffsetX - 320.0f - 5.0f, 0.0f, glm::vec2(-10.0f, -240.0f), glm::vec2(0.0f, 240.0f), glm::vec2(0.0f),
         0.0f, 0.8f, "P" + to_string(m_networkManager.GetPlayerNum()) + std::string("leftWall"));
     
-    AddAABB(worldOffsetX + 320.0f + 5.0f, 0.0f, glm::vec2(-10.0f, -240.0f), glm::vec2(0.0f, 240.0f), glm::vec2(0.0f),
+    AddAABB(m_worldOffsetX + 320.0f + 5.0f, 0.0f, glm::vec2(-10.0f, -240.0f), glm::vec2(0.0f, 240.0f), glm::vec2(0.0f),
         0.0f, 0.8f, "P" + to_string(m_networkManager.GetPlayerNum()) + std::string("rightWall"));
 
-    AddAABB(worldOffsetX, -240.0f - 5.0f, glm::vec2(-320.0f, -10.0f), glm::vec2(320.0f, 0.0f), glm::vec2(0.0f),
+    AddAABB(m_worldOffsetX, -240.0f - 5.0f, glm::vec2(-320.0f, -10.0f), glm::vec2(320.0f, 0.0f), glm::vec2(0.0f),
         0.0f, 0.8f, "P" + to_string(m_networkManager.GetPlayerNum()) + std::string("floorWall"));
 
 
 	Entity* cam = EntityFactory::CreateOrthoFpCameraEntity(*this, -320.0f, 320.0f,
 		-240.0f, 240.0f, "testCam");
 
-    cam->SetPos(glm::vec3(-worldOffsetX, 0.0f, 0.0f));
+    cam->SetPos(glm::vec3(-m_worldOffsetX, 0.0f, 0.0f));
 
     m_physicsSystem.start();
 
@@ -244,6 +246,25 @@ void TerrainDestructionScene::GetNewNetworkCircles(ostream& out)
 }
 
 
+// Add to the ostream data of any circles that need to be transferred over.
+void TerrainDestructionScene::GetTransferCircles(ostream& out)
+{
+    std::lock_guard<std::mutex> toTransLock(m_circlesToTransferMutex);
+    for (auto it = m_circlesToTransfer.begin(); it != m_circlesToTransfer.end();)
+    {
+        Circle& circ = it->second;
+        out << "LOSTCTRL " << it->first << " CIRC "
+            /*<< "X: "*/ << circ.GetPos().x << " " << circ.GetPos().y << " "
+            /*<< "R: " */<< circ.GetRadius() << " "
+            /*<< "V: "*/ << circ.GetVel().x << " " << circ.GetVel().y << " "
+            /*<< "E: "*/ << circ.GetElasticity() << " "
+            /*<< "F: "*/ << circ.GetStaticFriction() << " " << circ.GetDynamicFriction() << " "
+            /*<< "M: "*/ << circ.GetMass()
+            << endl;
+    }
+}
+
+
 void TerrainDestructionScene::FireHeavyRound(int shotNumber)
 {
     if (m_networkManager.GetNumPeers() > 0)
@@ -325,9 +346,105 @@ void TerrainDestructionScene::FireGrapeShot(int shotNumber)
 }
 
 
+void TerrainDestructionScene::CheckForHandovers()
+{
+    // Check for any circles that need to be handed over.
+    // First, Checks if they're over the boundary,
+    // If it is then get the circle's data and add the entity to be removed.
+    std::lock_guard<std::mutex> lock(m_circlesMutex);
+
+    for (auto it = m_circles.begin(); it != m_circles.end();)
+    {
+        if ((*it)->GetPos().x > m_worldOffsetX + HOME_RIGHT)
+        {
+            // Handover.
+            std::lock_guard<std::mutex> toTransLock(m_circlesToTransferMutex);
+            m_circlesToTransfer[(*it)->GetID()] = ((*it)->GetCircle());
+
+            std::lock_guard<std::mutex> toRemoveLock(m_circlesToRemoveMutex);
+
+            m_circlesToRemove.push_back(*it); // add the circle entity to be removed.
+        }
+    }
+}
+
+
+void TerrainDestructionScene::DeleteToBeRemoved()
+{
+    { // Circles.
+        std::lock_guard<std::mutex> lock(m_circlesToRemoveMutex);
+
+        for (auto it = m_circlesToRemove.begin(); it != m_circlesToRemove.end();)
+        {
+            // Marks it to be deleted in the physics system...
+            (*it)->DetachPhysicsObject();
+
+            Entity* toRemove = (*it);
+
+            auto& entsVec = this->GetEntities();
+
+            // Remove entity from the vector list.
+            entsVec.erase(std::remove(entsVec.begin(), entsVec.end(), toRemove), entsVec.end());
+
+            // Also remove from list of circles. (these are used for network).
+            std::lock_guard<std::mutex> lock2(m_circlesMutex);
+            m_circles.erase(std::remove(m_circles.begin(), m_circles.end(), toRemove), m_circles.end());
+
+            delete toRemove; // Destruct the entity from memory.
+            toRemove = 0;
+
+            // No move on.
+            it = m_circlesToRemove.erase(it);
+            if (it == m_circlesToRemove.end())
+            {
+                break; // No more to remove.
+            }
+
+            ++it;
+
+        }
+    }
+
+    { // AABBs.
+        std::lock_guard<std::mutex> lock(m_aabbsToRemoveMutex);
+
+        for (auto it = m_aabbsToRemove.begin(); it != m_aabbsToRemove.end();)
+        {
+            // Marks it to be deleted in the physics system...
+            (*it)->DetachPhysicsObject();
+
+            Entity* toRemove = (*it);
+
+            auto& entsVec = this->GetEntities();
+
+            // Remove entity from the vector list.
+            entsVec.erase(std::remove(entsVec.begin(), entsVec.end(), toRemove), entsVec.end());
+
+            // Remove the pointer from m_aabbs (this is vector obtained by NetMgr).
+            std::lock_guard<std::mutex> lock2(m_aabbsMutex);
+            m_aabbs.erase(std::remove(m_aabbs.begin(), m_aabbs.end(), toRemove), m_aabbs.end());
+
+            delete toRemove; // Destruct the entity from memory.
+            toRemove = 0;
+
+            // No move on.
+            it = m_aabbsToRemove.erase(it);
+            if (it == m_aabbsToRemove.end())
+            {
+                break; // No more to remove.
+            }
+            ++it;
+        }
+    }
+}
+
+
 void TerrainDestructionScene::Update(double time)
 {
     Scene::Update(time);
+
+    
+
     LoadNewCircles();
     LoadNewAABBs();
 

@@ -39,24 +39,43 @@ public:
 
     void GetNewNetworkCircles(ostream& out);
 
+    void GetTransferCircles(ostream& out);
+
+
     void FireHeavyRound(int shotNumber);
     void FireGrapeShot(int shotNumber);
     void FireExplodingShot(int shotNumber);
 
 private:
+    void CheckForHandovers();
+
+    void DeleteToBeRemoved();
+
+private:
     int                             m_screenWidth;
     int                             m_screenHeight;
+    float                           m_worldOffsetX;
     std::vector<PhysCircleEntity*>  m_circles;
     std::vector<PhysCircleEntity*>  m_circlesToAdd;
+    std::vector<PhysCircleEntity*>  m_circlesToRemove;
     std::vector<PhysAABBEntity*>    m_aabbs;
     std::vector<PhysAABBEntity*>    m_aabbsToAdd;
+    std::vector<PhysAABBEntity*>    m_aabbsToRemove;
+
+    std::map<std::string, Circle>   m_circlesToTransfer;
+
+  //  std::vector<std::pair<std::string, Circle>> m_circlesToTransfer;
+    
 
     Entity*                         m_cannon;
 
     std::vector<PhysCircleEntity*>  m_newNetworkCircles;
 
     std::mutex                      m_circlesToAddMutex;
+    std::mutex                      m_circlesToRemoveMutex;
     std::mutex                      m_aabbsToAddMutex;
+    std::mutex                      m_aabbsToRemoveMutex;
+    std::mutex                      m_circlesToTransferMutex;
     std::mutex                      m_circlesMutex;
     std::mutex                      m_aabbsMutex;
 

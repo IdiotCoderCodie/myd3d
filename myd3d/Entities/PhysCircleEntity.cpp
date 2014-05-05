@@ -33,3 +33,10 @@ PhysCircleEntity::PhysCircleEntity(Scene& scene, const entityId_t& id, PhysicsSy
 PhysCircleEntity::~PhysCircleEntity()
 {
 }
+
+
+void PhysCircleEntity::DetachPhysicsObject()
+{
+    m_physicsSystem.RemoveCircle(m_circle);
+    m_circle = 0;
+}

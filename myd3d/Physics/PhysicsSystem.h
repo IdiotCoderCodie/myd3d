@@ -38,6 +38,9 @@ public:
 
     const glm::vec2& GetGravity() { return glm::vec2(m_gravity.x, m_gravity.y) * m_gravityScale; }
 
+    void RemoveCircle(Circle* circle);
+    void RemoveAABB(AABB* aabb);
+
 private:
 	void SimulationLoop(double time);
 
@@ -51,6 +54,8 @@ private:
 
 	void UpdateObjectPhysics();
 
+    void DiscardToRemoves();
+
 private:
     HiResTimer              m_timer;
 	float                   m_dt;
@@ -59,12 +64,19 @@ private:
     int                     m_actualfps;
     Scene*                  m_parentScene;
 	ContactManifold*        m_manifold;
+
     std::vector<Circle*>    m_circles;
-    std::vector<Circle*>    m_circlesToAdd;
+    std::vector<Circle*>    m_circlesToAdd;    
     std::mutex              m_circleToAddMutex;
+    std::vector<Circle*>    m_circlesToRemove;
+    std::mutex              m_circlesToRemoveMutex;
+
     std::vector<AABB*>      m_aabbs;   
     std::vector<AABB*>      m_aabbsToAdd;
     std::mutex              m_aabbsToAddMutex;
+    std::vector<AABB*>      m_aabbsToRemove;
+    std::mutex              m_aabbsToRemoveMutex;
+
     TwBar*                  m_tweakBar;
     float                   m_gravityScale;// = 9.81f * 5.0f; // Could put in struct tbh.
     glm::vec3               m_gravity;// = glm::vec3(0.0f, -1.0f, 0.0f); // vec3 for AntTw.

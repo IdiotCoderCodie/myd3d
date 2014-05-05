@@ -12,6 +12,9 @@
 
 #include <AntTweakBar.h>
 
+#include <thread>
+#include <atomic>
+
 class TerrainDestructionScene;
 
 #define NM_MAX_PEERS 5
@@ -57,6 +60,10 @@ private:
 
     void SendUpdateData();
 
+    void SendTransfers();
+
+    void CheckForTransfers();
+
     void SendInitData(SocketStream& peer);
 
 private:
@@ -73,4 +80,6 @@ private:
     HiResTimer                  m_timer;
     int                         m_targetUps;
     int                         m_actualUps;
+
+    std::atomic<bool>           m_stopTransferThread;
 };

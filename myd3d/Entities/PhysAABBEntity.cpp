@@ -34,3 +34,10 @@ PhysAABBEntity::PhysAABBEntity(Scene& scene, const entityId_t& id, PhysicsSystem
 PhysAABBEntity::~PhysAABBEntity(void)
 {
 }
+
+
+void PhysAABBEntity::DetachPhysicsObject()
+{
+    m_physicsSystem.RemoveAABB(m_aabb);
+    m_aabb = 0;
+}

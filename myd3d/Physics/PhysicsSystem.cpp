@@ -1,5 +1,6 @@
 #include "PhysicsSystem.h"
 
+#include <algorithm>
 
 PhysicsSystem::PhysicsSystem(void) 
 :   m_timer(),
@@ -98,9 +99,9 @@ Circle& PhysicsSystem::AddCircle(Entity* entity, float radius, const glm::vec2& 
     return *circle;
 }
 
-
 AABB& PhysicsSystem::AddAABB(Entity* entity, const glm::vec2& min, const glm::vec2& max, 
-                            const glm::vec2& vel, float mass, float elast)
+                            const glm::vec2& 
+                            vel, float mass, float elast)
 {
     AABB* aabb = new AABB();
     aabb->SetParent(entity);
@@ -117,6 +118,79 @@ AABB& PhysicsSystem::AddAABB(Entity* entity, const glm::vec2& min, const glm::ve
     }
 
     return *aabb;
+}
+
+
+void PhysicsSystem::RemoveCircle(Circle* circle)
+{
+    std::lock_guard<std::mutex> lock(m_circlesToRemoveMutex);
+    m_circlesToRemove.push_back(circle);
+    circle->SetParent(0);
+    circle = 0;
+}
+
+
+void PhysicsSystem::RemoveAABB(AABB* aabb)
+{
+    std::lock_guard<std::mutex> lock(m_aabbsToRemoveMutex);
+    m_aabbsToRemove.push_back(aabb);
+    aabb->SetParent(0);
+    aabb = 0;
+}
+
+
+void PhysicsSystem::DiscardToRemoves()
+{
+    { // Get rid of any circles marked to be removed.
+        std::lock_guard<std::mutex> lock(m_circlesToRemoveMutex);
+
+        for (auto it = m_circlesToRemove.begin(); it != m_circlesToRemove.end(); )
+        {
+            Circle* toRemove = (*it);
+
+            // Remove from the vector.
+            auto r = std::remove(m_circles.begin(), m_circles.end(), toRemove);
+            // Erase.
+            m_circles.erase(r, m_circles.end());
+
+            delete toRemove;
+            toRemove = 0;
+
+            // Gone. Now move on to next toRemove (if any).
+            it = m_circlesToRemove.erase(it);
+            if (it == m_circlesToRemove.end())
+            {
+                break; // No more circles to remove.
+            }
+
+            // Got there -> More circles to remove.
+            ++it;
+        }
+    } // m_circlesToRemoveMutex released.
+
+    {
+        std::lock_guard<std::mutex> lock(m_aabbsToRemoveMutex);
+
+        for (auto it = m_aabbsToRemove.begin(); it != m_aabbsToRemove.end(); )
+        {
+            AABB* toRemove = *it;
+
+            // Remove from vector, then erase.
+            m_aabbs.erase( std::remove(m_aabbs.begin(), m_aabbs.end(), toRemove), m_aabbs.end() );
+
+            delete toRemove;
+            toRemove = 0;
+
+            // Now move on...
+            it = m_aabbsToRemove.erase(it);
+            if (it == m_aabbsToRemove.end())
+            {
+                break; // No more aabbs to remove.
+            }
+
+            ++it;
+        }
+    } // m_aabbsToRemoveMutex released.
 }
 
 
@@ -158,7 +232,8 @@ void PhysicsSystem::SimulationLoop(double time)
 	// Handle Static collisions.
 	//StaticCollisionDetection();
 
-	// Calculate the physics calculations on all objects.
+    DiscardToRemoves();
+
     LoadNewCircles();
     LoadNewAABBs();
     // Apply gravity to all.

@@ -8,6 +8,7 @@
 
 #include "../Scenes/TerrainDestructionScene.h"
 
+
 using namespace std;
 
 
@@ -18,7 +19,8 @@ NetworkManager::NetworkManager(void)
     m_playerNum(1),
     m_timer(),
     m_targetUps(20),
-    m_actualUps()
+    m_actualUps(),
+    m_stopTransferThread(false)
 {
     for(int i = 0; i < NM_MAX_PEERS; i++)
     {
@@ -247,6 +249,8 @@ void NetworkManager::PackAndSendData()
 
 void NetworkManager::SendUpdateData()
 {
+    SendTransfers();
+
     if(m_numPeers < 1)
     {
         return;
@@ -281,7 +285,76 @@ void NetworkManager::SendUpdateData()
             m_peers[i].Send(ssBuffer.str().c_str(), bufSize, 0);
         }
     }
-    // TODO: Send squares.
+}
+
+
+void NetworkManager::SendTransfers()
+{
+    std::ostringstream ssBuffer;
+
+    m_scene->GetTransferCircles(ssBuffer);
+
+    ssBuffer.seekp(0, ios::end);
+    int bufSize = ssBuffer.tellp();
+    if (bufSize > 0)
+    {
+        m_opponent.Send(ssBuffer.str().c_str(), bufSize, 0);
+    }
+}
+
+
+void NetworkManager::CheckForTransfers()
+{
+    const int buffSize = 1000;
+    char buffer[buffSize];
+    int timeo = 500;
+    while (!m_stopTransferThread)
+    {
+        memset(buffer, 0, buffSize);
+        if (m_opponent.Recv(buffer, buffSize - 1, 0) < 1)
+        {
+            continue;
+        }
+
+        std::stringstream bufferStream(buffer);
+
+        std::string head;
+        bufferStream >> head;
+        while (!bufferStream.eof())
+        {
+            if (!head.compare("LOSTCTRL "))
+            {
+                // Incoming circle to add to scene.
+                std::string entID;
+                bufferStream >> entID;
+
+                std::string type;
+                bufferStream >> type; // can only be circle atm anyway.
+                if (!type.compare("CIRC"))
+                {
+                    // Load in all the circle data which should be following.
+                    float x, y;
+                    float r;
+                    float vX, vY;
+                    float e;
+                    float fS, fD;
+                    float m;
+                    // Read in all data for circle.
+                    bufferStream >> x >> y >> r >> vX >> vY >> e >> fS >> fD >> m;
+
+                    if (m_numPeers > 0)
+                    {
+                        m_scene->AddCircleNetwork(x, y, r, glm::vec2(vX, vY), m, e, entID);
+                    }
+                    else
+                    {
+                        m_scene->AddCircle(x, y, r, glm::vec2(vX, vY), m, e, entID);
+                    }
+                    // TODO: Add circle.
+                }
+            }
+        }
+    }
 }
 
 
@@ -366,6 +439,9 @@ int NetworkManager::run()
     // TODO: Won't need to do this for camera views.
     EstablishGameConnection();
 
+    thread checkThread = thread(&NetworkManager::CheckForTransfers, this);
+
+
     // Start the receiver to check for incoming connections.
     // ERROR HERE
     // ESA 10048 here when more than one client tries to listen on the same computer on the same port.
@@ -392,8 +468,11 @@ int NetworkManager::run()
     m_timer.Start();
     while(true)
     {       
-        if(isFinishing())
+        if (isFinishing())
+        {
+            m_stopTransferThread = true;
             return 0;
+        }
 
         float elapsedTime = (float)m_timer.GetTimeInSeconds(); // How long last iteration took.    
         if (m_targetUps > 0)
@@ -411,6 +490,7 @@ int NetworkManager::run()
 
         CheckForNewPeer();
         SendUpdateData();
+        CheckForTransfers();
     }
     return 1;
 }
