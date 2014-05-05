@@ -290,15 +290,18 @@ void NetworkManager::SendUpdateData()
 
 void NetworkManager::SendTransfers()
 {
-    std::ostringstream ssBuffer;
-
-    m_scene->GetTransferCircles(ssBuffer);
-
-    ssBuffer.seekp(0, ios::end);
-    int bufSize = ssBuffer.tellp();
-    if (bufSize > 0)
+    while (true)
     {
-        m_opponent.Send(ssBuffer.str().c_str(), bufSize, 0);
+        std::ostringstream ssBuffer;
+
+        m_scene->GetTransferCircles(ssBuffer);
+        std::string test = ssBuffer.str();
+        ssBuffer.seekp(0, ios::end);
+        int bufSize = ssBuffer.tellp();
+        if (bufSize > 0)
+        {
+            m_opponent.Send(ssBuffer.str().c_str(), bufSize, 0);
+        }
     }
 }
 
@@ -308,7 +311,7 @@ void NetworkManager::CheckForTransfers()
     const int buffSize = 1000;
     char buffer[buffSize];
     int timeo = 500;
-    while (!m_stopTransferThread)
+    while (/*!m_stopTransferThread*/ true)
     {
         memset(buffer, 0, buffSize);
         if (m_opponent.Recv(buffer, buffSize - 1, 0) < 1)
@@ -491,7 +494,6 @@ int NetworkManager::run()
 
         CheckForNewPeer();
         SendUpdateData();
-        CheckForTransfers();
     }
     return 1;
 }

@@ -261,7 +261,11 @@ void TerrainDestructionScene::GetTransferCircles(ostream& out)
             /*<< "F: "*/ << circ.GetStaticFriction() << " " << circ.GetDynamicFriction() << " "
             /*<< "M: "*/ << circ.GetMass()
             << endl;
+
+        ++it;
     }
+
+    m_circlesToTransfer.empty();
 }
 
 
