@@ -4,6 +4,7 @@
 PhysicsSystem::PhysicsSystem(void) :
 m_timer(),
 m_dt(0.0f),
+m_dtModifier(1.0f),
 m_targetfps(1000), 
 m_actualfps(0),
 m_parentScene(0),
@@ -20,7 +21,8 @@ m_gravity(0.0f, -1.0f, 0.0f)
 
     TwAddVarRW(m_tweakBar, "targetFPS", TW_TYPE_INT32, &m_targetfps, "");
     TwAddVarRO(m_tweakBar, "actualFPS", TW_TYPE_INT32, &m_actualfps, "");
-    TwAddVarRO(m_tweakBar, "dt", TW_TYPE_FLOAT, &m_dt, "step=0.0001");
+    TwAddVarRO(m_tweakBar, "dt", TW_TYPE_FLOAT, &m_dt, "step=0.00001");
+    TwAddVarRW(m_tweakBar, "dtMod", TW_TYPE_FLOAT, &m_dtModifier, "step = 0.01");
     TwAddVarRW(m_tweakBar, "GravityVec", TW_TYPE_DIR3F, &m_gravity, "");
     TwAddVarRW(m_tweakBar, "GravityScale", TW_TYPE_FLOAT, &m_gravityScale, "step = 0.01");
 
@@ -45,11 +47,11 @@ int PhysicsSystem::run()
     SetThreadAffinityMask(this->GetHandle(), 4);
     m_timer.Start();
 
-    float elapsedTime = m_timer.GetTimeInSeconds();
+    //float elapsedTime = m_timer.GetTimeInSeconds();
     while (!isFinishing())
     {
-        TwRefreshBar(m_tweakBar);
-        elapsedTime = m_timer.GetTimeInSeconds();
+        //TwRefreshBar(m_tweakBar);
+        float elapsedTime = (float)m_timer.GetTimeInSeconds();
         if (m_targetfps > 0)
         {
             float targetUpdTime = 1.0f / m_targetfps;
@@ -64,9 +66,6 @@ int PhysicsSystem::run()
         }
         m_actualfps = (int)(1.0f / elapsedTime);
         Update(elapsedTime);
-       // std::cout << elapsedTime << std::endl;
-        //Sleep(1);
-        SetThreadAffinityMask(this->GetHandle(), 4);
     }
 
     return 0;
@@ -76,6 +75,7 @@ void PhysicsSystem::Update(double time)
 {
 	// TODO: DO IT.
    // time = 1.0f / 60.0f;
+    time = time * m_dtModifier;
 	SimulationLoop(time);
 }
 

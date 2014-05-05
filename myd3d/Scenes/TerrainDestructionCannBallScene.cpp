@@ -22,8 +22,8 @@ TerrainDestructionCannBallScene::TerrainDestructionCannBallScene(const std::stri
     m_screenWidth = d3d.GetScreenWidth();
     m_screenHeight = d3d.GetScreenHeight();
 
-    EntityFactory::CreateOrthoFpCameraEntity(*this, -m_screenWidth / 2.0f, m_screenWidth / 2.0f,
-        -m_screenHeight / 2.0f, m_screenHeight / 2.0f, "mainCamera");
+    EntityFactory::CreateOrthoFpCameraEntity(*this, -320.0f / 5.0f, 320.0f / 5.0f,
+        -240.0f / 5.0f, 240.0f / 5.0f, "mainCamera");
 
     if (!m_wsa.isOk())
     {

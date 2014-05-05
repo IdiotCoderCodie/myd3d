@@ -8,6 +8,10 @@
 #include "../glm/glm.hpp"
 #include "../Entities/Entity.h"
 
+#include "../HiResTimer.h"
+
+#include <AntTweakBar.h>
+
 class TerrainDestructionScene;
 
 #define NM_MAX_PEERS 5
@@ -64,4 +68,9 @@ private:
     int                         m_numPeers;
     int                         m_playerNum;
     TerrainDestructionScene*    m_scene;
+    TwBar*                      m_tweakBar;
+    float                       m_updateAmount;
+    HiResTimer                  m_timer;
+    int                         m_targetUps;
+    int                         m_actualUps;
 };

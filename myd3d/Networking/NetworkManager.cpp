@@ -15,12 +15,20 @@ NetworkManager::NetworkManager(void)
 :   m_foundOpponent(false),
     m_receiver(),
     m_numPeers(0),
-    m_playerNum(1)
+    m_playerNum(1),
+    m_timer(),
+    m_targetUps(20),
+    m_actualUps()
 {
     for(int i = 0; i < NM_MAX_PEERS; i++)
     {
         m_peerIsInit[i] = false;
     }
+
+    m_tweakBar = TwNewBar("Networking");
+    
+    TwAddVarRW(m_tweakBar, "targetUPS", TW_TYPE_INT32, &m_targetUps, "");
+    TwAddVarRO(m_tweakBar, "actualUPS", TW_TYPE_INT32, &m_actualUps, "");
 }
 
 
@@ -348,6 +356,7 @@ void NetworkManager::SendInitData(SocketStream& peer)
 int NetworkManager::run()
 {
     SetThreadAffinityMask(GetHandle(), 2);
+    
     // First things first... check for game connection.
     // TODO: Won't need to do this for camera views.
     EstablishGameConnection();
@@ -375,44 +384,28 @@ int NetworkManager::run()
     m_receiver.SetKey(to_string(CONNECT_MAGIC_NUM) + (m_playerNum == 1 ? "-PLAY1" : "-PLAY2"));
     m_receiver.start();
 
-    float testUpdateData = 1.234567f;
-
+    m_timer.Start();
     while(true)
     {       
         if(isFinishing())
             return 0;
 
+        float elapsedTime = (float)m_timer.GetTimeInSeconds(); // How long last iteration took.    
+        if (m_targetUps > 0)
+        {
+            float targetUpdTime = 1.0f / m_targetUps;
+            if (elapsedTime < targetUpdTime)
+            {
+                float sleepTime = (targetUpdTime - elapsedTime) * 1000.0f;
+                Sleep((DWORD)sleepTime);
+                SetThreadAffinityMask(GetHandle(), 2);
+                elapsedTime += m_timer.GetTimeInSeconds(); // Lengthen iteration length.
+            }
+        }
+        m_actualUps = (int)(1.0f / elapsedTime);
+
         CheckForNewPeer();
-        Sleep(20); // TODO: Remove.
-        SetThreadAffinityMask(GetHandle(), 2);
-
         SendUpdateData();
-        //PackAndSendData();
-
-        //// Send a float for testing.
-        //int timeoMs = 100;
-        //char sendBuffer[100];
-        //memcpy(sendBuffer, (char*)&testUpdateData, 4);
-
-        //setsockopt(m_opponent.GetHandle(), SOL_SOCKET, SO_SNDTIMEO, (char*)&timeoMs, sizeof(timeoMs));
-        //m_opponent.Send(sendBuffer, 4, 0);
-
-       
-        //setsockopt(m_opponent.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoMs, sizeof(timeoMs));
-        //char buffer[100];
-        //memset(buffer, 0, 100);       
-
-        //if(m_opponent.Recv(buffer, 100, 0) < 1)
-        //{
-        //    continue;
-        //}
-
-        //float val;
-        //memcpy((char*)&val, buffer, 4);
-
-        //cout << "Received float: " << val << endl;
-
-        //testUpdateData = val + 1.0f;
     }
     return 1;
 }
