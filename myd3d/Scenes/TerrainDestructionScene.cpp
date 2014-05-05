@@ -13,7 +13,9 @@ std::ofstream debugOut("TerrainDestructionNetworkingLog.txt");
 #endif 
 
 TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneManager* sceneMgr)
-    : Scene(name, sceneMgr)
+    : Scene(name, sceneMgr),
+    m_cannonAim(0.0f, 1.0f, 0.0f),
+    m_cannonPower(400.0f)
 {
     D3D& d3d = GetParent().GetD3DInstance();
 
@@ -30,26 +32,26 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 
     // Wait for connection to peer, and get the player num to position world.
     float worldOffsetX = 0.0f;
-    while (true)
-    {
-        if (!m_networkManager.HasFoundOpponent())
-        {
-            Sleep(100); // Sleep for a bit.
-        }
-        else
-        {
-            int playerNum = m_networkManager.GetPlayerNum();
-            if (playerNum == 1)
-            {
-                worldOffsetX = -HOME_WIDTH / 2.0f;
-            }
-            else
-            {
-                worldOffsetX = 320.5 / 2.0f;
-            }
-            break;
-        }
-    }
+    //while (true)
+    //{
+    //    if (!m_networkManager.HasFoundOpponent())
+    //    {
+    //        Sleep(100); // Sleep for a bit.
+    //    }
+    //    else
+    //    {
+    //        int playerNum = m_networkManager.GetPlayerNum();
+    //        if (playerNum == 1)
+    //        {
+    //            worldOffsetX = -HOME_WIDTH / 2.0f;
+    //        }
+    //        else
+    //        {
+    //            worldOffsetX = 320.5 / 2.0f;
+    //        }
+    //        break;
+    //    }
+    //}
 
     int cannonPosX = rand() % 9 + 6;
 
@@ -58,7 +60,7 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 
     Entity* sqwer = EntityFactory::CreateBmpEntity(*this, d3d, BACKGROUND_TEX, 2560, 1600, m_screenWidth, m_screenHeight, "bg");
     
-    AddCircle(worldOffsetX + 250.0f, 400.0f, 20.0f, glm::vec2(-20.0f, 0.0f), 1.0f, 0.9f, std::string("circ3"));
+    //AddCircle(worldOffsetX + 250.0f, 400.0f, 20.0f, glm::vec2(-20.0f, 0.0f), 1.0f, 0.9f, std::string("circ3"));
 
     for(int i = 0; i < 20; i++)
     {
@@ -71,7 +73,7 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
                     glm::vec2(-HALF_UNIT_SIZE, -HALF_UNIT_SIZE), 
                     glm::vec2(HALF_UNIT_SIZE, HALF_UNIT_SIZE),          // Dimensions
                     glm::vec2(0.0f),                                    // Velocity
-                    1.0f,                                               // Mass
+                    10.0f,                                               // Mass
                     0.9f,                                               // Elasticity
                     std::string("sqwer") + to_string(i*20 + y));        // ID
         }
@@ -102,6 +104,11 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
     cam->SetPos(glm::vec3(-worldOffsetX, 0.0f, 0.0f));
 
     m_physicsSystem.start();
+
+
+    m_tweakBar = TwNewBar("Game");
+    TwAddVarRW(m_tweakBar, "cannonPower", TW_TYPE_FLOAT, &m_cannonPower, "step = 5.0");
+    TwAddVarRW(m_tweakBar, "cannonDir", TW_TYPE_DIR3F, &m_cannonAim, "");
 }
 
 
@@ -247,13 +254,19 @@ void TerrainDestructionScene::Update(double time)
             // Fire shot.
             if (m_networkManager.GetNumPeers() > 0)
             {
-                AddCircleNetwork(-200.0f, 500.0f, 10.0f, glm::vec2(0.0f, -100.0f), 1.0f, 0.9f,
-                    std::string("shot") + to_string(totalShots));
+                AddCircleNetwork(m_cannon->GetPos().x, m_cannon->GetPos().y,    // StartPos
+                                 HALF_UNIT_SIZE,    // Radius
+                                 glm::vec2(m_cannonAim.x, m_cannonAim.y) * m_cannonPower, // Vel.
+                                 4.0f, 0.9f,    // Mass, Elast
+                                 std::string("shot") + to_string(totalShots));  // ID
             }
             else
             { // No peers are connected, so no need to signal that new stuff has been added.
-                AddCircle(-200.0f, 500.0f, 10.0f, glm::vec2(0.0f, -100.0f), 1.0f, 0.9f,
-                    std::string("shot") + to_string(totalShots));
+                AddCircle(m_cannon->GetPos().x, m_cannon->GetPos().y + 10.0f,    // StartPos
+                          HALF_UNIT_SIZE / 2.0f,    // Radius
+                          glm::vec2(m_cannonAim.x, m_cannonAim.y) * m_cannonPower,  // Velocity
+                          4.0f, 0.9f,    // Mass, Elast
+                          std::string("shot") + to_string(totalShots));
             }
             totalShots++;
             timeUntilNextShot = timeBetweenShots;

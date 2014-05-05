@@ -63,4 +63,11 @@ private:
 	PhysicsSystem   m_physicsSystem;
     WSA             m_wsa;
     NetworkManager  m_networkManager;
+
+    // Cannon Stuff.
+    glm::vec3       m_cannonAim;
+    float           m_cannonPower;
+
+    // Tweak Bar
+    TwBar*          m_tweakBar;
 };
