@@ -43,6 +43,7 @@ public:
 private:
     void LoadCircle(istream& in, std::string& id);
     void LoadSquare(istream& in, std::string& id);
+    void LoadCannon(istream& in, std::string& id);
 
     void GetPeerUpdates();
 

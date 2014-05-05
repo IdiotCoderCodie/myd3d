@@ -41,16 +41,17 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
             int playerNum = m_networkManager.GetPlayerNum();
             if (playerNum == 1)
             {
-                worldOffsetX = -320.5f;
+                worldOffsetX = -HOME_WIDTH / 2.0f;
             }
             else
             {
-                worldOffsetX = 320.5f;
+                worldOffsetX = 320.5 / 2.0f;
             }
             break;
         }
     }
 
+    int cannonPosX = rand() % 9 + 6;
 
 	m_screenWidth	= d3d.GetScreenWidth();
 	m_screenHeight	= d3d.GetScreenHeight();
@@ -61,23 +62,37 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 
     for(int i = 0; i < 20; i++)
     {
+        float xPos = worldOffsetX + HOME_LEFT + UNIT_SIZE / 2.0f + (UNIT_SIZE * i);
+        float yPos;
         for(int y = 0; y < rand() % 7 + 6; y++)
         {
-            AddAABB(worldOffsetX - 320.0f + 11.0f + 15.5f + (31.0f * i), -239.0f + 10.0f + 15.5f + (32.0f * y),
-                    glm::vec2(-15.0f, -15.0f), glm::vec2(15.0f, 15.0f),
-                    glm::vec2(0.0f), 1.0f, 0.9f, std::string("sqwer") + to_string(i*20 + y));
+            yPos = HOME_BOT + HALF_UNIT_SIZE + (UNIT_SIZE * y);
+            AddAABB(xPos, yPos,                                         // Position
+                    glm::vec2(-HALF_UNIT_SIZE, -HALF_UNIT_SIZE), 
+                    glm::vec2(HALF_UNIT_SIZE, HALF_UNIT_SIZE),          // Dimensions
+                    glm::vec2(0.0f),                                    // Velocity
+                    1.0f,                                               // Mass
+                    0.9f,                                               // Elasticity
+                    std::string("sqwer") + to_string(i*20 + y));        // ID
+        }
+
+        if (cannonPosX == i)
+        {
+            m_cannon = EntityFactory::CreateBmpEntity(*this, d3d, CANNON_TEX, CANNON_STENCIL,
+                UNIT_SIZE, UNIT_SIZE, 0, 0, "cannon");
+            m_cannon->SetPos(glm::vec3(xPos, yPos + UNIT_SIZE, 0.0f));
         }
     }
 
 
     // Walls.
-    AddAABB(worldOffsetX - 320.0f, 0.0f, glm::vec2(-10.0f, -240.0f), glm::vec2(10.0f, 240.0f), glm::vec2(0.0f),
+    AddAABB(worldOffsetX - 320.0f - 5.0f, 0.0f, glm::vec2(-10.0f, -240.0f), glm::vec2(0.0f, 240.0f), glm::vec2(0.0f),
             0.0f, 0.8f, std::string("leftWall"));
     
-    AddAABB(worldOffsetX + 320.0f, 0.0f, glm::vec2(-10.0f, -240.0f), glm::vec2(10.0f, 240.0f), glm::vec2(0.0f),
+    AddAABB(worldOffsetX + 320.0f + 5.0f, 0.0f, glm::vec2(-10.0f, -240.0f), glm::vec2(0.0f, 240.0f), glm::vec2(0.0f),
             0.0f, 0.8f, std::string("rightWall"));
 
-    AddAABB(worldOffsetX, -240.0f, glm::vec2(-310.0f, -10.0f), glm::vec2(310.0f, 10.0f), glm::vec2(0.0f),
+    AddAABB(worldOffsetX, -240.0f - 5.0f, glm::vec2(-320.0f, -10.0f), glm::vec2(320.0f, 0.0f), glm::vec2(0.0f),
             0.0f, 0.8f, std::string("floorWall"));
 
 

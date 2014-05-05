@@ -30,9 +30,9 @@ public:
     void LoadNewCircles();
     void LoadNewAABBs();
 
-    std::vector<PhysCircleEntity*>& GetCircles() { return m_circles; }
-    std::vector<PhysAABBEntity*>& GetAABBs() { return m_aabbs; }
-    std::vector<Entity*>& GetLines()   { return m_lines; }
+    std::vector<PhysCircleEntity*>& GetCircles()    { return m_circles; }
+    std::vector<PhysAABBEntity*>&   GetAABBs()      { return m_aabbs; }
+    Entity&                         GetCannon()     { return *m_cannon;  }
 
     std::mutex& GetCirclesMutex() { return m_circlesMutex;  }
     std::mutex& GetAABBsMutex()   { return m_aabbsMutex; }
@@ -46,7 +46,8 @@ private:
     std::vector<PhysCircleEntity*>  m_circlesToAdd;
     std::vector<PhysAABBEntity*>    m_aabbs;
     std::vector<PhysAABBEntity*>    m_aabbsToAdd;
-    std::vector<Entity*>            m_lines;
+
+    Entity*                         m_cannon;
 
     std::vector<PhysCircleEntity*>  m_newNetworkCircles;
 

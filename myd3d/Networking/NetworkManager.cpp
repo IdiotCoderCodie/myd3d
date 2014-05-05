@@ -312,6 +312,11 @@ void NetworkManager::SendInitData(SocketStream& peer)
         // TODO: Create PhysSquareEnt, like PhysCircleEnt to get all needed data.
     }
 
+    Entity& cannon = m_scene->GetCannon();
+    ssBuffer << "ENT " << cannon.GetID() << " "
+             << "CAN " << "X: " << cannon.GetPos().x << " " << cannon.GetPos().y
+             << endl;
+
     ssBuffer << "ENDINIT" << endl;
 
     // Get the size of the string.

@@ -115,6 +115,19 @@ void TerrainDestructionOffworldScene::AddSquare(float x, float y, float w, float
 }
 
 
+void TerrainDestructionOffworldScene::AddCannon(float x, float y, std::string& id)
+{
+    Entity* newEnt = new Entity(*this, id);
+    newEnt->SetComponent(new VisualBitmapComponent(GetParent().GetD3DInstance(),
+                         CANNON_TEX, CANNON_STENCIL, UNIT_SIZE, UNIT_SIZE, 0, 0));
+
+    newEnt->SetPos(glm::vec3(x, y, 0.0f));
+
+    std::lock_guard<std::mutex> lock(m_entsToAddMutex);
+    m_entsToAdd.push_back(newEnt);
+}
+
+
 void TerrainDestructionOffworldScene::LoadNewEnts()
 {
     std::lock_guard<std::mutex> lock(m_entsToAddMutex);

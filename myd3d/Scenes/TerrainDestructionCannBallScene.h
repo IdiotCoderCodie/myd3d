@@ -21,6 +21,7 @@ public:
 
     void AddCircle(float x, float y, float radius, std::string& id);
     void AddSquare(float x, float y, float w, float h, std::string& id);
+    void AddCannon(float x, float y, std::string& id);
 
     void LoadNewEnts();
 

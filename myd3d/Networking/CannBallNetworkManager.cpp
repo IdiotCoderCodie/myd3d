@@ -96,7 +96,11 @@ void CannBallNetworkManager::EstablishPeerConnection(int playerNum)
                                 else if(!entityType.compare("SQR"))
                                 {
                                     LoadSquare(ssBuffer, entityId);
-                                }                                
+                                }    
+                                else if (!entityType.compare("CAN"))
+                                {
+                                    LoadCannon(ssBuffer, entityId);
+                                }
                             }
                         }  
                         
@@ -168,6 +172,21 @@ void CannBallNetworkManager::LoadSquare(istream& in, std::string& id)
     }
 
     m_scene->AddSquare(x, y, w, h, id);
+}
+
+void CannBallNetworkManager::LoadCannon(istream& in, std::string& id)
+{
+    float x, y;
+
+    char attr;
+    in >> attr;
+    if (attr == 'X')
+    {
+        in.ignore(1);
+        in >> x >> y;
+    }
+
+    m_scene->AddCannon(x, y, id);
 }
 
 

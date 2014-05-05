@@ -98,13 +98,6 @@ void TerrainDestructionCannBallScene::AddCircle(float x, float y, float radius, 
 
     std::lock_guard<std::mutex> lock(m_entsToAddMutex);
     m_entsToAdd.push_back(newEnt);
-
-    //Entity* newEnt = 
-    //    EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), PHYS_CIRC_TEX, 
-    //                                   L"circleStencil.dds", radius*2.0f, radius*2.0f, 
-    //                                   m_screenWidth, m_screenHeight, id);
-
-    //newEnt->SetPos(glm::vec3(x, y, 0.0f));
 }
 
 void TerrainDestructionCannBallScene::AddSquare(float x, float y, float w, float h, std::string& id)
@@ -118,11 +111,19 @@ void TerrainDestructionCannBallScene::AddSquare(float x, float y, float w, float
 
     std::lock_guard<std::mutex> lock(m_entsToAddMutex);
     m_entsToAdd.push_back(newEnt);
-    //Entity* newEnt =
-    //    EntityFactory::CreateBmpEntity(*this, GetParent().GetD3DInstance(), PHYS_BLOCK_TEX, 
-    //    w, h, m_screenWidth, m_screenHeight, id);
+}
 
-    //newEnt->SetPos(glm::vec3(x, y, 0.0f));
+
+void TerrainDestructionCannBallScene::AddCannon(float x, float y, std::string& id)
+{
+    Entity* newEnt = new Entity(*this, id);
+    newEnt->SetComponent(new VisualBitmapComponent(GetParent().GetD3DInstance(),
+        CANNON_TEX, CANNON_STENCIL, UNIT_SIZE, UNIT_SIZE, 0, 0));
+
+    newEnt->SetPos(glm::vec3(x, y, 0.0f));
+
+    std::lock_guard<std::mutex> lock(m_entsToAddMutex);
+    m_entsToAdd.push_back(newEnt);
 }
 
 
