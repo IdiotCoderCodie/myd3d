@@ -41,3 +41,13 @@ void PhysAABBEntity::DetachPhysicsObject()
     m_physicsSystem.RemoveAABB(m_aabb);
     m_aabb = 0;
 }
+
+
+void PhysAABBEntity::Update(double time)
+{
+    if (m_aabb)
+    {
+        this->SetPos(glm::vec3(m_aabb->GetPos().x, m_aabb->GetPos().y, 0.0f));
+    }
+    Entity::Update(time);
+}

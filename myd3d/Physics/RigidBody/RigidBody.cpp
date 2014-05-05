@@ -45,7 +45,7 @@ void RigidBody::Update()
     m_position = m_newPosition;
     if (m_parentEntity)
     {
-        m_parentEntity->SetPos(glm::vec3(m_newPosition, 0.0f));
+       // m_parentEntity->SetPos(glm::vec3(m_newPosition, 0.0f));
     }
 }
 

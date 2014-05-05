@@ -37,7 +37,7 @@ public:
     void SetComponent(Component* newComponent);
     void ClearComponents();
 
-    void Update(double time);
+    virtual void Update(double time);
 
     void Draw(D3D& d3d);
 

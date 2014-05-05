@@ -34,26 +34,26 @@ TerrainDestructionScene::TerrainDestructionScene(const std::string& name, SceneM
 
     // Wait for connection to peer, and get the player num to position world.
     m_worldOffsetX = 0.0f;
-    while (true)
-    {
-        if (!m_networkManager.HasFoundOpponent())
-        {
-            Sleep(100); // Sleep for a bit.
-        }
-        else
-        {
-            int playerNum = m_networkManager.GetPlayerNum();
-            if (playerNum == 1)
-            {
-                m_worldOffsetX = (-HOME_WIDTH / 2.0f) - 10.0f;
-            }
-            else
-            {
-                m_worldOffsetX = (HOME_WIDTH / 2.0f) + 10.0f;
-            }
-            break;
-        }
-    }
+    //while (true)
+    //{
+    //    if (!m_networkManager.HasFoundOpponent())
+    //    {
+    //        Sleep(100); // Sleep for a bit.
+    //    }
+    //    else
+    //    {
+    //        int playerNum = m_networkManager.GetPlayerNum();
+    //        if (playerNum == 1)
+    //        {
+    //            m_worldOffsetX = (-HOME_WIDTH / 2.0f) - 10.0f;
+    //        }
+    //        else
+    //        {
+    //            m_worldOffsetX = (HOME_WIDTH / 2.0f) + 10.0f;
+    //        }
+    //        break;
+    //    }
+    //}
 
     int cannonPosX = rand() % 9 + 6;
 

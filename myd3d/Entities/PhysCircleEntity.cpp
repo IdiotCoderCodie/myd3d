@@ -40,3 +40,12 @@ void PhysCircleEntity::DetachPhysicsObject()
     m_physicsSystem.RemoveCircle(m_circle);
     m_circle = 0;
 }
+
+void PhysCircleEntity::Update(double time)
+{
+    if (m_circle)
+    {
+        this->SetPos(glm::vec3(m_circle->GetPos().x, m_circle->GetPos().y, 0.0f));
+    }
+    Entity::Update(time);
+}

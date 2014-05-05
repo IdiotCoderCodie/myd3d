@@ -27,6 +27,8 @@ public:
 
     void DetachPhysicsObject();
 
+    void Update(double time);
+
 private:
     PhysicsSystem& m_physicsSystem;
     VisualBitmapComponent* m_bmp; 
