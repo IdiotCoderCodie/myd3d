@@ -164,7 +164,7 @@ void PhysicsSystem::DiscardToRemoves()
             }
 
             // Got there -> More circles to remove.
-            ++it;
+            //++it;
         }
     } // m_circlesToRemoveMutex released.
 
@@ -188,7 +188,7 @@ void PhysicsSystem::DiscardToRemoves()
                 break; // No more aabbs to remove.
             }
 
-            ++it;
+            //++it;
         }
     } // m_aabbsToRemoveMutex released.
 }
@@ -204,7 +204,7 @@ void PhysicsSystem::LoadNewCircles()
         m_circles.push_back(*it);
         it = m_circlesToAdd.erase(it);
         if (it == m_circlesToAdd.end()) break;
-        ++it; // Increment iterator here, to avoid invalid iterator.
+        //++it; // Increment iterator here, to avoid invalid iterator.
     }
 }
 
@@ -220,7 +220,7 @@ void PhysicsSystem::LoadNewAABBs()
         it = m_aabbsToAdd.erase(it);
 
         if (it == m_aabbsToAdd.end()) break;
-        ++it; // Increment iterator here, to avoid invalid iterator.
+        //++it; // Increment iterator here, to avoid invalid iterator.
     }
 }
 

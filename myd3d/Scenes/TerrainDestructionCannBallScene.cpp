@@ -140,7 +140,7 @@ void TerrainDestructionCannBallScene::LoadNewEnts()
         if (it == m_entsToAdd.end())
             break;
 
-        ++it;
+        //++it;
     }
 }
 
