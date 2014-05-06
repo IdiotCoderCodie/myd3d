@@ -213,6 +213,8 @@ void CannBallNetworkManager::GetPeerUpdates(int playerNum)
     // int circleNum = 0;
     while(!bufferStream.eof())
     {
+        //////////////////////////////////////////////
+        /////////////   UPDATE ENTITY    /////////////
         if(!head.compare("UPD"))
         {
             // ReadUpdateMessage
@@ -259,6 +261,7 @@ void CannBallNetworkManager::GetPeerUpdates(int playerNum)
                 }
             }
         }
+        //////////////////////////////////////////////
         ///////////////   ADD ENTITY    //////////////
         else if (!head.compare("ADD"))
         {
@@ -280,6 +283,30 @@ void CannBallNetworkManager::GetPeerUpdates(int playerNum)
                 LoadSquare(bufferStream, entID);
             }
         }
+        ////////////////////////////////////////////////
+        ///////////////// LOSTCTRL  ////////////////////
+        else if (!head.compare("LOSTCTRL"))
+        {
+            std::string entID;
+            bufferStream >> entID;
+
+            std::string type;
+            bufferStream >> type;
+            if (!type.compare("CIRC"))
+            {
+                float t;
+                //bufferStream >> t >> t >> t >> t >> t >> t >> t >> t >> t;
+                if (playerNum == 1)
+                {
+                    m_followBallStr = "P" + to_string(2) + m_followBallStr;
+                }
+                else
+                {
+                    m_followBallStr = "P" + to_string(1) + m_followBallStr;
+                }
+            }
+        }
+
         bufferStream >> head;
     }
 

@@ -20,6 +20,7 @@ NetworkManager::NetworkManager(void)
     m_timer(),
     m_targetUps(20),
     m_actualUps(),
+    m_lostCtrlsToSend(),
     m_stopTransferThread(false)
 {
     for(int i = 0; i < NM_MAX_PEERS; i++)
@@ -274,6 +275,12 @@ void NetworkManager::SendUpdateData()
 
     m_scene->GetNewNetworkCircles(ssBuffer); // Add on any Additional circles :)
 
+    {
+        std::lock_guard<std::mutex> lock(m_lostCtrlsToSendMutex);
+        ssBuffer << m_lostCtrlsToSend;
+        m_lostCtrlsToSend.clear();
+    }
+
     ssBuffer.seekp(0, ios::end);
     int bufSize = ssBuffer.tellp();
     int timeo = 1000;
@@ -295,13 +302,16 @@ void NetworkManager::SendTransfers()
         std::ostringstream ssBuffer;
 
         m_scene->GetTransferCircles(ssBuffer);
-        std::string test = ssBuffer.str();
+       // std::string test = ssBuffer.str();
         ssBuffer.seekp(0, ios::end);
         int bufSize = ssBuffer.tellp();
         if (bufSize > 0)
         {
             m_opponent.Send(ssBuffer.str().c_str(), bufSize, 0);
         }
+
+        std::lock_guard<std::mutex> lock(m_lostCtrlsToSendMutex);
+        m_lostCtrlsToSend += ssBuffer.str();
     }
 }
 

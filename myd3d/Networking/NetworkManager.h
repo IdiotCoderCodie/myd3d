@@ -14,6 +14,7 @@
 
 #include <thread>
 #include <atomic>
+#include <mutex>
 
 class TerrainDestructionScene;
 
@@ -80,6 +81,9 @@ private:
     HiResTimer                  m_timer;
     int                         m_targetUps;
     int                         m_actualUps;
+
+    std::string                 m_lostCtrlsToSend;
+    std::mutex                  m_lostCtrlsToSendMutex;
 
     std::atomic<bool>           m_stopTransferThread;
 };

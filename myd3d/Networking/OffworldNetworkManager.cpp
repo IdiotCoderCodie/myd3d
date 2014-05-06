@@ -261,6 +261,22 @@ void OffworldNetworkManager::GetPeerUpdates()
                 LoadSquare(bufferStream, entID);
             }
         }
+        ////////////////////////////////////////////////
+        ///////////////// LOSTCTRL  ////////////////////
+        else if (!head.compare("LOSTCTRL"))
+        {
+            std::string entID;
+            bufferStream >> entID;
+
+            std::string type;
+            bufferStream >> type;
+            if (!type.compare("CIRC"))
+            {
+                float t;
+                //bufferStream >> t >> t >> t >> t >> t >> t >> t >> t >> t;
+
+            }
+        }
 
 
         bufferStream >> head; // Get next entID, (if there is one...)
