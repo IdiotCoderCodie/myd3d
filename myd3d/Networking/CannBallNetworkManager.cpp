@@ -296,13 +296,16 @@ void CannBallNetworkManager::GetPeerUpdates(int playerNum)
             {
                 float t;
                 //bufferStream >> t >> t >> t >> t >> t >> t >> t >> t >> t;
-                if (playerNum == 1)
+                if (!entID.compare(m_followBallStr))
                 {
-                    m_followBallStr = "P" + to_string(2) + m_followBallStr;
-                }
-                else
-                {
-                    m_followBallStr = "P" + to_string(1) + m_followBallStr;
+                    if (playerNum == 1)
+                    {
+                        m_followBallStr = "P" + to_string(2) + m_followBallStr;
+                    }
+                    else
+                    {
+                        m_followBallStr = "P" + to_string(1) + m_followBallStr;
+                    }
                 }
             }
         }

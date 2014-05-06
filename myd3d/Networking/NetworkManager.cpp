@@ -250,7 +250,7 @@ void NetworkManager::PackAndSendData()
 
 void NetworkManager::SendUpdateData()
 {
-    SendTransfers();
+    //SendTransfers();
 
     if(m_numPeers < 1)
     {
