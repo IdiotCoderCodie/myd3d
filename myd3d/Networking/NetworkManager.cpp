@@ -320,7 +320,7 @@ void NetworkManager::CheckForTransfers()
         }
 
         std::stringstream bufferStream(buffer);
-
+        
         std::string head;
         bufferStream >> head;
         while (!bufferStream.eof())
@@ -356,6 +356,7 @@ void NetworkManager::CheckForTransfers()
                     // TODO: Add circle.
                 }
             }
+            bufferStream >> head;
         }
     }
 }
