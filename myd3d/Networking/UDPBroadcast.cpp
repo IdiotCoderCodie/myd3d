@@ -7,7 +7,7 @@ UDPBroadcast::UDPBroadcast(void)
      m_foundPeer(false),
      m_message(to_string(CONNECT_MAGIC_NUM)),
      m_port(BROADCAST_PORT),
-     m_attempts(5)
+     m_attempts(1)
 {
 }
 
@@ -46,19 +46,19 @@ int UDPBroadcast::run()
         cout << "Waiting for response... " << endl;
 
         SocketDgram dgramReceive;
-        dgramReceive.Open(0);
-        int timeoSecs = 5;
-        setsockopt(m_socket.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoSecs, sizeof(timeoSecs));
-      /*  std::string t = m_socket.GetLocalAddr().ToString();
-        cout << t << endl;    */
+        dgramReceive.Open(BROADCAST_PORT_AUX);
+        int timeoSecs = 50;
+        setsockopt(dgramReceive.GetHandle(), SOL_SOCKET, SO_RCVTIMEO, (char*)&timeoSecs, sizeof(timeoSecs));
+      //  std::string t = m_socket.GetLocalAddr().ToString();
+        //cout << t << endl;    
 
         bool echoMatch = false;
         //while(!echoMatch)
         //{
         memset(rcvBuff, 0, 100000);
-        for(int attempt = 0; attempt < 50; attempt++) // look for our message amongst any background crap.
+        for(int attempt = 0; attempt < 10; attempt++) // look for our message amongst any background crap.
         {
-            int bytesRcvd = m_socket.RecvFrom(rcvBuff, 100000, 0, m_peerAddr);
+            int bytesRcvd = dgramReceive.RecvFrom(rcvBuff, 100000, 0, m_peerAddr);
             if(bytesRcvd > 0)
             {
                 cout << "Rcvd " << bytesRcvd << " from " << m_peerAddr.ToString();
